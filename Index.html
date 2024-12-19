@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1e1e1e">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Puzzle de Palabras</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.4">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+
+<body>
+    <div id="particles-js"></div>
+    <div class="game-container">
+        <div class="header">
+            <div class="top-controls">
+                <div id="timer">00:00</div>
+                <button id="options" aria-label="Opciones">⚙️</button>
+            </div>
+            <h1 id="level-title"></h1>
+        </div>
+        <div class="game-board-container">
+            <div id="board"></div>
+            <div id="hints"></div>
+        </div>
+    </div>
+    <script type="module" src="main.js?v=1.1"></script>
+</body>
+
+</html>
