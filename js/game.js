@@ -4,48 +4,77 @@ import { AnimationManager } from './animations.js';
 
 class GameState {
     constructor() {
-        this.initializeThemeLoading()
+        // Establecer el tema guardado inmediatamente
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Inicializar el juego
+        this.initializeElements();
+        this.initializeState();
+        this.initializeBoard();
+        this.bindEvents();
+
+        this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
+        this.updateAll(LEVEL_ORDER[0]);
+
+        // Cargar temas en segundo plano
+        this.loadThemes()
             .then(() => {
-                this.initializeElements();
-                this.initializeState();
-                this.initializeBoard();
-                this.bindEvents();
-
-                this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
-                this.updateAll(LEVEL_ORDER[0]);
-
                 // Mostrar el contenido cuando todo esté listo
                 this.showContent();
             })
             .catch(error => {
-                console.error('Error en la inicialización:', error);
-                // Fallback a tema dark y mostrar contenido
-                document.documentElement.setAttribute('data-theme', 'dark');
+                console.error('Error loading themes:', error);
                 this.showContent();
             });
     }
 
-    async initializeThemeLoading() {
-        // Obtener tema guardado o usar dark como fallback
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
+    async loadThemes() {
         try {
-            // Cargar temas en paralelo
-            const [themeFiles] = await Promise.all([
-                this.listThemeFiles(),
-                this.preloadDefaultTheme() // Asegurar que el tema dark esté cargado
-            ]);
+            // Cargar temas.json primero
+            const themeFiles = await this.listThemeFiles();
+            
+            // Cargar todos los temas en paralelo
+            await Promise.all(themeFiles.map(async file => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = `styles/themes/${file}`;
+                
+                // Esperar a que cada tema se cargue
+                await new Promise((resolve, reject) => {
+                    link.onload = resolve;
+                    link.onerror = reject;
+                    document.head.appendChild(link);
+                });
+            }));
 
-            // Cargar resto de temas en segundo plano
-            this.loadRemainingThemes(themeFiles);
-
-            // Inicializar selector de temas
+            // Inicializar el selector de temas después de cargar todo
             await this.loadAvailableThemes();
             this.initializeThemeSelector();
+            
         } catch (error) {
             console.error('Error loading themes:', error);
             throw error;
+        }
+    }
+
+    setTheme(themeName) {
+        if (!this.availableThemes) return;
+
+        let found = false;
+        for (const [, themes] of this.availableThemes) {
+            if (themes.has(themeName)) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found || themeName === 'dark') {
+            document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('theme', themeName);
+            requestAnimationFrame(() => this.updateWordList());
+        } else {
+            this.setTheme('dark');
         }
     }
 
@@ -591,36 +620,6 @@ class GameState {
             name.split(/[-_\s.]/)
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
                 .join(' ');
-    }
-
-    setTheme(themeName, isRetry = false) {
-        if (isRetry && themeName === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            // Recalcular después de aplicar el tema por defecto
-            requestAnimationFrame(() => this.updateWordList());
-            return;
-        }
-
-        let found = false;
-        for (const [, themes] of this.availableThemes) {
-            if (themes.has(themeName)) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            requestAnimationFrame(() => {
-                document.documentElement.setAttribute('data-theme', themeName);
-                localStorage.setItem('theme', themeName);
-                // Esperar a que se apliquen los estilos del nuevo tema
-                // y luego recalcular los anchos
-                requestAnimationFrame(() => this.updateWordList());
-            });
-        } else {
-            this.setTheme('dark', true);
-        }
     }
 
     bindModalEvents() {
