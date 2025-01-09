@@ -4,32 +4,84 @@ import { AnimationManager } from './animations.js';
 
 class GameState {
     constructor() {
-        this.loadThemeStylesheets().then(() => {
-            this.initializeElements();
-            this.initializeState();
-            this.initializeBoard();
-            this.bindEvents();
+        this.initializeThemeLoading()
+            .then(() => {
+                this.initializeElements();
+                this.initializeState();
+                this.initializeBoard();
+                this.bindEvents();
 
-            // Asegurar que el nivel esté establecido antes de actualizar
-            this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
-            this.updateAll(LEVEL_ORDER[0]);
+                this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
+                this.updateAll(LEVEL_ORDER[0]);
 
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
+                // Mostrar el contenido cuando todo esté listo
+                this.showContent();
+            })
+            .catch(error => {
+                console.error('Error en la inicialización:', error);
+                // Fallback a tema dark y mostrar contenido
+                document.documentElement.setAttribute('data-theme', 'dark');
+                this.showContent();
+            });
+    }
 
-            this.loadAvailableThemes()
-                .then(() => this.initializeThemeSelector())
-                .catch(() => this.setTheme('dark'));
-        }).catch(error => {
-            console.error('Error fatal al cargar temas:', error);
-            document.documentElement.setAttribute('data-theme', 'dark');
-            // Continuar con la inicialización básica
-            this.initializeElements();
-            this.initializeState();
-            this.initializeBoard();
-            this.bindEvents();
-            this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
-            this.updateAll(LEVEL_ORDER[0]);
+    async initializeThemeLoading() {
+        // Obtener tema guardado o usar dark como fallback
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        try {
+            // Cargar temas en paralelo
+            const [themeFiles] = await Promise.all([
+                this.listThemeFiles(),
+                this.preloadDefaultTheme() // Asegurar que el tema dark esté cargado
+            ]);
+
+            // Cargar resto de temas en segundo plano
+            this.loadRemainingThemes(themeFiles);
+
+            // Inicializar selector de temas
+            await this.loadAvailableThemes();
+            this.initializeThemeSelector();
+        } catch (error) {
+            console.error('Error loading themes:', error);
+            throw error;
+        }
+    }
+
+    async preloadDefaultTheme() {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'styles/themes/basic.css';
+        
+        const loaded = new Promise((resolve, reject) => {
+            link.onload = resolve;
+            link.onerror = reject;
+        });
+        
+        document.head.appendChild(link);
+        await loaded;
+    }
+
+    loadRemainingThemes(themeFiles) {
+        themeFiles.forEach(file => {
+            if (file !== 'basic.css') {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = `styles/themes/${file}`;
+                document.head.appendChild(link);
+            }
+        });
+    }
+
+    showContent() {
+        requestAnimationFrame(() => {
+            document.body.classList.remove('js-loading');
+            const overlay = document.querySelector('.js-loading-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                setTimeout(() => overlay.remove(), 300);
+            }
         });
     }
 
