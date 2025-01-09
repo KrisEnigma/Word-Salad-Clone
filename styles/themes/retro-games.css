@@ -1,0 +1,354 @@
+/* Category: Juegos Retro */
+/* stylelint-disable no-unknown-custom-properties */
+/* Importar fuentes para juegos retro */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+/* Theme: Minecraft */
+:root[data-theme='minecraft'] {
+    /* Fuentes */
+    --font-family-header: 'VT323', monospace;
+    --font-family-title: 'Press Start 2P', monospace;
+    --font-family-content: 'VT323', monospace;
+
+    /* Colores */
+    --color-bg: #45523e;
+    --color-cell: #747474;
+    --color-modal: rgba(0, 0, 0, 0.8);
+    --color-button: #549551;
+    --color-text: #fff;
+    --color-selected: #5794df;
+    --color-hover: rgba(87, 148, 223, 0.8);
+    --color-line: #ffd83d;
+    
+    /* Efectos */
+    --cell-radius: 0;
+    --border-light: var(--border-width) solid #000;
+    --shadow-color: rgba(52, 152, 219, 0.3);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #5794df, #66bb6a);
+    --found-scale: 1.05;
+    --found-shadow: 3px 3px 0 #000;
+    --unused-scale: 0.95;
+    --unused-opacity: 0.4;
+    --confetti-colors: #5794df, #66bb6a, #ffd83d, #c6c6c6;
+}
+
+/* Efectos del tema Minecraft - Añadir texturas con gradientes en lugar de imágenes */
+:root[data-theme='minecraft'] .board {
+    background: repeating-conic-gradient(
+        from 0deg at 0% 0%,
+        #45523e 0% 25%,
+        #3b4734 25% 50%,
+        #45523e 50% 75%,
+        #3b4734 75%
+    );
+    background-size: 32px 32px;
+}
+
+:root[data-theme='minecraft'] .cell {
+    background: repeating-conic-gradient(
+        from 0deg at 0% 0%,
+        #747474 0% 25%,
+        #656565 25% 50%,
+        #747474 50% 75%,
+        #656565 75%
+    );
+    background-size: 16px 16px;
+    image-rendering: pixelated;
+    border: 2px solid #000;
+    box-shadow:
+        inset -2px -2px 0 #404040,
+        inset 2px 2px 0 #8b8b8b;
+}
+
+:root[data-theme='minecraft'] .cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+}
+
+:root[data-theme='minecraft'] .text {
+    transform: translateY(-1px);
+    text-shadow: 2px 2px #000;
+}
+
+/* Theme: Among Us */
+:root[data-theme='amongus'] {
+    /* Fuentes */
+    --font-family-header: 'VT323', monospace;
+    --font-family-title: 'Goldman', sans-serif;
+    --font-family-content: 'Share Tech Mono', monospace;
+
+    /* Colores */
+    --color-bg: linear-gradient(180deg, #0b1015 0%, #1b2a32 100%);
+    --color-cell: linear-gradient(to bottom, #1b2a32 60%, #132329 100%);
+    --color-modal: #15292f;
+    --color-button: #2e5bff;
+    --color-text: #fff;
+    --color-selected: #ff1c1c;
+    --color-hover: #ed2b2b;
+    --color-line: #98ff4a;
+    --border-light: none;
+
+    /* Efectos */
+    --cell-radius: min(20px, 4vw);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #ff1c1c, #ff4d4d);
+    --found-scale: 1.12;
+    --found-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+    --unused-scale: 0.88;
+    --unused-opacity: 0.15;
+    --confetti-colors: #f00, #00f, #0f0, #ff0;
+}
+
+/* Theme: Tetris */
+:root[data-theme='tetris'] {
+    /* Fuentes */
+    --font-family-header: 'Press Start 2P', monospace;
+    --font-family-title: 'VT323', monospace;
+    --font-family-content: 'Share Tech Mono', monospace;
+
+    /* Colores */
+    --color-bg: #000;
+    --color-cell: #0341ae;
+    --color-modal: #000;
+    --color-button: #0341ae;
+    --color-text: #fff;
+    --color-selected: #0f0;
+    --color-hover: #40c2ff;
+    --color-line: #ffa500;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --border-light: 2px solid #17b2ff;
+    
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #f00, #ff8e00);
+    --found-scale: 1.05;
+    --found-shadow: 3px 3px 0 #000;
+    --unused-scale: 0.9;
+    --unused-opacity: 0.25;
+    --confetti-colors: #f00, #0f0, #00f, #ff0;
+}
+
+/* Efectos del tema Tetris */
+:root[data-theme='tetris'] .cell {
+    border: 2px solid #17b2ff;
+    box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme='tetris'] .text {
+    font-family: 'Space Mono', monospace;
+    animation: tetris-pulse 2s infinite;
+}
+
+@keyframes tetris-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Theme: Pacman */
+:root[data-theme='pacman'] {
+    /* Fuentes */
+    --font-family-header: 'Press Start 2P', monospace;
+    --font-family-title: 'Press Start 2P', monospace;
+    --font-family-content: 'VT323', monospace;
+
+    /* Colores */
+    --color-bg: #000;
+    --color-cell: #2121de;
+    --color-modal: rgba(0, 0, 64, 0.95);
+    --color-button: #ffb897;
+    --color-text: #ffd800;
+    --color-selected: #f00;
+    --color-hover: rgba(255, 0, 0, 0.8);
+    --color-line: #0ff;
+
+    /* Efectos */
+    --cell-radius: 4px;
+    --border-light: 1px solid #2121ff;
+    --line-cap: round;
+    --line-dash: 1 15;
+    --line-animation: pacman-dots 0.5s linear infinite;
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #ffd700, #ff7f00);
+    --found-scale: 1.1;
+    --found-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    --unused-scale: 0.85;
+    --unused-opacity: 0.3;
+    --confetti-colors: #ffda00, #00008b, #f00, #fff;
+}
+
+/* Efectos específicos del tema Pacman */
+:root[data-theme='pacman'] .board {
+    background: var(--color-bg);
+    border-radius: var(--cell-radius);
+}
+
+:root[data-theme='pacman'] .cell {
+    background: var(--color-cell);
+    border: var(--border-light);
+    box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme='pacman'] .text {
+    color: var(--color-text);
+    font-family: var(--font-family-content);
+    font-size: calc(var(--cell-size) * 0.4 * var(--font-scale));
+    font-weight: bold;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme='pacman'] .title,
+:root[data-theme='pacman'] .level-number,
+:root[data-theme='pacman'] .timer {
+    font-family: var(--font-family-header);
+    color: var(--color-text);
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme='pacman'] .title {
+    font-size: var(--font-size-title);
+    letter-spacing: 1px;
+}
+
+:root[data-theme='pacman'] .mark.selected {
+    background: var(--color-selected);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+}
+
+:root[data-theme='pacman'] .word {
+    background: var(--word-bg);
+    color: var(--color-text);
+    font-family: var(--font-family-content);
+}
+
+:root[data-theme='pacman'] .word.found {
+    background: var(--color-selected);
+    color: var(--color-text);
+}
+
+:root[data-theme='pacman'] .board svg line {
+    stroke: var(--color-line);
+    stroke-width: var(--line-width);
+    stroke-linecap: var(--line-cap);
+    stroke-dasharray: var(--line-dash);
+    animation: var(--line-animation);
+}
+
+/* Animación específica para palabras encontradas */
+@keyframes pacman-found {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(1.5);
+        box-shadow: 0 0 20px var(--color-selected);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+:root[data-theme='pacman'] .found-temp {
+    animation-name: pacman-found !important;
+}
+
+/* Theme: Space Invaders */
+:root[data-theme='spaceinvaders'] {
+    /* Fuentes */
+    --font-family-header: 'Share Tech Mono', monospace;
+    --font-family-title: 'Orbitron', sans-serif;
+    --font-family-content: 'VT323', monospace;
+
+    /* Colores */
+    --color-bg: #000;
+    --color-cell: #1a1a1a;
+    --color-modal: #0a0a0a;
+    --color-button: #f33;
+    --color-text: #3f3;
+    --color-selected: #f33;
+    --color-hover: #ff3;
+    --color-line: #0ff;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --border-light: 1px solid #3f3;
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #f33, #f66);
+    --found-scale: 1.08;
+    --found-shadow: 0 0 16px rgba(51, 255, 51, 0.5);
+    --unused-scale: 0.92;
+    --unused-opacity: 0.2;
+    --confetti-colors: #70ff70, #ff7070, #70ffd8, #fff070;
+}
+
+/* Efectos del tema Space Invaders */
+:root[data-theme='spaceinvaders'] .text {
+    font-family: 'Space Mono', monospace;
+    text-shadow: 0 0 8px rgba(51, 255, 51, 0.7);
+}
+
+:root[data-theme='spaceinvaders'] .mark.selected {
+    animation: invader-pulse 1s infinite;
+}
+
+@keyframes invader-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Minecraft */
+@keyframes minecraft-found {
+    0% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-6px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Tetris */
+@keyframes tetris-found {
+    0% {
+        transform: translateY(0) rotate(0);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
+    100% {
+        transform: translateY(0) rotate(360deg);
+    }
+}
+
+:root[data-theme='minecraft'] .found-temp {
+    animation-name: minecraft-found !important;
+}
+
+:root[data-theme='tetris'] .found-temp {
+    animation-name: tetris-found !important;
+}
