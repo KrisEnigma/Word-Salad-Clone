@@ -173,17 +173,10 @@ export class AnimationManager {
             if (this.instance) {
                 const screenWidth = window.innerWidth;
                 const normalizedX = options.origin.x * screenWidth;
-                console.log('🎉 Disparando confeti:', {
-                    ...options,
-                    screenPos: `${Math.round(normalizedX)}px`,
-                    screenWidth: `${screenWidth}px`,
-                    visible: normalizedX < screenWidth ? '✅' : '❌'
-                });
                 this.instance(options);
             }
         },
         stop() {
-            console.log('🛑 Deteniendo confeti');
             if (this.instance) {
                 this.instance.reset();
                 this.instance = null;
@@ -194,11 +187,8 @@ export class AnimationManager {
                 if (!this.instance) this.initialize();
                 
                 const colors = this.getColors();
-                console.log('🎨 Colores del confeti:', colors);
-                console.log('📱 Ancho de pantalla:', window.innerWidth);
 
                 // Primera oleada: explosiones laterales
-                console.log('💥 Iniciando explosiones laterales simultáneas');
                 this.fire({
                     particleCount: 100,
                     spread: 70,
@@ -214,7 +204,6 @@ export class AnimationManager {
 
                 // Segunda oleada: explosión central
                 setTimeout(() => {
-                    console.log('💫 Iniciando explosión central');
                     this.fire({
                         particleCount: 150,
                         spread: 100,
@@ -231,7 +220,6 @@ export class AnimationManager {
         },
         // Método de prueba para depuración
         test(x = 0.5, y = 0.35) {
-            console.log('🧪 Prueba de confeti en:', { x, y });
             this.fire({
                 particleCount: 50,
                 spread: 70,
@@ -284,13 +272,11 @@ export class AnimationManager {
         document.addEventListener('keydown', e => {
             // Tecla T para test
             if (e.key.toLowerCase() === 't') {
-                console.log('🔍 Iniciando prueba de confeti');
                 this.confetti.test();
             }
             // Teclas 1-9 para probar diferentes posiciones horizontales
             if (!isNaN(parseInt(e.key)) && e.key !== '0') {
                 const x = parseInt(e.key) / 10;
-                console.log(`🎯 Probando posición x: ${x}`);
                 this.confetti.test(x);
             }
         });

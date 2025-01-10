@@ -37,23 +37,6 @@
     background: var(--color-bg);
 }
 
-:root[data-theme='sekiro'] body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-        radial-gradient(1px 1px at 30% 30%, rgba(185, 28, 28, 0.1), transparent),
-        radial-gradient(2px 2px at 60% 60%, rgba(185, 28, 28, 0.2), transparent);
-    background-size: 200px 200px;
-    animation: sekiro-ashes 12s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes sekiro-ashes {
-    0% { background-position: 0 0, 0 0; }
-    100% { background-position: 200px 200px, -200px -200px; }
-}
-
 @keyframes sekiro-found {
     0% { 
         transform: scale(1) translateX(0);

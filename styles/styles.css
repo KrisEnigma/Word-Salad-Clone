@@ -15,6 +15,7 @@
     --spacing: clamp(8px, 2vh, 16px);
 
     /* Dimensiones de elementos */
+    --cell-size: calc((var(--board-size) - 12px) / 4);
     --cell-gap: 4px;
     --hitbox-size: 80px;
     /* Valor fijo que funciona bien en móvil y desktop */
@@ -25,7 +26,7 @@
 
     /* Tipografía proporcional */
     --base-font-size: calc(var(--board-size) * 0.06);
-    --font-size-title: clamp(1.2rem, calc(var(--base-font-size) * 1.5), 2rem);
+    --font-size-title: clamp(1.2rem, calc(var(--base-font-size) * 1.5), 1.5rem);
     --font-size-ui: clamp(0.75rem, calc(var(--base-font-size) * 0.8), 1.2rem);
     --font-size-word: var(--base-font-size);
     --font-size-cell: calc(var(--board-size) * 0.15);
@@ -126,27 +127,22 @@ body {
     cursor: pointer;
 }
 
-.menu div,
-.menu::before,
-.menu::after {
-    content: '';
-    position: absolute;
-    height: 2px;
+.menu svg {
     width: 100%;
-    background-color: var(--color-text);
-    left: 0;
+    height: 100%;
 }
 
-.menu::before {
-    top: 4px;
+.menu svg path {
+    stroke: var(--color-text);
+    transition: transform 0.2s ease;
 }
 
+/* Eliminar los estilos antiguos del menú */
+.menu::before,
+.menu::after,
+.menu-middle,
 .menu div {
-    top: 11px;
-}
-
-.menu::after {
-    bottom: 4px;
+    display: none;
 }
 
 .timer {
@@ -214,9 +210,8 @@ body {
 
 .cell {
     position: relative;
-    width: calc((var(--board-size) - 12px) / 4);
-    /* (board - 3 gaps) / 4 cells */
-    height: calc((var(--board-size) - 12px) / 4);
+    width: var(--cell-size);
+    height: var(--cell-size);
     background: var(--color-cell);
     border-radius: var(--cell-radius);
     display: flex;
@@ -497,33 +492,63 @@ svg {
     margin-top: 0;
 }
 
+/* Eliminar los estilos antiguos del preview y reemplazarlos por estos */
+
+/* Estilos base del preview */
 .theme-preview {
     contain: style;
+    isolation: isolate;
+    width: 80px;
+    height: 120px;
 }
 
-.theme-preview[data-theme] {
-    --preview-size: 40px;
-    --preview-mark-inset: 8px;
-    --preview-font-size: 1.2em;
-    --preview-title-size: 0.9em;
-    --preview-gap: 8px;
+/* Container principal con scope propio */
+.preview-wrapper {
+    /* Variables del preview */
+    --preview-width: 80px;
+    --preview-height: 120px;
+    --preview-cell-size: 48px;
+    --preview-mark-inset: 6px;
+    --preview-font-size: clamp(0.6em, 0.8em, 0.9em);
+    --preview-mark-size: 32px;
+    --preview-text-size: 1.4em;
+    --preview-title-size: 0.75em;
+
+    /* Estilos del wrapper */
+    border-radius: 12px;
+    padding: 6px;
+    height: 100%;
+    width: 100%;
+    isolation: isolate;
+    border: var(--preview-border);
+    box-shadow: var(--preview-shadow);
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Consolidar todos los estilos de preview en una sola ubicación */
-.preview-container[data-theme] {
+.preview-wrapper[data-theme] {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family-content);
+}
+
+.preview-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    background: var(--color-bg);
+    gap: 12px;
+    width: 100%;
     padding: 8px;
     border-radius: 8px;
-    width: 15vw;
 }
 
-.preview-container[data-theme] .preview-cell {
-    width: 10vw;
-    height: 10vw;
+/* Celda del preview */
+.preview-cell {
+    width: var(--preview-cell-size);
+    height: var(--preview-cell-size);
+    flex-shrink: 0;
     background: var(--color-cell);
     border: var(--border-light);
     border-radius: var(--cell-radius);
@@ -532,37 +557,57 @@ svg {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.2s ease;
 }
 
-.preview-container[data-theme] .preview-mark {
+/* Marca del preview */
+.preview-mark {
     position: absolute;
-    inset: 8px;
-    border-radius: var(--cell-radius);
+    inset: var(--preview-mark-inset);
+    border-radius: inherit;
     background: var(--color-selected);
     opacity: 0.8;
+    width: var(--preview-mark-size);
+    height: var(--preview-mark-size);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.preview-container[data-theme] .preview-text {
+/* Texto del preview */
+.preview-text {
     color: var(--color-text);
     font-family: var(--font-family-content);
-    font-size: 1.2em;
+    font-size: var(--preview-text-size);
     font-weight: bold;
     z-index: 1;
 }
 
-.preview-container[data-theme] .preview-title {
+/* Título del preview */
+.preview-title {
     background: var(--color-modal);
     color: var(--color-text);
     font-family: var(--font-family-title);
-    font-size: var(--font-size-ui);
-    border-radius: 4px;
+    border-radius: 6px;
     width: 100%;
-    line-height: 1.2;
     min-height: 2.4em;
+    padding: 6px;
+    font-size: var(--preview-title-size);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 8px;
+    text-align: center;
+    line-height: 1.2;
+    word-break: normal;
+}
+
+/* Efectos hover */
+.theme-option:hover .preview-wrapper {
+    transform: translateY(-2px);
+}
+
+.theme-option:hover .preview-cell {
+    transform: scale(1.05);
 }
 
 .word-list {
@@ -620,7 +665,6 @@ svg {
 
 .word:not(.found) {
     color: var(--color-text);
-    opacity: 0.7;
 }
 
 .word.found {

@@ -39,22 +39,6 @@
     background: var(--color-bg);
 }
 
-:root[data-theme='darksouls'] body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: 
-        radial-gradient(2px 2px at 30px 30px, rgba(255, 140, 0, 0.8), transparent 60%),
-        radial-gradient(3px 3px at 70px 40px, rgba(255, 69, 0, 0.7), transparent 60%),
-        radial-gradient(4px 4px at 40px 70px, rgba(255, 140, 0, 0.9), transparent 60%);
-    background-size: 100px 100px;
-    animation: ember-float 12s linear infinite;
-    pointer-events: none;
-    mix-blend-mode: screen;
-}
-
-/* ...existing code... */
-
 @keyframes darksouls-found {
     0% {
         transform: scale(1);
@@ -75,11 +59,6 @@
         transform: scale(1);
         filter: brightness(1) blur(0);
     }
-}
-
-@keyframes ember-float {
-    from { background-position: 0 0, 0 0, 0 0, 0 0; }
-    to { background-position: -100px -100px, 100px -100px, -100px 100px, 0 0; }
 }
 
 :root[data-theme='darksouls'] .found-temp {

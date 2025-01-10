@@ -37,29 +37,6 @@
     background: var(--color-bg);
 }
 
-:root[data-theme='tetris'] body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 20px,
-            rgba(23, 178, 255, 0.3) 20px,
-            rgba(23, 178, 255, 0.3) 40px
-        ),
-        linear-gradient(135deg, rgba(255,255,255,0.15) 25%, transparent 25%);
-    background-size: 100px 100%, 40px 40px;
-    animation: tetris-bg 8s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes tetris-bg {
-    from { background-position: 0 0, 0 0; }
-    to { background-position: 0 100%, 40px 40px; }
-}
-
 :root[data-theme='tetris'] .board {
     background: repeating-linear-gradient(
         0deg,
@@ -69,8 +46,6 @@
         #111 2px
     );
 }
-
-/* ...resto del código... */
 
 :root[data-theme='tetris'] .cell {
     box-shadow: 

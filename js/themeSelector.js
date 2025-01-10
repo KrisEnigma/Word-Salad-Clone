@@ -45,26 +45,19 @@ export class ThemeSelector {
         if (!this.themesData) return;
 
         try {
-            // Usar getDefaultTheme en lugar de localStorage
-            const defaultTheme = localStorage.getItem('theme') || this.getDefaultTheme();
-            const defaultThemeData = this.findThemeData(defaultTheme);
-            
-            if (defaultThemeData) {
-                // Asegurarse de que el tema por defecto esté cargado primero
-                await this.loadStylesheet(`styles/${defaultThemeData.category.path}/${defaultThemeData.theme.file}`);
-            }
-
-            // Luego cargar el resto de los temas
+            // Cargar todos los temas de forma asíncrona
             const promises = Object.values(this.themesData.categories).flatMap(category => 
-                category.themes
-                    .filter(theme => this.getThemeId(theme.file) !== defaultTheme)
-                    .map(theme => {
-                        const path = `styles/${category.path}/${theme.file}`;
-                        return this.loadStylesheet(path);
-                    })
+                category.themes.map(theme => {
+                    const path = `styles/${category.path}/${theme.file}`;
+                    return this.loadStylesheet(path);
+                })
             );
 
             await Promise.all(promises);
+
+            // Aplicar el tema actual después de cargar todos
+            const currentTheme = localStorage.getItem('theme') || this.getDefaultTheme();
+            this.setTheme(currentTheme);
         } catch (error) {
             console.error('Error loading theme stylesheets:', error);
         }
@@ -113,9 +106,9 @@ export class ThemeSelector {
 
             if (category?.themes.length) {
                 html += `<div class="theme-category">${category.name}</div>`;
-                
                 category.themes.forEach(theme => {
-                    const isActive = document.documentElement.getAttribute('data-theme') === this.getThemeId(theme.file);
+                    const themeId = this.getThemeId(theme.file);
+                    const isActive = document.documentElement.getAttribute('data-theme') === themeId;
                     html += this.createThemeButton(theme, isActive);
                 });
             }
@@ -123,6 +116,73 @@ export class ThemeSelector {
 
         themeGrid.innerHTML = html;
         this.bindEvents(themeGrid);
+
+        // Aplicar los estilos específicos a cada preview después de renderizar
+        requestAnimationFrame(async () => {
+            const previews = themeGrid.querySelectorAll('.preview-wrapper[data-theme]');
+            for (const preview of previews) {
+                const themeId = preview.getAttribute('data-theme');
+                const themeData = this.findThemeData(themeId);
+                if (themeData) {
+                    const styleText = await this.getThemeStyles(themeData);
+                    preview.setAttribute('style', styleText);
+                }
+            }
+        });
+    }
+
+    async getThemeStyles(themeData) {
+        const { category, theme } = themeData;
+        const path = `styles/${category.path}/${theme.file}`;
+        
+        try {
+            const response = await fetch(path);
+            if (!response.ok) throw new Error(`No se pudo cargar ${path}`);
+            
+            const css = await response.text();
+            const styleMatch = css.match(/:root\[data-theme=['"]([^'"]+)['"]\]\s*{([^}]+)}/);
+            
+            if (!styleMatch) return '';
+            
+            // Primero procesar las variables internas (como --portal-blue)
+            const variables = styleMatch[2];
+            const internalVars = {};
+            variables.match(/--[^:]+:[^;]+;/g)?.forEach(prop => {
+                const [name, value] = prop.split(':').map(s => s.trim());
+                if (name && !name.includes('color-')) {
+                    internalVars[name] = value.replace(';', '');
+                }
+            });
+
+            // Luego procesar las variables que necesitamos, resolviendo referencias
+            const cssVars = {};
+            variables.match(/--[^:]+:[^;]+;/g)?.forEach(prop => {
+                const [name, value] = prop.split(':').map(s => s.trim());
+                if (name) {
+                    let resolvedValue = value.replace(';', '');
+                    // Resolver referencias a variables internas
+                    Object.entries(internalVars).forEach(([varName, varValue]) => {
+                        resolvedValue = resolvedValue.replace(
+                            `var(${varName})`,
+                            varValue
+                        );
+                    });
+                    cssVars[name] = resolvedValue;
+                }
+            });
+
+            // Agregar variables específicas del preview
+            cssVars['--preview-shadow'] = '0 2px 8px rgba(0, 0, 0, 0.15)';
+            cssVars['--preview-border'] = '1px solid rgba(0, 0, 0, 0.1)';
+
+            return Object.entries(cssVars)
+                .map(([name, value]) => `${name}: ${value}`)
+                .join(';');
+                
+        } catch (error) {
+            console.warn(`Error cargando estilos para ${theme.name}:`, error);
+            return '';
+        }
     }
 
     createThemeButton(theme, isActive) {
@@ -131,16 +191,47 @@ export class ThemeSelector {
             <button class="theme-option${isActive ? ' active' : ''}" 
                     data-theme="${themeId}">
                 <div class="theme-preview">
-                    <div class="preview-container" data-theme="${themeId}">
-                        <div class="preview-cell">
-                            <div class="preview-mark"></div>
-                            <div class="preview-text">A</div>
+                    <div class="preview-wrapper" data-theme="${themeId}">
+                        <div class="preview-container">
+                            <div class="preview-cell">
+                                <div class="preview-mark"></div>
+                                <div class="preview-text">A</div>
+                            </div>
+                            <div class="preview-title">${theme.name}</div>
                         </div>
-                        <div class="preview-title">${theme.name}</div>
                     </div>
                 </div>
             </button>
         `;
+    }
+
+    getComputedThemeVariables(themeId) {
+        // Crear un elemento temporal para obtener las variables computadas
+        const temp = document.createElement('div');
+        temp.style.display = 'none';
+        temp.setAttribute('data-theme', themeId);
+        document.body.appendChild(temp);
+
+        // Obtener los valores computados
+        const styles = getComputedStyle(temp);
+        const variables = [
+            '--color-bg',
+            '--color-cell',
+            '--color-text',
+            '--color-selected',
+            '--color-modal',
+            '--cell-radius',
+            '--border-light',
+            '--font-family-title',
+            '--font-family-content'
+        ];
+
+        const cssText = variables
+            .map(variable => `${variable}:${styles.getPropertyValue(variable)}`)
+            .join(';');
+
+        document.body.removeChild(temp);
+        return cssText;
     }
 
     getDefaultTheme() {

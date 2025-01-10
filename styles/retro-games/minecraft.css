@@ -37,29 +37,6 @@
     background: var(--color-bg);
 }
 
-:root[data-theme='minecraft'] body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-        repeating-conic-gradient(
-            from 0deg at 0% 0%,
-            #45523e 0% 25%,
-            #3b4734 25% 50%,
-            #45523e 50% 75%,
-            #3b4734 75%
-        ),
-        radial-gradient(2px 2px at 50% 50%, rgba(255,255,255,0.05), transparent);
-    background-size: 32px 32px, 300px 300px;
-    animation: minecraft-float 10s alternate infinite;
-    pointer-events: none;
-}
-
-@keyframes minecraft-float {
-    0% { background-position: 0 0, 0 0; }
-    100% { background-position: -20px -20px, 50px 50px; }
-}
-
 :root[data-theme='minecraft'] .board {
     background: repeating-conic-gradient(
         from 0deg at 0% 0%,

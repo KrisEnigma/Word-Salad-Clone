@@ -59,36 +59,8 @@
     }
 }
 
-@keyframes blood-mist {
-    0% { background-position: 0 0, 0 0, 0 0; }
-    50% { background-position: 150px 150px, -200px -200px, 0 0; }
-    100% { background-position: 0 0, 0 0, 0 0; }
-}
-
 :root[data-theme='bloodborne'] body {
     background: var(--color-bg);
-}
-
-:root[data-theme='bloodborne'] body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: 
-        repeating-radial-gradient(
-            circle at 50% -100%,
-            rgba(139, 0, 0, 0.4) 10%,
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 30% 150%,
-            rgba(204, 0, 0, 0.5) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, rgba(139,0,0,0.3) 2px, transparent 2px);
-    background-size: 250px 250px, 350px 350px, 30px 30px;
-    animation: blood-mist 25s ease-in-out infinite;
-    pointer-events: none;
-    mix-blend-mode: multiply;
 }
 
 :root[data-theme='bloodborne'] .found-temp {
