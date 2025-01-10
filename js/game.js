@@ -1,115 +1,111 @@
 import { LEVELS, LEVEL_ORDER } from './levels.js';
 import { SelectionManager } from './selection.js';
 import { AnimationManager } from './animations.js';
+import { ThemeSelector } from './themeSelector.js';
 
 class GameState {
     constructor() {
-        // Establecer el tema guardado inmediatamente
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
-        // Inicializar el juego
-        this.initializeElements();
-        this.initializeState();
-        this.initializeBoard();
-        this.bindEvents();
-
-        this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
-        this.updateAll(LEVEL_ORDER[0]);
-
-        // Cargar temas en segundo plano
-        this.loadThemes()
-            .then(() => {
-                // Mostrar el contenido cuando todo esté listo
-                this.showContent();
-            })
+        // Inicializar carga en dos fases
+        this.initPhase1()
+            .then(() => this.initPhase2())
             .catch(error => {
-                console.error('Error loading themes:', error);
-                this.showContent();
+                console.error('Error during initialization:', error);
+                this.showContent(); // Mostrar contenido incluso si hay error
             });
+
+        this.themeSelector = new ThemeSelector();
     }
 
-    async loadThemes() {
+    async initPhase1() {
         try {
-            // Cargar temas.json primero
-            const themeFiles = await this.listThemeFiles();
-            
-            // Cargar todos los temas en paralelo
-            await Promise.all(themeFiles.map(async file => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = `styles/themes/${file}`;
-                
-                // Esperar a que cada tema se cargue
-                await new Promise((resolve, reject) => {
-                    link.onload = resolve;
-                    link.onerror = reject;
-                    document.head.appendChild(link);
-                });
-            }));
-
-            // Inicializar el selector de temas después de cargar todo
-            await this.loadAvailableThemes();
-            this.initializeThemeSelector();
-            
+            await this.preloadDefaultTheme();
+            this.initializeElements();
+            this.initializeState();
+            this.initializeBoard();
+            this.bindEvents();
         } catch (error) {
-            console.error('Error loading themes:', error);
             throw error;
         }
     }
 
-    setTheme(themeName) {
-        if (!this.availableThemes) return;
+    async initPhase2() {
+        try {
+            this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
+            this.updateAll(LEVEL_ORDER[0]);
 
-        let found = false;
-        for (const [, themes] of this.availableThemes) {
-            if (themes.has(themeName)) {
-                found = true;
-                break;
-            }
-        }
+            // Cargar los archivos CSS primero
+            await this.themeSelector.loadThemeStylesheets();
+            
+            // Luego inicializar el selector de temas
+            await this.themeSelector.initialize();
 
-        if (found || themeName === 'dark') {
-            document.documentElement.setAttribute('data-theme', themeName);
-            localStorage.setItem('theme', themeName);
-            requestAnimationFrame(() => this.updateWordList());
-        } else {
-            this.setTheme('dark');
+            // Mostrar contenido cuando esté todo listo
+            this.showContent();
+        } catch (error) {
+            console.error('❌ Error en fase 2:', error);
+            this.showContent(); // Mostrar contenido incluso si hay error
         }
     }
 
     async preloadDefaultTheme() {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'styles/themes/basic.css';
-        
-        const loaded = new Promise((resolve, reject) => {
-            link.onload = resolve;
-            link.onerror = reject;
+        const existingLink = document.querySelector('link[href="styles/themes/basic.css"]');
+        if (existingLink) {
+            return new Promise((resolve) => {
+                if (existingLink.loaded || existingLink.getAttribute('rel') === 'stylesheet') {
+                    resolve();
+                } else {
+                    console.log('⏳ Esperando carga de tema básico...');
+                    existingLink.onload = () => {
+                        resolve();
+                    };
+                }
+            });
+        }
+
+        // Si no existe, crear nuevo link
+        return new Promise((resolve, reject) => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'styles/themes/basic.css';
+            link.onload = () => {
+                resolve();
+            };
+            link.onerror = (err) => {
+                reject(err);
+            };
+            document.head.appendChild(link);
         });
-        
-        document.head.appendChild(link);
-        await loaded;
     }
 
-    loadRemainingThemes(themeFiles) {
-        themeFiles.forEach(file => {
-            if (file !== 'basic.css') {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = `styles/themes/${file}`;
-                document.head.appendChild(link);
-            }
-        });
+    setTheme(themeName) {
+        if (this.themeSelector.setTheme(themeName)) {
+            requestAnimationFrame(() => this.updateWordList());
+        } else {
+            this.themeSelector.setTheme('dark');
+        }
     }
 
     showContent() {
+        const body = document.body;
+        const overlay = document.querySelector('.js-loading-overlay');
+        
+        // Asegurar que las transiciones funcionen
         requestAnimationFrame(() => {
-            document.body.classList.remove('js-loading');
-            const overlay = document.querySelector('.js-loading-overlay');
+            // Primero mostrar el contenido del body
+            body.style.opacity = '1';
+            body.classList.remove('js-loading');
+            
             if (overlay) {
+                // Ocultar el overlay
                 overlay.classList.add('hidden');
-                setTimeout(() => overlay.remove(), 300);
+                
+                // Remover el overlay después de la transición
+                overlay.addEventListener('transitionend', () => {
+                    overlay.remove();
+                }, { once: true });
             }
         });
     }
@@ -141,40 +137,6 @@ class GameState {
             null,
             (selection) => this.onSelectionUpdate(selection)
         );
-    }
-
-    async loadThemeStylesheets() {
-        try {
-            const cssFiles = await this.listThemeFiles();
-            if (!cssFiles?.length) {
-                throw new Error('No se encontraron archivos de tema');
-            }
-
-            cssFiles.forEach(cssFile => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = `styles/themes/${cssFile}`;
-                document.head.appendChild(link);
-            });
-        } catch (error) {
-            console.error('Error loading theme stylesheets:', error);
-            throw error;
-        }
-    }
-
-    async listThemeFiles() {
-        try {
-            // Primero intentar obtener la lista desde themes.json
-            const response = await fetch('styles/themes/themes.json');
-            if (!response.ok) throw new Error('No se pudo obtener la lista de temas');
-
-            const data = await response.json();
-            return data.themes;
-        } catch (error) {
-            console.error('Error listing theme files:', error);
-            // Fallback a lista predefinida
-            return ['basic.css', 'retro-games.css', 'modern-games.css'];
-        }
     }
 
     onSelectionUpdate(selection) {
@@ -352,6 +314,13 @@ class GameState {
             .find(([, path]) => path === currentPath)?.[0];
 
         if (foundWord) {
+            // Verificar victoria y detener timer ANTES de todo
+            if (this.foundWords.size === Object.keys(this.currentLevel.data).length) {
+                this.pauseTimer();
+                // Actualizar el tiempo final inmediatamente
+                document.getElementById('final-time').textContent = this.timer.element.textContent;
+            }
+
             const wordIndex = Object.keys(this.currentLevel.data)
                 .sort((a, b) => a.localeCompare(b))
                 .indexOf(foundWord);
@@ -361,6 +330,7 @@ class GameState {
 
             await AnimationManager.animateWordFound(selection, wordElement, foundWord);
             this.updateUnusedLetters();
+            
             if (this.foundWords.size === Object.keys(this.currentLevel.data).length) {
                 this.onLevelComplete();
             }
@@ -514,114 +484,6 @@ class GameState {
         this.selectionManager.resetControls();
     }
 
-    async loadAvailableThemes() {
-        try {
-            const themes = new Map();
-            this.themeDisplayNames = new Map();
-            this.categoryOrder = [];
-
-            const cssFiles = await this.listThemeFiles();
-            if (!cssFiles?.length) {
-                throw new Error('No se encontraron archivos de tema');
-            }
-
-            // Procesar cada archivo de tema
-            for (const cssFile of cssFiles) {
-                const cssContent = await (await fetch(`styles/themes/${cssFile}`)).text();
-                this.processThemeFile(cssContent, themes);
-            }
-
-            this.availableThemes = themes;
-            return themes;
-        } catch (error) {
-            console.error('Error loading themes:', error);
-            throw error;
-        }
-    }
-
-    processThemeFile(cssContent, themes) {
-        const categoryMatch = cssContent.match(/\/\* Category:\s*([^*]+?)\s*\*\//);
-        const category = categoryMatch ? categoryMatch[1].trim() : 'Sin Categoría';
-
-        if (!this.categoryOrder.includes(category)) {
-            this.categoryOrder.push(category);
-        }
-
-        const themeSet = new Set();
-        const themeMatches = [...cssContent.matchAll(/\/\* Theme:\s*([^*]+?)\s*\*\//g)];
-
-        themeMatches.forEach(match => {
-            const originalName = match[1].trim();
-            const normalizedName = originalName.toLowerCase()
-                .replace(/\s+/g, '')
-                .replace(/-/g, '');
-
-            this.themeDisplayNames.set(normalizedName, originalName);
-            themeSet.add(normalizedName);
-        });
-
-        if (themeSet.size > 0) {
-            themes.set(category, themes.has(category)
-                ? new Set([...themes.get(category), ...themeSet])
-                : themeSet
-            );
-        }
-    }
-
-    initializeThemeSelector() {
-        const themeGrid = document.querySelector('.theme-grid');
-        if (!themeGrid) return;
-
-        let html = '';
-
-        this.categoryOrder.forEach(category => {
-            const themes = this.availableThemes.get(category);
-            if (themes?.size > 0) {
-                html += `<div class="theme-category">${category}</div>`;
-                Array.from(themes).sort().forEach(theme => {
-                    const isActive = document.documentElement.getAttribute('data-theme') === theme;
-                    html += `
-                        <button class="theme-option${isActive ? ' active' : ''}" 
-                                data-theme="${theme}">
-                            ${this.formatThemeName(theme)}
-                        </button>
-                    `;
-                });
-            }
-        });
-
-        themeGrid.innerHTML = html;
-
-        themeGrid.addEventListener('click', e => {
-            const themeButton = e.target.closest('.theme-option');
-            if (!themeButton) return;
-
-            const newTheme = themeButton.dataset.theme;
-            this.setTheme(newTheme);
-
-            themeGrid.querySelectorAll('.theme-option').forEach(btn =>
-                btn.classList.toggle('active', btn.dataset.theme === newTheme)
-            );
-        });
-
-        document.getElementById('theme-button')?.addEventListener('click', () => {
-            document.getElementById('modal').classList.remove('active');
-            document.getElementById('theme-modal').classList.add('active');
-        });
-
-        document.querySelector('.back-button')?.addEventListener('click', () => {
-            document.getElementById('theme-modal').classList.remove('active');
-            document.getElementById('modal').classList.add('active');
-        });
-    }
-
-    formatThemeName(name) {
-        return this.themeDisplayNames.get(name.toLowerCase()) ||
-            name.split(/[-_\s.]/)
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                .join(' ');
-    }
-
     bindModalEvents() {
         const modalHandlers = {
             menu: document.querySelector('.menu'),
@@ -723,6 +585,45 @@ class GameState {
             }
         });
     }
+
+    handleNativeEvents() {
+        const { App } = Capacitor.Plugins;
+        
+        // Manejar el botón de retroceso en Android
+        document.addEventListener('ionBackButton', (ev) => {
+            ev.detail.register(10, () => {
+                if (document.querySelector('.modal-overlay.active')) {
+                    this.handleModalClose();
+                } else {
+                    App?.exitApp();
+                }
+            });
+        });
+
+        // Manejar pausa/resume de la app
+        document.addEventListener('pause', () => this.pauseTimer());
+        document.addEventListener('resume', () => this.resumeTimer());
+    }
+}
+
+function checkVictory() {
+    if (foundWords.size === totalWords) {
+        stopTimer(); // Detener el timer inmediatamente
+        handleVictory();
+        return true;
+    }
+    return false;
+}
+
+function handleVictory() {
+    const finalTime = document.getElementById('final-time');
+    finalTime.textContent = timer.getTimeString();
+    
+    // Pequeño delay para las animaciones pero el timer ya está detenido
+    setTimeout(() => {
+        showModal('victory-modal');
+        startConfetti();
+    }, 500);
 }
 
 document.addEventListener('DOMContentLoaded', () => new GameState());

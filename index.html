@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' 'unsafe-inline' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:;">
-    <title>Tablero 4x4</title>
-    <link rel="stylesheet" href="styles/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <title>Game Salad</title>
+    <link rel="icon" href="#" type="image/x-icon">
     <style>
-        /* Tema base dark para evitar FOUC */
-        :root[data-theme='dark'] {
-            --color-bg: #121212;
-            --color-text: #ffffff;
-            --font-family-content: system-ui, -apple-system, sans-serif;
-        }
-        /* Estilo inicial para prevenir FOUC */
-        .js-loading {
-            visibility: hidden;
+        html { background: #121212; }
+        body { 
             opacity: 0;
+            transition: opacity 0.3s ease-in;
         }
-        
+        body.js-loading { 
+            opacity: 1;
+            background: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
         .js-loading-overlay {
             position: fixed;
             inset: 0;
@@ -33,31 +32,35 @@
             z-index: 9999;
             transition: opacity 0.3s ease-out;
         }
-
         .js-loading-overlay.hidden {
             opacity: 0;
             pointer-events: none;
         }
-
-        .js-loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid #ffffff33;
-            border-top-color: #fff;
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #fff;
+            border-bottom-color: #5e5e5e;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: rotation 1s linear infinite;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
+    <link rel="stylesheet" href="styles/styles.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
 </head>
 
 <body class="js-loading">
+    <!-- Loader inicial -->
     <div class="js-loading-overlay">
-        <div class="js-loading-spinner"></div>
+        <div class="loader"></div>
     </div>
+
     <div class="toolbar">
         <button class="menu">
             <div></div>

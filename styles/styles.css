@@ -696,3 +696,202 @@ svg {
         filter: blur(0);
     }
 }
+
+@keyframes modal-open {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-overlay.active .modal-content {
+    animation: modal-open 0.3s ease-out;
+}
+
+/* Nuevos estilos para el preview de temas */
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    transition: transform 0.2s ease;
+}
+
+.theme-option:hover {
+    transform: translateY(-2px);
+}
+
+.theme-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.preview-cell {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+}
+
+.theme-preview[data-theme] .preview-cell {
+    /* Heredar estilos del tema actual */
+    background: var(--color-cell);
+    border: var(--border-light);
+    border-radius: var(--cell-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.preview-mark {
+    position: absolute;
+    inset: 4px;
+    border-radius: inherit;
+    background: var(--color-selected);
+    opacity: 0.8;
+}
+
+.preview-text {
+    color: var(--color-text);
+    font-family: var(--font-family-content);
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.preview-title {
+    font-family: var(--font-family-title);
+    color: var(--color-text);
+    font-size: 0.9em;
+    text-align: center;
+    margin-top: 4px;
+}
+
+/* Contenedor del theme grid con scroll */
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+    padding: 12px;
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.theme-option.active {
+    position: relative;
+}
+
+.theme-option.active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--color-selected);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+/* Ajustar la categoría para que ocupe todo el ancho */
+.theme-category {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+    padding-bottom: 8px;
+    color: var(--color-text);
+    font-size: 1.1em;
+    font-weight: bold;
+    border-bottom: 1px solid var(--color-text);
+}
+
+.theme-category:first-child {
+    margin-top: 0;
+}
+
+/* Mejorar el scroll */
+.theme-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theme-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.theme-grid::-webkit-scrollbar-thumb {
+    background: var(--color-selected);
+    border-radius: 4px;
+}
+
+/* Ajustar los estilos del preview de temas */
+.theme-preview {
+    contain: style;
+}
+
+.theme-preview[data-theme] {
+    --preview-size: 40px;
+    --preview-mark-inset: 8px; /* Aumentado para que la marca sea más pequeña */
+    --preview-font-size: 1.2em;
+    --preview-title-size: 0.9em;
+    --preview-gap: 8px;
+}
+
+.preview-container[data-theme] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-container[data-theme] .preview-cell {
+    width: 40px;
+    height: 40px;
+    background: var(--color-cell, #ccc);
+    border: var(--border-light, 1px solid rgba(0,0,0,0.1));
+    border-radius: var(--cell-radius, 8px);
+    box-shadow: var(--shadow-sm, 0 2px 4px rgba(0,0,0,0.1));
+}
+
+.preview-container[data-theme] .preview-mark {
+    position: absolute;
+    inset: 8px; /* Marca más pequeña */
+    border-radius: inherit;
+    background: var(--color-selected, #666);
+    opacity: 0.8;
+}
+
+.preview-container[data-theme] .preview-text {
+    color: var(--color-text, #000);
+    font-family: var(--font-family-content, inherit);
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.preview-container[data-theme] .preview-title {
+    font-family: var(--font-family-title, inherit);
+    color: var(--color-text, #000);
+    font-size: 0.9em;
+    letter-spacing: var(--title-letter-spacing, normal); /* Para temas que usen spacing */
+}
+
+/* Mejorar el contraste del nombre del tema */
+.preview-container[data-theme] .preview-title {
+    margin-top: 8px;
+    background: var(--color-modal, transparent);
+    padding: 4px 8px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* ...rest of existing code... */
