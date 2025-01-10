@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root[data-theme='tetris'] {
+    --font-family-header: 'Press Start 2P', monospace;
+    --font-family-title: 'VT323', monospace;
+    --font-family-content: 'Press Start 2P', monospace;
+
+    /* Colores */
+    --color-bg: #000;
+    --color-cell: #0341ae;
+    --color-modal: #000;
+    --color-button: #0341ae;
+    --color-text: #fff;
+    --color-selected: #0f0;
+    --color-hover: #40c2ff;
+    --color-line: #ffa500;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --border-light: 2px solid #17b2ff;
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #f00, #ff8e00);
+    --found-scale: 1.2;
+    --found-shadow: 0 0 20px #17b2ff;
+    --unused-scale: 0.8;
+    --unused-opacity: 0.25;
+    --animation-duration-found: 800ms;
+    --animation-timing: steps(4);
+    --confetti-colors: #f00, #0f0, #00f, #ff0;
+}
+
+/* ...existing code... */
+
+:root[data-theme='tetris'] body {
+    background: var(--color-bg);
+}
+
+:root[data-theme='tetris'] body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 20px,
+            rgba(23, 178, 255, 0.3) 20px,
+            rgba(23, 178, 255, 0.3) 40px
+        ),
+        linear-gradient(135deg, rgba(255,255,255,0.15) 25%, transparent 25%);
+    background-size: 100px 100%, 40px 40px;
+    animation: tetris-bg 8s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes tetris-bg {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 0 100%, 40px 40px; }
+}
+
+:root[data-theme='tetris'] .board {
+    background: repeating-linear-gradient(
+        0deg,
+        #000,
+        #000 1px,
+        #111 1px,
+        #111 2px
+    );
+}
+
+/* ...resto del código... */
+
+:root[data-theme='tetris'] .cell {
+    box-shadow: 
+        inset -2px -2px 0 #002a8d,
+        inset 2px 2px 0 #17b2ff;
+    animation: tetris-pulse 2s infinite;
+}
+
+@keyframes tetris-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes tetris-found {
+    0% { 
+        transform: rotate(0) scale(1); 
+        filter: brightness(1);
+    }
+    50% { 
+        transform: rotate(180deg) scale(0.8); 
+        filter: brightness(1.5);
+    }
+    100% { 
+        transform: rotate(360deg) scale(1);
+        filter: brightness(1);
+    }
+}
+
+:root[data-theme='tetris'] .found-temp {
+    animation: tetris-found var(--animation-duration-found) var(--animation-timing);
+    background: linear-gradient(45deg, #f00, #ff8e00);
+    box-shadow: 0 0 20px #17b2ff;
+}

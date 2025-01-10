@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
+
+:root[data-theme='retro'] {
+    /* Fuentes */
+    --font-family-header: 'JetBrains Mono', monospace;
+    --font-family-title: 'Space Mono', monospace;
+    --font-family-content: 'JetBrains Mono', monospace;
+
+    /* Colores */
+    --color-bg: #002b36;
+    --color-cell: #073642;
+    --color-modal: #001f27;
+    --color-button: #073642;
+    --color-text: #93a1a1;
+    --color-selected: #859900;
+    --color-hover: rgba(133, 153, 0, 0.8);
+    --color-line: #cb4b16;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --shadow-opacity: 0.4;
+    --border-light: 2px solid #094754;
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #859900, #2aa198);
+    --found-scale: 1.05;
+    --found-shadow: 0 0 20px rgba(133, 153, 0, 0.4);
+    --unused-scale: 0.9;
+    --unused-opacity: 0.25;
+    --confetti-colors: #f0f, #0ff, #ff0, #00f;
+}
+
+/* Efectos especiales para Retro */
+:root[data-theme='retro'] .board {
+    background: #001f27;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme='retro'] .cell {
+    border: 2px solid #094754;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme='retro'] .mark.selected {
+    animation: retro-blink 1s steps(2) infinite;
+}
+
+:root[data-theme='retro'] .title,
+:root[data-theme='retro'] .timer,
+:root[data-theme='retro'] .level-number {
+    font-family: var(--font-family-header);
+    letter-spacing: 1px;
+}
+
+@keyframes retro-blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes retro-found {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+:root[data-theme='retro'] .found-temp {
+    animation-name: retro-found !important;
+}

@@ -1,0 +1,83 @@
+{
+  "categories": {
+    "basic": {
+      "name": "Básicos",
+      "path": "basic",
+      "themes": [
+        {
+          "file": "dark.css",
+          "name": "Dark",
+          "isDefault": true
+        },
+        {
+          "file": "light.css",
+          "name": "Light"
+        },
+        {
+          "file": "retro.css",
+          "name": "Retro"
+        },
+        {
+          "file": "synthwave.css",
+          "name": "Synthwave"
+        }
+      ]
+    },
+    "retro-games": {
+      "name": "Juegos Retro",
+      "path": "retro-games",
+      "themes": [
+        {
+          "file": "minecraft.css",
+          "name": "Minecraft"
+        },
+        {
+          "file": "amongus.css",
+          "name": "Among Us"
+        },
+        {
+          "file": "tetris.css",
+          "name": "Tetris"
+        },
+        {
+          "file": "pacman.css",
+          "name": "Pac-Man"
+        },
+        {
+          "file": "spaceinvaders.css",
+          "name": "Space Invaders"
+        }
+      ]
+    },
+    "modern-games": {
+      "name": "Juegos Modernos",
+      "path": "modern-games",
+      "themes": [
+        {
+          "file": "portal.css",
+          "name": "Portal"
+        },
+        {
+          "file": "darksouls.css",
+          "name": "Dark Souls"
+        },
+        {
+          "file": "bloodborne.css",
+          "name": "Bloodborne"
+        },
+        {
+          "file": "sekiro.css",
+          "name": "Sekiro"
+        },
+        {
+          "file": "eldenring.css",
+          "name": "Elden Ring"
+        },
+        {
+          "file": "zelda-botw.css",
+          "name": "Zelda BOTW"
+        }
+      ]
+    }
+  }
+}

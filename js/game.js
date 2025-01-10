@@ -5,22 +5,24 @@ import { ThemeSelector } from './themeSelector.js';
 
 class GameState {
     constructor() {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
+        this.themeSelector = new ThemeSelector();
+        
         // Inicializar carga en dos fases
         this.initPhase1()
             .then(() => this.initPhase2())
             .catch(error => {
                 console.error('Error during initialization:', error);
-                this.showContent(); // Mostrar contenido incluso si hay error
+                this.showContent();
             });
-
-        this.themeSelector = new ThemeSelector();
     }
 
     async initPhase1() {
         try {
+            // Primero cargar los datos de temas para poder obtener el tema por defecto
+            await this.themeSelector.loadThemesData();
+            const savedTheme = localStorage.getItem('theme') || this.themeSelector.getDefaultTheme();
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
             await this.preloadDefaultTheme();
             this.initializeElements();
             this.initializeState();
@@ -51,33 +53,59 @@ class GameState {
     }
 
     async preloadDefaultTheme() {
-        const existingLink = document.querySelector('link[href="styles/themes/basic.css"]');
-        if (existingLink) {
-            return new Promise((resolve) => {
-                if (existingLink.loaded || existingLink.getAttribute('rel') === 'stylesheet') {
-                    resolve();
-                } else {
-                    console.log('⏳ Esperando carga de tema básico...');
-                    existingLink.onload = () => {
+        try {
+            const response = await fetch('styles/themes.json');
+            const data = await response.json();
+            
+            const defaultTheme = localStorage.getItem('theme') || 'dark';
+            const basicCategory = data.categories.basic;
+            const themeData = basicCategory.themes.find(t => this.getThemeId(t.file) === defaultTheme) || 
+                            basicCategory.themes.find(t => this.getThemeId(t.file) === 'dark');
+            
+            const themePath = `styles/${basicCategory.path}/${themeData.file}`;
+            
+            const existingLink = document.querySelector(`link[href="${themePath}"]`);
+            if (existingLink) {
+                return new Promise((resolve) => {
+                    if (existingLink.loaded || existingLink.getAttribute('rel') === 'stylesheet') {
                         resolve();
-                    };
-                }
+                    } else {
+                        console.log('⏳ Esperando carga de tema básico...');
+                        existingLink.onload = () => resolve();
+                        existingLink.onerror = () => resolve();
+                    }
+                });
+            }
+
+            return new Promise((resolve) => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = themePath;
+                link.onload = () => resolve();
+                link.onerror = () => {
+                    console.warn(`⚠️ Error cargando tema ${themePath}, intentando cargar dark.css`);
+                    link.href = 'styles/basic/dark.css';
+                    link.onload = () => resolve();
+                    link.onerror = () => resolve();
+                };
+                document.head.appendChild(link);
+            });
+        } catch (error) {
+            console.error('Error loading default theme:', error);
+            // Fallback directo a dark.css
+            return new Promise((resolve) => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'styles/basic/dark.css';
+                link.onload = () => resolve();
+                link.onerror = () => resolve();
+                document.head.appendChild(link);
             });
         }
+    }
 
-        // Si no existe, crear nuevo link
-        return new Promise((resolve, reject) => {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'styles/themes/basic.css';
-            link.onload = () => {
-                resolve();
-            };
-            link.onerror = (err) => {
-                reject(err);
-            };
-            document.head.appendChild(link);
-        });
+    getThemeId(themeFile) {
+        return themeFile.replace('.css', '');
     }
 
     setTheme(themeName) {

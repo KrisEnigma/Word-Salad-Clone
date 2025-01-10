@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&display=swap');
+
+:root[data-theme='portal'] {
+    /* Fuentes */
+    --font-family-header: 'Share Tech Mono', monospace;
+    --font-family-title: 'Chakra Petch', sans-serif;
+    --font-family-content: 'Share Tech Mono', monospace;
+
+    /* Colores */
+    --color-bg: #1a1a1a;
+    --color-cell: #2a2a2a;
+    --color-modal: rgba(42, 42, 42, 0.95);
+    --color-button: #ff6b00;
+    --color-text: #ffffff;
+    --color-selected: #00a8d6;
+    --color-hover: #ff4400;
+    --color-line: #ff6b00;
+
+    /* Efectos */
+    --cell-radius: 4px;
+    --border-light: 1px solid rgba(255, 255, 255, 0.1);
+    --shadow-opacity: 0.7;
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #00a8d6, #ff4400);
+    --found-scale: 1.2;
+    --found-shadow: 
+        0 0 30px rgba(0, 168, 214, 0.8),
+        0 0 60px rgba(255, 68, 0, 0.6),
+        inset 0 0 20px rgba(255, 255, 255, 0.4);
+    --unused-scale: 0.85;
+    --unused-opacity: 0.2;
+    --animation-duration-found: 800ms;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --confetti-colors: #00bcd4, #fff, #ff6b00, #ffd700;
+}
+
+/* Estilizar celdas como paneles de prueba */
+:root[data-theme='portal'] .cell {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        inset 0 0 15px rgba(0, 0, 0, 0.5),
+        0 0 1px rgba(0, 168, 214, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+:root[data-theme='portal'] .cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.1) 50%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, rgba(255,255,255,0.1) 50%, transparent 52%);
+    background-size: 10px 10px;
+}
+
+/* Efecto de selección tipo portal */
+:root[data-theme='portal'] .mark.selected {
+    background: rgba(0, 168, 214, 0.3);
+    box-shadow: 
+        0 0 15px rgba(0, 168, 214, 0.6),
+        inset 0 0 5px rgba(0, 168, 214, 0.8);
+    backdrop-filter: blur(2px) brightness(1.2);
+}
+
+/* Efecto hover tipo portal naranja */
+:root[data-theme='portal'] .hitbox:hover + .mark:not(.selected) {
+    background: rgba(255, 68, 0, 0.3);
+    box-shadow: 
+        0 0 15px rgba(255, 68, 0, 0.6),
+        inset 0 0 5px rgba(255, 68, 0, 0.8);
+    backdrop-filter: blur(2px) brightness(1.2);
+}
+
+/* Fondo al estilo Aperture Science */
+:root[data-theme='portal'] body {
+    background: var(--color-bg);
+}
+
+:root[data-theme='portal'] body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+        /* Logo circular de Aperture simplificado */
+        radial-gradient(circle at center, transparent 40%, rgba(255,255,255,0.03) 40.5%, transparent 42%),
+        radial-gradient(circle at center, transparent 35%, rgba(255,255,255,0.02) 35.5%, transparent 37%),
+        /* Líneas de cuadrícula principales */
+        linear-gradient(90deg, transparent 49.5%, rgba(0, 168, 214, 0.15) 50%, transparent 50.5%),
+        linear-gradient(0deg, transparent 49.5%, rgba(0, 168, 214, 0.15) 50%, transparent 50.5%),
+        /* Líneas de cuadrícula secundarias */
+        linear-gradient(90deg, rgba(255, 68, 0, 0.1) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 68, 0, 0.1) 1px, transparent 1px);
+    background-size: 400px 400px, 400px 400px, 200px 200px, 200px 200px, 20px 20px, 20px 20px;
+    animation: portal-grid 30s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes portal-grid {
+    0% { 
+        background-position: 
+            center center,
+            center center,
+            0 0, 0 0,
+            0 0, 0 0;
+    }
+    100% { 
+        background-position: 
+            center center,
+            center center,
+            200px 200px, 200px 200px,
+            20px 20px, 20px 20px;
+    }
+}
+
+/* Animación de encontrar palabra más dramática */
+@keyframes portal-found {
+    0% {
+        transform: scale(1);
+        filter: brightness(1) saturate(1);
+    }
+    20% {
+        transform: scale(1.3) rotate(5deg);
+        filter: brightness(2) saturate(1.5);
+        box-shadow: 
+            0 0 50px rgba(0, 168, 214, 0.8),
+            0 0 100px rgba(255, 68, 0, 0.6);
+    }
+    40% {
+        transform: scale(0.8) rotate(-5deg);
+        filter: brightness(0.8) saturate(1);
+    }
+    70% {
+        transform: scale(1.1) rotate(2deg);
+        filter: brightness(1.5) saturate(1.2);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+        filter: brightness(1) saturate(1);
+    }
+}
+
+:root[data-theme='portal'] .found-temp {
+    animation-name: portal-found !important;
+}

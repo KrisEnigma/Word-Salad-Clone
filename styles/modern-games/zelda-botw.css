@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+:root[data-theme='zelda-botw'] {
+    /* Fuentes */
+    --font-family-header: 'Cardo', serif; /* Más similar a las fuentes del juego */
+    --font-family-title: 'Cardo', serif;
+    --font-family-content: 'Noto Sans', sans-serif; /* Mejor para UI como en el juego */
+
+    /* Colores - Paleta Sheikah */
+    --color-bg: linear-gradient(135deg, #162834 0%, #1d3543 100%);
+    --color-cell: linear-gradient(145deg, #1d3543, #162834);
+    --color-modal: rgba(22, 40, 52, 0.95);
+    --color-button: #45b7ce;
+    --color-text: #e2e9f3;
+    --color-selected: #45b7ce;
+    --color-hover: #7cd3e6;
+    --color-line: #45b7ce;
+
+    /* Efectos */
+    --cell-radius: 2px; /* Más cuadrado como la estética Sheikah */
+    --border-light: 1px solid rgba(69, 183, 206, 0.15);
+    --shadow-opacity: 0.5;
+
+    /* Animaciones */
+    --found-bg: radial-gradient(circle, #45b7ce 0%, #2c95ab 100%);
+    --found-scale: 1.15;
+    --found-shadow: 
+        0 0 20px rgba(69, 183, 206, 0.6),
+        0 0 40px rgba(44, 149, 171, 0.4),
+        inset 0 0 15px rgba(124, 211, 230, 0.3);
+    --unused-scale: 0.92;
+    --unused-opacity: 0.15;
+    --animation-duration-found: 800ms;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --confetti-colors: #45b7ce, #e2e9f3, #2c95ab, #7cd3e6;
+}
+
+/* Modificar comportamiento de mark */
+:root[data-theme='zelda-botw'] .mark {
+    background: transparent; /* Inicialmente invisible */
+    backdrop-filter: none;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+:root[data-theme='zelda-botw'] .mark.selected,
+:root[data-theme='zelda-botw'] .hitbox:hover + .mark {
+    background: rgba(69, 183, 206, 0.25);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(69, 183, 206, 0.4);
+    box-shadow: 0 0 15px rgba(69, 183, 206, 0.2);
+}
+
+:root[data-theme='zelda-botw'] .cell {
+    backdrop-filter: blur(1px);
+    background: linear-gradient(145deg, rgba(29, 53, 67, 0.95), rgba(22, 40, 52, 0.98));
+    border: var(--border-light);
+    position: relative;
+}
+
+:root[data-theme='zelda-botw'] .cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, transparent, rgba(69, 183, 206, 0.08));
+    border: 1px solid rgba(69, 183, 206, 0.1);
+    z-index: 1;
+}
+
+:root[data-theme='zelda-botw'] .cell::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(45deg, transparent 30%, rgba(69, 183, 206, 0.1) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+:root[data-theme='zelda-botw'] .cell:hover::after {
+    opacity: 1;
+}
+
+/* Actualizar animación para que sea más similar a los efectos del juego */
+@keyframes zelda-found {
+    0% {
+        transform: scale(1);
+        filter: brightness(1) blur(0);
+    }
+    30% {
+        transform: scale(1.15) rotate(1deg);
+        filter: brightness(2) blur(1px);
+        box-shadow: 
+            0 0 30px rgba(69, 183, 206, 0.8),
+            0 0 60px rgba(44, 149, 171, 0.6);
+    }
+    60% {
+        transform: scale(0.95) rotate(-1deg);
+        filter: brightness(0.9) blur(0);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+        filter: brightness(1) blur(0);
+    }
+}
+
+:root[data-theme='zelda-botw'] .found-temp {
+    animation-name: zelda-found !important;
+    background: var(--found-bg);
+    border-color: rgba(124, 211, 230, 0.4);
+}
+
+:root[data-theme='zelda-botw'] body {
+    background: var(--color-bg);
+}
+
+:root[data-theme='zelda-botw'] body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+        radial-gradient(3px 3px at 40px 60px, rgba(69, 183, 206, 0.8), transparent 60%),
+        radial-gradient(2px 2px at 20px 50px, rgba(69, 183, 206, 0.6), transparent 60%),
+        radial-gradient(4px 4px at 30px 100px, rgba(69, 183, 206, 0.9), transparent 60%),
+        radial-gradient(3px 3px at 70px 40px, rgba(69, 183, 206, 0.7), transparent 60%);
+    background-size: 150px 150px;
+    animation: sheikah-particles 15s linear infinite;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+@keyframes sheikah-particles {
+    from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+    to { background-position: 200px -200px, -200px 200px, 200px 200px, -200px -200px, 100px 100px; }
+}
