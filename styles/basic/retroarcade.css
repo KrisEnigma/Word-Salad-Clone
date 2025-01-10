@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root[data-theme='retroarcade'] {
+    /* Fuentes */
+    --font-family-header: 'Press Start 2P', cursive;
+    --font-family-title: 'Press Start 2P', cursive;
+    --font-family-content: 'VT323', monospace;
+
+    /* Colores */
+    --color-bg: #121212;
+    --color-cell: #1E1E1E;
+    --color-modal: rgba(30, 30, 30, 0.95);
+    --color-button: #FF3D00;
+    --color-text: #FFD600;
+    --color-selected: #00B0FF;
+    --color-hover: #00E676;
+    --color-line: #00B0FF;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --shadow-opacity: 0.6;
+    --border-light: 2px solid rgba(0, 176, 255, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(255, 61, 0, 0.1);
+    --effect-color-2: rgba(0, 176, 255, 0.1);
+    --glow-radius: 20px;
+    --glow-color: rgba(0, 230, 118, 0.3);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #FF3D00, #00B0FF);
+    --found-scale: 1.15;
+    --found-shadow: 0 0 30px rgba(255, 214, 0, 0.5);
+    --unused-scale: 0.9;
+    --unused-opacity: 0.15;
+    --confetti-colors: #FF3D00, #00B0FF, #FFD600, #00E676;
+}
+
+:root[data-theme='retroarcade'] .board {
+    background: repeating-linear-gradient(45deg,
+            #121212,
+            #121212 10px,
+            #1a1a1a 10px,
+            #1a1a1a 20px);
+    border: 4px solid rgba(0, 176, 255, 0.4);
+    box-shadow:
+        inset 0 0 20px rgba(0, 176, 255, 0.2),
+        0 0 30px rgba(255, 61, 0, 0.3);
+}
+
+:root[data-theme='retroarcade'] .cell {
+    border: 2px solid rgba(0, 176, 255, 0.3);
+    box-shadow:
+        inset 0 0 10px rgba(0, 230, 118, 0.2),
+        0 0 15px rgba(255, 61, 0, 0.2);
+    background: #1E1E1E;
+    image-rendering: pixelated;
+}
+
+:root[data-theme='retroarcade'] .title {
+    color: #FFD600;
+    text-shadow:
+        3px 3px 0 #FF3D00,
+        -3px -3px 0 #00B0FF;
+    font-size: calc(var(--font-size-title) * 0.8);
+}
+
+@keyframes arcade-found {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(var(--found-scale));
+        filter: brightness(1.5) hue-rotate(45deg);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+:root[data-theme='retroarcade'] .found-temp {
+    animation: arcade-found 0.6s steps(4);
+}
+
+:root[data-theme='retroarcade'] .mark.selected {
+    animation: arcade-selected 1s steps(2) infinite;
+}
+
+@keyframes arcade-selected {
+
+    0%,
+    100% {
+        background: #00B0FF;
+        transform: translateY(0);
+    }
+
+    50% {
+        background: #00E676;
+        transform: translateY(-2px);
+    }
+}

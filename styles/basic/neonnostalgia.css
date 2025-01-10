@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&display=swap');
+
+:root[data-theme='neonnostalgia'] {
+    /* Fuentes */
+    --font-family-header: 'Monoton', cursive;
+    --font-family-title: 'Monoton', cursive;
+    --font-family-content: 'Chakra Petch', sans-serif;
+
+    /* Colores */
+    --color-bg: #360000;
+    --color-cell: rgba(0, 163, 224, 0.15);
+    --color-modal: rgba(0, 0, 0, 0.95);
+    --color-button: #39B54A;
+    --color-text: #FBB03B;
+    --color-selected: #F15A29;
+    --color-hover: #00A3E0;
+    --color-line: #D5006D;
+
+    /* Efectos */
+    --cell-radius: 4px;
+    --shadow-opacity: 0.7;
+    --border-light: 2px solid rgba(251, 176, 59, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(57, 181, 74, 0.1);
+    --effect-color-2: rgba(0, 163, 224, 0.1);
+    --glow-radius: 30px;
+    --glow-color: rgba(213, 0, 109, 0.4);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #39B54A, #00A3E0);
+    --found-scale: 1.2;
+    --found-shadow:
+        0 0 20px rgba(213, 0, 109, 0.6),
+        0 0 40px rgba(251, 176, 59, 0.4);
+    --unused-scale: 0.85;
+    --unused-opacity: 0.2;
+    --confetti-colors: #39B54A, #00A3E0, #F15A29, #FBB03B, #D5006D;
+}
+
+:root[data-theme='neonnostalgia'] .board {
+    background: transparent;
+    border: 3px solid rgba(213, 0, 109, 0.3);
+    box-shadow: 0 0 50px rgba(0, 163, 224, 0.2);
+}
+
+:root[data-theme='neonnostalgia'] .cell {
+    border: 2px solid rgba(251, 176, 59, 0.2);
+    box-shadow:
+        inset 0 0 20px rgba(57, 181, 74, 0.2),
+        0 0 15px rgba(213, 0, 109, 0.3);
+    background: linear-gradient(135deg,
+            rgba(42, 42, 42, 1) 0%,
+            rgba(42, 42, 42, 0.8) 100%);
+}
+
+:root[data-theme='neonnostalgia'] .title {
+    color: #FBB03B;
+    text-shadow:
+        0 0 5px rgba(251, 176, 59, 0.8),
+        0 0 10px rgba(241, 90, 41, 0.6),
+        0 0 20px rgba(213, 0, 109, 0.4);
+}
+
+@keyframes neon-found {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(var(--found-scale));
+        filter: brightness(1.5);
+        box-shadow:
+            0 0 30px rgba(57, 181, 74, 0.6),
+            0 0 60px rgba(0, 163, 224, 0.4);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+:root[data-theme='neonnostalgia'] .found-temp {
+    animation: neon-found 0.8s ease-in-out;
+}
+
+:root[data-theme='neonnostalgia'] .mark.selected {
+    animation: neon-pulse 2s infinite;
+}
+
+@keyframes neon-pulse {
+
+    0%,
+    100% {
+        background: #00A3E0;
+        box-shadow: 0 0 20px rgba(0, 163, 224, 0.6);
+    }
+
+    50% {
+        background: #F15A29;
+        box-shadow: 0 0 30px rgba(241, 90, 41, 0.6);
+    }
+}

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:wght@500;700&display=swap');
+
+:root[data-theme='fantasy'] {
+    /* Fuentes */
+    --font-family-header: 'MedievalSharp', cursive;
+    --font-family-title: 'Cinzel', serif;
+    --font-family-content: 'Alegreya', serif;
+
+    /* Colores */
+    --color-bg: #8B4513;
+    --color-cell: #A0522D;
+    --color-modal: rgba(139, 69, 19, 0.95);
+    --color-button: #A0522D;
+    --color-text: #F0E68C;
+    --color-selected: #FF4500;
+    --color-hover: rgba(255, 69, 0, 0.8);
+    --color-line: #6A5ACD;
+
+    /* Efectos */
+    --cell-radius: 8px;
+    --shadow-opacity: 0.4;
+    --border-light: 2px solid rgba(240, 230, 140, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(255, 69, 0, 0.1);
+    --effect-color-2: rgba(106, 90, 205, 0.1);
+    --glow-radius: 18px;
+    --glow-color: rgba(240, 230, 140, 0.25);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #FFD700, #FF4500);
+    --found-scale: 1.1;
+    --found-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    --unused-scale: 0.9;
+    --unused-opacity: 0.3;
+    --confetti-colors: #FFD700, #FF4500, #6A5ACD, #F0E68C;
+}
+
+:root[data-theme='fantasy'] .board {
+    background: linear-gradient(rgba(139, 69, 19, 0.8), rgba(160, 82, 45, 0.8));
+    backdrop-filter: blur(8px);
+}
+
+:root[data-theme='fantasy'] .cell {
+    border: 2px solid rgba(240, 230, 140, 0.3);
+    box-shadow: 
+        inset 0 0 15px rgba(240, 230, 140, 0.1),
+        0 0 10px rgba(106, 90, 205, 0.2);
+}
+
+:root[data-theme='fantasy'] .title {
+    color: #FFD700;
+    text-shadow: 
+        2px 2px 4px rgba(139, 69, 19, 0.8),
+        0 0 15px rgba(240, 230, 140, 0.5);
+    letter-spacing: 1px;
+}
+
+:root[data-theme='fantasy'] .timer,
+:root[data-theme='fantasy'] .level-number {
+    font-family: MedievalSharp, cursive;
+    color: #F0E68C;
+    text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.6);
+}
+
+@keyframes fantasy-found {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1) rotate(3deg);
+        filter: brightness(1.3);
+        box-shadow: 
+            0 0 25px #FFD700,
+            0 0 40px #FF4500;
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+:root[data-theme='fantasy'] .found-temp {
+    animation-name: fantasy-found !important;
+}
+
+:root[data-theme='fantasy'] .mark.selected {
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    animation: fantasy-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes fantasy-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px #FFD700;
+    }
+    50% {
+        box-shadow: 0 0 25px #FF4500;
+    }
+}

@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap');
+
+:root[data-theme='gameoverglow'] {
+    /* Fuentes */
+    --font-family-header: 'Audiowide', cursive;
+    --font-family-title: 'Audiowide', cursive;
+    --font-family-content: 'Syncopate', sans-serif;
+
+    /* Colores - Rediseñados para mejor uso de la paleta */
+    --color-bg: #210958; /* Negro para resaltar los colores neón */
+    --color-cell: rgba(0, 206, 209, 0.15); /* Cyan transparente para las celdas */
+    --color-modal: rgba(0, 0, 0, 0.95);
+    --color-button: #FF1493; /* Rosa neón */
+    --color-text: #ADFF2F; /* Verde lima para texto */
+    --color-selected: #FF4500; /* Naranja para selección */
+    --color-hover: #00CED1; /* Cyan para hover */
+    --color-line: #FF1493; /* Rosa neón para líneas */
+
+    /* Efectos */
+    --cell-radius: 4px;
+    --shadow-opacity: 0.8;
+    --border-light: 1px solid rgba(0, 206, 209, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(255, 20, 147, 0.1);
+    --effect-color-2: rgba(173, 255, 47, 0.1);
+    --glow-radius: 25px;
+    --glow-color: rgba(0, 206, 209, 0.3);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #FF1493, #FF4500);
+    --found-scale: 1.15;
+    --found-shadow: 
+        0 0 20px rgba(255, 20, 147, 0.6),
+        0 0 40px rgba(0, 206, 209, 0.4);
+    --unused-scale: 0.85;
+    --unused-opacity: 0.15;
+    --confetti-colors: #FF1493, #FF4500, #ADFF2F, #00CED1;
+}
+
+:root[data-theme='gameoverglow'] .cell {
+    border: var(--border-light);
+    box-shadow: 
+        inset 0 0 20px rgba(255, 20, 147, 0.1),
+        0 0 15px rgba(0, 206, 209, 0.2);
+    background: linear-gradient(135deg,
+        rgba(45, 45, 45, 1) 0%,
+        rgba(45, 45, 45, 0.8) 100%);
+}
+
+:root[data-theme='gameoverglow'] .title {
+    color: #00CED1;
+    text-shadow: 
+        0 0 10px rgba(0, 206, 209, 0.8),
+        0 0 20px rgba(255, 20, 147, 0.4);
+    letter-spacing: 2px;
+}
+
+@keyframes glow-found {
+    0% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        transform: scale(var(--found-scale));
+        filter: brightness(1.5);
+        box-shadow: 
+            0 0 40px rgba(255, 20, 147, 0.8),
+            0 0 80px rgba(173, 255, 47, 0.6);
+    }
+    100% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+:root[data-theme='gameoverglow'] .found-temp {
+    animation: glow-found 0.8s ease-in-out;
+}
+
+:root[data-theme='gameoverglow'] .mark.selected {
+    animation: glow-pulse 1.5s infinite;
+    box-shadow: 0 0 20px rgba(0, 206, 209, 0.6);
+}
+
+@keyframes glow-pulse {
+    0%, 100% { 
+        background: #FF4500;
+        box-shadow: 0 0 30px rgba(255, 69, 0, 0.6);
+    }
+    50% { 
+        background: #FF1493;
+        box-shadow: 0 0 40px rgba(255, 20, 147, 0.8);
+    }
+}
+
+:root[data-theme='gameoverglow'] .found-temp .text {
+    color: #FFFFFF; /* Texto blanco durante la animación para máximo contraste */
+}
+
+:root[data-theme='gameoverglow'] .word.found {
+    color: #FFFFFF; /* Texto blanco en palabras encontradas */
+    text-shadow: 0 0 10px rgba(173, 255, 47, 0.6);
+}

@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Metamorphous&display=swap');
+
+:root[data-theme='herojourney'] {
+    /* Fuentes */
+    --font-family-header: 'MedievalSharp', cursive;
+    --font-family-title: 'Cinzel', serif;
+    --font-family-content: 'Metamorphous', cursive;
+
+    /* Colores */
+    --color-bg: #1a1a1a;
+    --color-cell: #2a2a2a;
+    --color-modal: rgba(26, 26, 26, 0.95);
+    --color-button: #8B0000;
+    --color-text: #D3D3D3;
+    --color-selected: #FFD700;
+    --color-hover: #32CD32;
+    --color-line: #1E90FF;
+
+    /* Efectos */
+    --cell-radius: 4px;
+    --shadow-opacity: 0.5;
+    --border-light: 2px solid rgba(255, 215, 0, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(139, 0, 0, 0.2);
+    --effect-color-2: rgba(255, 215, 0, 0.1);
+    --glow-radius: 20px;
+    --glow-color: rgba(50, 205, 50, 0.3);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #8B0000, #FFD700);
+    --found-scale: 1.15;
+    --found-shadow: 0 0 30px rgba(30, 144, 255, 0.6);
+    --unused-scale: 0.85;
+    --unused-opacity: 0.2;
+    --confetti-colors: #8B0000, #FFD700, #32CD32, #1E90FF;
+}
+
+:root[data-theme='herojourney'] .board {
+    background: radial-gradient(circle at center, 
+        rgba(139, 0, 0, 0.2) 0%,
+        rgba(26, 26, 26, 0.9) 70%);
+    border: 3px solid rgba(255, 215, 0, 0.3);
+}
+
+:root[data-theme='herojourney'] .cell {
+    border: var(--border-light);
+    box-shadow: 0 0 15px rgba(30, 144, 255, 0.2);
+    background: linear-gradient(135deg,
+        rgba(42, 42, 42, 1) 0%,
+        rgba(42, 42, 42, 0.8) 100%);
+}
+
+:root[data-theme='herojourney'] .title {
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(139, 0, 0, 0.6);
+    letter-spacing: 2px;
+}
+
+:root[data-theme='herojourney'] .timer,
+:root[data-theme='herojourney'] .level-number {
+    color: #D3D3D3;
+    text-shadow: 1px 1px 2px rgba(139, 0, 0, 0.4);
+}
+
+@keyframes hero-found {
+    0% { transform: scale(1); }
+    50% { 
+        transform: scale(var(--found-scale));
+        box-shadow: 0 0 30px #FFD700;
+    }
+    100% { transform: scale(1); }
+}
+
+:root[data-theme='herojourney'] .found-temp {
+    animation: hero-found 0.8s ease-out;
+}
+
+:root[data-theme='herojourney'] .mark.selected {
+    animation: hero-selected 1.5s infinite;
+}
+
+@keyframes hero-selected {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 15px #FFD700;
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 0 0 25px #32CD32;
+    }
+}

@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+
+:root[data-theme='arcade'] {
+    /* Fuentes */
+    --font-family-header: 'VT323', monospace;
+    --font-family-title: 'Press Start 2P', cursive;
+    --font-family-content: 'Pixelify Sans', sans-serif;
+
+    /* Colores */
+    --color-bg: #1a1a2e;
+    --color-cell: #2a2a3e;
+    --color-modal: rgba(26, 26, 46, 0.95);
+    --color-button: #2a2a3e;
+    --color-text: #FFD700;
+    --color-selected: #8A2BE2;
+    --color-hover: rgba(138, 43, 226, 0.8);
+    --color-line: #00BFFF;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --shadow-opacity: 0.5;
+    --border-light: 2px solid #FFD700;
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(255, 105, 180, 0.1);
+    --effect-color-2: rgba(0, 191, 255, 0.1);
+    --glow-radius: 12px;
+    --glow-color: rgba(255, 215, 0, 0.3);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #FF6347, #8A2BE2);
+    --found-scale: 1.15;
+    --found-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+    --unused-scale: 0.85;
+    --unused-opacity: 0.3;
+    --confetti-colors: #FFD700, #FF6347, #8A2BE2, #FF69B4;
+}
+
+:root[data-theme='arcade'] .board {
+    background: repeating-linear-gradient(
+        45deg,
+        #1a1a2e,
+        #1a1a2e 10px,
+        #2a2a3e 10px,
+        #2a2a3e 20px
+    );
+}
+
+:root[data-theme='arcade'] .cell {
+    border: 2px solid #FFD700;
+    image-rendering: pixelated;
+    box-shadow: 
+        inset 0 0 0 2px rgba(255, 215, 0, 0.2),
+        0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+:root[data-theme='arcade'] .title {
+    color: #FFD700;
+    text-shadow: 
+        2px 2px 0 #FF6347,
+        4px 4px 0 #8A2BE2;
+    letter-spacing: 1px;
+    line-height: 1.5;
+}
+
+:root[data-theme='arcade'] .timer,
+:root[data-theme='arcade'] .level-number {
+    font-family: 'VT323', monospace;
+    color: #FF69B4;
+    text-shadow: 2px 2px 0 #8A2BE2;
+    font-size: 1.2em;
+}
+
+@keyframes arcade-found {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.15) rotate(-5deg);
+    }
+    75% {
+        transform: scale(1.15) rotate(5deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+:root[data-theme='arcade'] .found-temp {
+    animation-name: arcade-found !important;
+}
+
+:root[data-theme='arcade'] .mark.selected {
+    border: 2px solid #FFD700;
+    animation: arcade-blink 1s steps(2) infinite;
+}
+
+@keyframes arcade-blink {
+    0%, 100% {
+        opacity: 1;
+        border-color: #FFD700;
+    }
+    50% {
+        opacity: 0.7;
+        border-color: #FF69B4;
+    }
+}

@@ -80,17 +80,6 @@
     overflow: hidden;
 }
 
-:root[data-theme='portal'] .cell::before {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    background:
-        linear-gradient(90deg, transparent 48%, rgba(0, 0, 0, 0.03) 50%, transparent 52%),
-        linear-gradient(0deg, transparent 48%, rgba(0, 0, 0, 0.03) 50%, transparent 52%);
-    background-size: 16px 16px;
-}
-
 /* Personalización tipográfica ajustada */
 :root[data-theme='portal'] .title {
     font-family: var(--font-family-title);

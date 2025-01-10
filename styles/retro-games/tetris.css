@@ -31,8 +31,6 @@
     --confetti-colors: #f00, #0f0, #00f, #ff0;
 }
 
-/* ...existing code... */
-
 :root[data-theme='tetris'] body {
     background: var(--color-bg);
 }

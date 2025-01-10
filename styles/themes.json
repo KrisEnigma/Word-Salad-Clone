@@ -14,12 +14,104 @@
           "name": "Light"
         },
         {
-          "file": "retro.css",
-          "name": "Retro"
+          "file": "solarized.css",
+          "name": "Solarized"
         },
         {
           "file": "synthwave.css",
           "name": "Synthwave"
+        },
+        {
+          "file": "cyberpunk.css",
+          "name": "Cyberpunk"
+        },
+        {
+          "file": "arcade.css",
+          "name": "Arcade"
+        },
+        {
+          "file": "dreams.css",
+          "name": "Dreams"
+        },
+        {
+          "file": "fantasy.css",
+          "name": "Fantasy"
+        },
+        {
+          "file": "forest.css",
+          "name": "Forest"
+        },
+        {
+          "file": "odyssey.css",
+          "name": "Odyssey"
+        },
+        {
+          "file": "pixel.css",
+          "name": "Pixel"
+        },
+        {
+          "file": "stealth.css",
+          "name": "Stealth"
+        },
+        {
+          "file": "elementalfury.css",
+          "name": "Elemental Fury"
+        },
+        {
+          "file": "mysticshadows.css",
+          "name": "Mystic Shadows"
+        },
+        {
+          "file": "technovibes.css",
+          "name": "Techno Vibes"
+        },
+        {
+          "file": "battleready.css",
+          "name": "Battle Ready"
+        },
+        {
+          "file": "glitcheffect.css",
+          "name": "Glitch Effect"
+        },
+        {
+          "file": "neonnostalgia.css",
+          "name": "Neon Nostalgia"
+        },
+        {
+          "file": "retroarcade.css",
+          "name": "Retro Arcade"
+        },
+        {
+          "file": "herojourney.css",
+          "name": "Hero's Journey"
+        },
+        {
+          "file": "digitaldawn.css",
+          "name": "Digital Dawn"
+        },
+        {
+          "file": "pixelparadise.css",
+          "name": "Pixel Paradise"
+        },
+        {
+          "file": "8bitadventure.css",
+          "name": "8-Bit Adventure"
+        },
+        {
+          "file": "classicconsole.css",
+          "name": "Classic Console"
+        },
+        {
+          "file": "vintagevibes.css",
+          "name": "Vintage Vibes"
+        },
+        {
+          "file": "gameoverglow.css",
+          "name": "Game Over Glow"
+        },
+        {
+          "file": "retrorainbow.css",
+          "name": "Retro Rainbow"
         }
       ]
     },

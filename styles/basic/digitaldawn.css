@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap');
+
+:root[data-theme='digitaldawn'] {
+    /* Fuentes */
+    --font-family-header: 'Orbitron', sans-serif;
+    --font-family-title: 'Rajdhani', sans-serif;
+    --font-family-content: 'Space Grotesk', sans-serif;
+
+    /* Colores */
+    --color-bg: #0a0a1a;
+    --color-cell: #1a1a2a;
+    --color-modal: rgba(10, 10, 26, 0.95);
+    --color-button: #8A2BE2;
+    --color-text: #FFFFFF;
+    --color-selected: #FF6347;
+    --color-hover: #FFD700;
+    --color-line: #00BFFF;
+
+    /* Efectos */
+    --cell-radius: 8px;
+    --shadow-opacity: 0.6;
+    --border-light: 1px solid rgba(0, 191, 255, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(255, 99, 71, 0.1);
+    --effect-color-2: rgba(0, 191, 255, 0.1);
+    --glow-radius: 25px;
+    --glow-color: rgba(138, 43, 226, 0.4);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(135deg, #FF6347, #8A2BE2);
+    --found-scale: 1.1;
+    --found-shadow: 0 0 40px rgba(0, 191, 255, 0.5);
+    --unused-scale: 0.9;
+    --unused-opacity: 0.15;
+    --confetti-colors: #FF6347, #FFD700, #00BFFF, #8A2BE2;
+}
+
+:root[data-theme='digitaldawn'] .board {
+    background: linear-gradient(135deg,
+            rgba(10, 10, 26, 0.95) 0%,
+            rgba(138, 43, 226, 0.1) 100%);
+    border: 2px solid rgba(0, 191, 255, 0.2);
+}
+
+:root[data-theme='digitaldawn'] .cell {
+    background: linear-gradient(145deg,
+            rgba(26, 26, 42, 1) 0%,
+            rgba(26, 26, 42, 0.8) 100%);
+    border: var(--border-light);
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.1);
+    backdrop-filter: blur(2px);
+}
+
+:root[data-theme='digitaldawn'] .title {
+    color: #FFFFFF;
+    text-shadow:
+        0 0 10px rgba(0, 191, 255, 0.5),
+        0 0 20px rgba(138, 43, 226, 0.3);
+    letter-spacing: 1px;
+}
+
+:root[data-theme='digitaldawn'] .timer,
+:root[data-theme='digitaldawn'] .level-number {
+    color: #00BFFF;
+    text-shadow: 0 0 10px rgba(0, 191, 255, 0.4);
+}
+
+@keyframes dawn-found {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(var(--found-scale));
+        filter: brightness(1.5);
+        box-shadow:
+            0 0 30px rgba(255, 99, 71, 0.6),
+            0 0 50px rgba(0, 191, 255, 0.4);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+:root[data-theme='digitaldawn'] .found-temp {
+    animation: dawn-found 0.7s ease-in-out;
+}
+
+:root[data-theme='digitaldawn'] .mark.selected {
+    animation: dawn-selected 2s infinite;
+}
+
+@keyframes dawn-selected {
+    0% {
+        background: #FF6347;
+    }
+
+    33% {
+        background: #FFD700;
+    }
+
+    66% {
+        background: #00BFFF;
+    }
+
+    100% {
+        background: #FF6347;
+    }
+}

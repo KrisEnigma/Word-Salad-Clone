@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+
+:root[data-theme='pixel'] {
+    /* Fuentes */
+    --font-family-header: 'Silkscreen', cursive;
+    --font-family-title: 'Press Start 2P', cursive;
+    --font-family-content: 'DotGothic16', sans-serif;
+
+    /* Colores */
+    --color-bg: linear-gradient(135deg, #1a1a1a, #8A2BE2 200%);
+    --color-cell: #2a2a2a;
+    --color-modal: rgba(26, 26, 26, 0.95);
+    --color-button: linear-gradient(145deg, #2a2a2a, #8A2BE2);
+    --color-text: #00FFFF;
+    --color-selected: #FF69B4;
+    --color-hover: rgba(255, 105, 180, 0.8);
+    --color-line: #FFD700;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --shadow-opacity: 0.5;
+    --border-light: 2px solid rgba(0, 255, 255, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(255, 105, 180, 0.1);
+    --effect-color-2: rgba(138, 43, 226, 0.1);
+    --glow-radius: 15px;
+    --glow-color: rgba(0, 255, 255, 0.25);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #FF69B4, #8A2BE2);
+    --found-scale: 1.15;
+    --found-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+    --unused-scale: 0.85;
+    --unused-opacity: 0.3;
+    --confetti-colors: #FF69B4, #00FFFF, #FFD700, #FF6347;
+}
+
+:root[data-theme='pixel'] .board {
+    background-image:
+        linear-gradient(45deg, transparent 25%, rgba(255, 99, 71, 0.1) 25%),
+        linear-gradient(-45deg, transparent 25%, rgba(255, 99, 71, 0.1) 25%),
+        linear-gradient(45deg, rgba(255, 99, 71, 0.1) 75%, transparent 75%),
+        linear-gradient(-45deg, rgba(255, 99, 71, 0.1) 75%, transparent 75%);
+    background-size: 20px 20px;
+    background-color: #1a1a1a;
+    image-rendering: pixelated;
+}
+
+:root[data-theme='pixel'] .cell {
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    image-rendering: pixelated;
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 105, 180, 0.2),
+        0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+:root[data-theme='pixel'] .title {
+    color: #00FFFF;
+    text-shadow:
+        2px 2px 0 #FF69B4,
+        4px 4px 0 #8A2BE2;
+    letter-spacing: 2px;
+    line-height: 1.5;
+}
+
+:root[data-theme='pixel'] .timer {
+    font-family: Silkscreen, cursive;
+    color: #FF6347;
+    text-shadow: 2px 2px 0 #8A2BE2;
+}
+
+:root[data-theme='pixel'] .level-number {
+    font-family: Silkscreen, cursive;
+    color: #FFD700;
+    text-shadow: 2px 2px 0 #FF69B4;
+}
+
+@keyframes pixel-found {
+    0% {
+        transform: scale(1);
+        clip-path: inset(0 0 0 0);
+    }
+
+    50% {
+        transform: scale(1.15);
+        clip-path: inset(10% 10% 10% 10%);
+    }
+
+    100% {
+        transform: scale(1);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+:root[data-theme='pixel'] .found-temp {
+    animation-name: pixel-found !important;
+}
+
+:root[data-theme='pixel'] .mark.selected {
+    border: 2px dashed #FF69B4;
+    animation: pixel-rainbow 2s steps(6) infinite;
+}
+
+@keyframes pixel-rainbow {
+    0% {
+        border-color: #FF69B4;
+    }
+
+    20% {
+        border-color: #00FFFF;
+    }
+
+    40% {
+        border-color: #FFD700;
+    }
+
+    60% {
+        border-color: #FF6347;
+    }
+
+    80% {
+        border-color: #8A2BE2;
+    }
+
+    100% {
+        border-color: #FF69B4;
+    }
+}

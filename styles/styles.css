@@ -26,7 +26,7 @@
 
     /* Tipografía proporcional */
     --base-font-size: calc(var(--board-size) * 0.06);
-    --font-size-title: clamp(1.2rem, calc(var(--base-font-size) * 1.5), 1.5rem);
+    --font-size-title: clamp(1.5rem, calc(var(--base-font-size) * 2), 2.5rem);
     --font-size-ui: clamp(0.75rem, calc(var(--base-font-size) * 0.8), 1.2rem);
     --font-size-word: var(--base-font-size);
     --font-size-cell: calc(var(--board-size) * 0.15);
@@ -65,6 +65,9 @@
     --modal-min-height: min(200px, 50vh);
     --modal-max-height: 80vh;
     --modal-border-radius: min(16px, 3vw);
+
+    /* Aumentar el tamaño base del título */
+    --title-height: clamp(2.5rem, 4vh, 4rem);
 }
 
 /* Resto del CSS base */
@@ -154,8 +157,9 @@ body {
 
 .title {
     height: var(--title-height);
-    font-size: var(--font-size-title);
-    line-height: 1.2;
+    font-size: clamp(1rem, 6vw, var(--font-size-title));
+    line-height: 1.3;
+    padding: 0 var(--spacing);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,6 +170,7 @@ body {
     font-family: var(--font-family-title);
     max-width: 100%;
     overflow-wrap: break-word;
+    white-space: nowrap;
 }
 
 /* Clase de utilidad para prevenir selección */

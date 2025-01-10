@@ -7,28 +7,39 @@
     --font-family-title: 'Cardo', serif;
     --font-family-content: 'Noto Sans', sans-serif; /* Mejor para UI como en el juego */
 
-    /* Colores - Paleta Sheikah */
-    --color-bg: linear-gradient(135deg, #162834 0%, #1d3543 100%);
-    --color-cell: linear-gradient(145deg, #1d3543, #162834);
-    --color-modal: rgba(22, 40, 52, 0.95);
-    --color-button: #45b7ce;
-    --color-text: #e2e9f3;
-    --color-selected: #45b7ce;
-    --color-hover: #7cd3e6;
-    --color-line: #45b7ce;
+    /* Colores - Paleta Sheikah mejorada */
+    --color-bg: linear-gradient(135deg, #0f1922 0%, #1a2f3d 50%, #243b4d 100%);
+    --color-cell: linear-gradient(145deg, 
+        rgba(38, 67, 87, 0.95),
+        rgba(29, 53, 67, 0.98)
+    );
+    --color-modal: linear-gradient(180deg, 
+        rgba(22, 40, 52, 0.98) 0%,
+        rgba(15, 25, 34, 0.95) 100%
+    );
+    --color-button: linear-gradient(to bottom right, #5ccce0, #45b7ce);
+    --color-text: #e8f1ff;
+    --color-selected: #5ccce0;
+    --color-hover: rgba(124, 211, 230, 0.8);
+    --color-line: linear-gradient(to right, #45b7ce, #7cd3e6);
 
-    /* Efectos */
-    --cell-radius: 2px; /* Más cuadrado como la estética Sheikah */
-    --border-light: 1px solid rgba(69, 183, 206, 0.15);
-    --shadow-opacity: 0.5;
+    /* Efectos mejorados */
+    --cell-radius: 3px;
+    --border-light: 1px solid rgba(92, 204, 224, 0.2);
+    --shadow-opacity: 0.6;
+    --glow-effect: 0 0 20px rgba(69, 183, 206, 0.2);
 
-    /* Animaciones */
-    --found-bg: radial-gradient(circle, #45b7ce 0%, #2c95ab 100%);
+    /* Animaciones mejoradas */
+    --found-bg: radial-gradient(circle, 
+        rgba(92, 204, 224, 1) 0%, 
+        rgba(69, 183, 206, 0.9) 50%,
+        rgba(44, 149, 171, 0.8) 100%
+    );
     --found-scale: 1.15;
     --found-shadow: 
-        0 0 20px rgba(69, 183, 206, 0.6),
-        0 0 40px rgba(44, 149, 171, 0.4),
-        inset 0 0 15px rgba(124, 211, 230, 0.3);
+        0 0 25px rgba(92, 204, 224, 0.7),
+        0 0 45px rgba(69, 183, 206, 0.5),
+        inset 0 0 20px rgba(124, 211, 230, 0.4);
     --unused-scale: 0.92;
     --unused-opacity: 0.15;
     --animation-duration-found: 800ms;
@@ -46,16 +57,22 @@
 
 :root[data-theme='zelda-botw'] .mark.selected,
 :root[data-theme='zelda-botw'] .hitbox:hover + .mark {
-    background: rgba(69, 183, 206, 0.25);
-    backdrop-filter: blur(2px);
-    border: 1px solid rgba(69, 183, 206, 0.4);
-    box-shadow: 0 0 15px rgba(69, 183, 206, 0.2);
+    background: rgba(92, 204, 224, 0.15);
+    backdrop-filter: blur(3px);
+    border: 1px solid rgba(92, 204, 224, 0.3);
+    box-shadow: 
+        0 0 20px rgba(92, 204, 224, 0.2),
+        inset 0 0 10px rgba(124, 211, 230, 0.1);
 }
 
 :root[data-theme='zelda-botw'] .cell {
-    backdrop-filter: blur(1px);
-    background: linear-gradient(145deg, rgba(29, 53, 67, 0.95), rgba(22, 40, 52, 0.98));
+    backdrop-filter: blur(2px);
+    background: var(--color-cell);
     border: var(--border-light);
+    box-shadow: 
+        var(--glow-effect),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
@@ -63,8 +80,13 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(145deg, transparent, rgba(69, 183, 206, 0.08));
-    border: 1px solid rgba(69, 183, 206, 0.1);
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(92, 204, 224, 0.05) 50%,
+        transparent 100%
+    );
+    opacity: 0.5;
     z-index: 1;
 }
 
@@ -72,14 +94,21 @@
     content: '';
     position: absolute;
     inset: -1px;
-    background: linear-gradient(45deg, transparent 30%, rgba(69, 183, 206, 0.1) 50%, transparent 70%);
+    background: linear-gradient(
+        45deg,
+        transparent 20%,
+        rgba(92, 204, 224, 0.2) 40%,
+        rgba(124, 211, 230, 0.2) 60%,
+        transparent 80%
+    );
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: all 0.4s ease;
     z-index: 2;
 }
 
 :root[data-theme='zelda-botw'] .cell:hover::after {
     opacity: 1;
+    transform: translateX(5px);
 }
 
 /* Actualizar animación para que sea más similar a los efectos del juego */
@@ -90,14 +119,15 @@
     }
     30% {
         transform: scale(1.15) rotate(1deg);
-        filter: brightness(2) blur(1px);
+        filter: brightness(2.5) blur(2px);
         box-shadow: 
-            0 0 30px rgba(69, 183, 206, 0.8),
-            0 0 60px rgba(44, 149, 171, 0.6);
+            0 0 35px rgba(92, 204, 224, 0.8),
+            0 0 65px rgba(69, 183, 206, 0.6),
+            inset 0 0 20px rgba(124, 211, 230, 0.4);
     }
     60% {
         transform: scale(0.95) rotate(-1deg);
-        filter: brightness(0.9) blur(0);
+        filter: brightness(0.95) blur(0);
     }
     100% {
         transform: scale(1) rotate(0);
@@ -113,21 +143,6 @@
 
 :root[data-theme='zelda-botw'] body {
     background: var(--color-bg);
-}
-
-:root[data-theme='zelda-botw'] body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: 
-        radial-gradient(3px 3px at 40px 60px, rgba(69, 183, 206, 0.8), transparent 60%),
-        radial-gradient(2px 2px at 20px 50px, rgba(69, 183, 206, 0.6), transparent 60%),
-        radial-gradient(4px 4px at 30px 100px, rgba(69, 183, 206, 0.9), transparent 60%),
-        radial-gradient(3px 3px at 70px 40px, rgba(69, 183, 206, 0.7), transparent 60%);
-    background-size: 150px 150px;
-    animation: sheikah-particles 15s linear infinite;
-    pointer-events: none;
-    mix-blend-mode: screen;
 }
 
 @keyframes sheikah-particles {

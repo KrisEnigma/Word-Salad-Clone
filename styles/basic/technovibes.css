@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap');
+
+:root[data-theme='technovibes'] {
+    /* Fuentes */
+    --font-family-header: 'Syncopate', sans-serif;
+    --font-family-title: 'Orbitron', sans-serif;
+    --font-family-content: 'Chakra Petch', sans-serif;
+
+    /* Colores */
+    --color-bg: #2d0036;
+    --color-cell: #1a1a1a;
+    --color-modal: rgba(26, 26, 26, 0.95);
+    --color-button: linear-gradient(145deg, #00FF00, #1E90FF);
+    --color-text: #FFD700;
+    --color-selected: #FF00FF;
+    --color-hover: rgba(255, 0, 255, 0.7);
+    --color-line: #00FF00;
+
+    /* Efectos */
+    --cell-radius: 0;
+    --shadow-opacity: 0.6;
+    --border-light: 1px solid rgba(0, 255, 0, 0.3);
+
+    /* Efectos especiales */
+    --effect-color-1: rgba(30, 144, 255, 0.15);
+    --effect-color-2: rgba(255, 99, 71, 0.15);
+    --glow-radius: 20px;
+    --glow-color: rgba(0, 255, 0, 0.2);
+
+    /* Animaciones */
+    --found-bg: linear-gradient(45deg, #FF00FF, #1E90FF);
+    --found-scale: 1.1;
+    --found-shadow: 0 0 35px rgba(0, 255, 0, 0.5);
+    --unused-scale: 0.9;
+    --unused-opacity: 0.2;
+    --confetti-colors: #00FF00, #FF00FF, #1E90FF, #FFD700;
+}
+
+:root[data-theme='technovibes'] .board {
+    background: transparent;
+}
+
+:root[data-theme='technovibes'] .cell {
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    box-shadow:
+        inset 0 0 15px rgba(30, 144, 255, 0.2),
+        0 0 10px rgba(255, 0, 255, 0.2);
+    background: linear-gradient(135deg,
+            rgba(26, 26, 26, 0.9),
+            rgba(26, 26, 26, 0.7));
+}
+
+:root[data-theme='technovibes'] .title {
+    color: #00FF00;
+    text-shadow:
+        0 0 10px rgba(0, 255, 0, 0.7),
+        0 0 20px rgba(30, 144, 255, 0.5);
+    letter-spacing: 3px;
+}
+
+:root[data-theme='technovibes'] .text {
+    font-family: Orbitron, sans-serif;
+    letter-spacing: 1px;
+}
+
+@keyframes techno-found {
+    0% {
+        transform: scale(1);
+        filter: hue-rotate(0deg);
+    }
+
+    50% {
+        transform: scale(1.1);
+        filter: hue-rotate(180deg);
+        border-color: #FF00FF;
+    }
+
+    100% {
+        transform: scale(1);
+        filter: hue-rotate(360deg);
+    }
+}
+
+:root[data-theme='technovibes'] .found-temp {
+    animation: techno-found 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-theme='technovibes'] .mark.selected {
+    background: #FF00FF;
+    animation: techno-pulse 2s infinite;
+}
+
+@keyframes techno-pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 15px #00FF00,
+            0 0 30px #1E90FF;
+    }
+
+    50% {
+        box-shadow:
+            0 0 25px #FF00FF,
+            0 0 50px #FFD700;
+    }
+}
