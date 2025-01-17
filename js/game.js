@@ -465,17 +465,17 @@ class GameState {
         window.addEventListener('resize', () => this.selectionManager.drawLine());
 
         document.addEventListener('click', event => {
-            // No resetear ni cerrar nada si el click está relacionado con el modal de victoria
+            // No procesar ningún click relacionado con el modal de victoria
             if (event.target.closest('#victory-modal')) return;
-
-            // No resetear si el click está relacionado con el menú o modales
+            
+            // No resetear si el click está en elementos de UI
             if (event.target.closest('.modal-overlay') || 
                 event.target.closest('.menu') || 
                 event.target.closest('.modal-content')) {
                 return;
             }
 
-            // Solo resetear si el click fue fuera del tablero y no en elementos de UI
+            // Solo resetear si el click fue fuera del tablero
             if (!event.target.closest('.board')) {
                 this.selectionManager.reset();
                 this.handleModalClose(event);
@@ -498,6 +498,22 @@ class GameState {
                 if (modal.classList.contains('active') && modal.id !== 'victory-modal') {
                     modal.classList.remove('active');
                     if (modal === document.getElementById('modal')) {
+                        this.resumeTimer();
+                    }
+                }
+            });
+        });
+
+        // Eliminar el listener general de modales y reemplazarlo con uno más específico
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            // Ignorar completamente el modal de victoria
+            if (modal.id === 'victory-modal') return;
+
+            modal.addEventListener('click', (event) => {
+                // Solo cerrar si el click fue directamente en el overlay
+                if (event.target === modal) {
+                    modal.classList.remove('active');
+                    if (modal.id === 'modal') {
                         this.resumeTimer();
                     }
                 }
@@ -572,41 +588,46 @@ class GameState {
         const modalHandlers = {
             menu: document.querySelector('.menu'),
             modal: document.getElementById('modal'),
+            themeModal: document.getElementById('theme-modal'),
             victoryModal: document.getElementById('victory-modal')
         };
 
-        // Remover duplicados y asegurar consistencia en la lógica de cierre
+        // Agregar el evento click al botón del menú
+        modalHandlers.menu.addEventListener('click', (event) => {
+            event.stopPropagation();
+            modalHandlers.modal.classList.add('active');
+            this.pauseTimer();
+        });
+
+        const isAnyModalActive = () => {
+            return ['modal', 'theme-modal', 'victory-modal'].some(id => 
+                document.getElementById(id).classList.contains('active')
+            );
+        };
+
         const closeModal = (modal) => {
-            // No cerrar si es el modal de victoria
             if (modal?.id === 'victory-modal') return;
             
             modal?.classList.remove('active');
-            if (modal === modalHandlers.modal) {
+            // Solo reanudar el timer si no hay ningún modal activo
+            if (!isAnyModalActive()) {
                 this.resumeTimer();
             }
         };
 
-        // Eliminar los listeners redundantes y mantener solo uno por modal
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            if (modal.id === 'victory-modal') return;
-
-            modal.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    closeModal(modal);
-                }
-            });
+        // Configurar navegación entre modales
+        document.querySelector('.back-button')?.addEventListener('click', () => {
+            modalHandlers.themeModal.classList.remove('active');
+            modalHandlers.modal.classList.add('active');
+            // No reanudar el timer aquí ya que seguimos en modales
         });
 
-        // Actualizar el manejo de botones para usar closeModal
-        document.querySelectorAll('.back-button, #modal .menu-options button').forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.stopPropagation();
-                const modal = button.closest('.modal-overlay');
-                closeModal(modal);
-            });
+        document.getElementById('theme-button')?.addEventListener('click', () => {
+            modalHandlers.modal.classList.remove('active');
+            modalHandlers.themeModal.classList.add('active');
+            // No reanudar el timer aquí ya que seguimos en modales
         });
 
-        // ...resto del código de bindModalEvents sin cambios...
         const handleButton = (buttonId) => {
             const buttonHandlers = {
                 'reset-game': () => {
@@ -617,14 +638,14 @@ class GameState {
                 'restart-level': () => {
                     this.resetTimer();
                     this.loadLevel(this.currentLevel.id);
-                    closeModal(modalHandlers.victoryModal);
+                    modalHandlers.victoryModal.classList.remove('active');
                 },
                 'next-level': () => {
                     const nextIndex = LEVEL_ORDER.indexOf(this.currentLevel.id) + 1;
                     if (nextIndex < LEVEL_ORDER.length) {
                         this.resetTimer();
                         this.loadLevel(LEVEL_ORDER[nextIndex]);
-                        closeModal(modalHandlers.victoryModal);
+                        modalHandlers.victoryModal.classList.remove('active');
                     }
                 }
             };
@@ -632,39 +653,24 @@ class GameState {
             buttonHandlers[buttonId]?.();
         };
 
+        // Configurar event listeners para botones
         ['reset-game', 'restart-level', 'next-level'].forEach(buttonId => {
             const button = document.getElementById(buttonId);
             if (button) {
-                button.addEventListener('click', () => {  // Eliminar el parámetro event ya que no se usa
-                    handleButton(buttonId);
-                });
+                button.addEventListener('click', () => handleButton(buttonId));
             }
         });
 
-        modalHandlers.menu.addEventListener('click', event => {  // Cambiar e por event
-            event.stopPropagation();
-            const isOpening = !modalHandlers.modal.classList.contains('active');
-            if (isOpening) {
-                modalHandlers.modal.classList.add('active');
-                this.pauseTimer();
-            } else {
-                modalHandlers.modal.classList.remove('active');
-                this.resumeTimer();
+        // Prevenir cierre del modal de victoria en clicks externos
+        modalHandlers.victoryModal.addEventListener('click', (event) => {
+            if (event.target === modalHandlers.victoryModal) {
+                event.stopPropagation();
             }
         });
 
-        modalHandlers.modal.addEventListener('click', event => {  // Cambiar e por event
-            if (event.target === modalHandlers.modal) {
-                closeModal(modalHandlers.modal);
-            }
-        });
-
-        document.querySelectorAll('.modal-content').forEach(content => {
-            content.addEventListener('click', event => event.stopPropagation());  // Renombrar e a event
-        });
-
+        // Configurar listeners para otros modales
         document.querySelectorAll('.modal-overlay').forEach(modal => {
-            if (modal.id === 'victory-modal') return; // Skip victory modal
+            if (modal.id === 'victory-modal') return;
             
             modal.addEventListener('click', (event) => {
                 if (event.target === modal) {
@@ -673,43 +679,23 @@ class GameState {
             });
         });
 
-        document.addEventListener('keydown', e => {
-            if (e.key.toLowerCase() === 'c') {
-                AnimationManager.confetti.start();
-            }
-            if (e.key.toLowerCase() === 'v') {
-                this.onLevelComplete();
-            }
-        });
+        // ...existing code for menu and other modal handlers...
 
-        // Asegurarse de que el evento de cierre se aplique a todos los modales
-        document.querySelectorAll('.back-button, #modal .menu-options button').forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevenir que el click se propague
-                // Cerrar el modal más cercano
-                const modal = button.closest('.modal-overlay');
-                modal.classList.remove('active');
-                this.resumeTimer();
-            });
-        });
-
-        // Manejar el cierre al hacer clic fuera del modal
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                    this.resumeTimer();
-                }
-            });
+        // Evitar la propagación de clicks dentro del contenido modal
+        document.querySelectorAll('.modal-content').forEach(content => {
+            content.addEventListener('click', event => event.stopPropagation());
         });
     }
 
     handleModalClose() {
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             if (modal.id === 'victory-modal') return;
+            
             if (modal.classList.contains('active')) {
-                modal.classList.remove('active');
-                if (modal === document.getElementById('modal')) {
+                const modalElement = modal;
+                modalElement.classList.remove('active');
+                // Solo reanudar el timer si no hay ningún modal activo
+                if (!document.querySelector('.modal-overlay.active')) {
                     this.resumeTimer();
                 }
             }
