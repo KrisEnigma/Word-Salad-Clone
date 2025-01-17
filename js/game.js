@@ -15,10 +15,9 @@ class GameState {
                 this.showContent();
             });
 
-        // Agregar listener para cambios de tema
-        window.addEventListener('themechange', (e) => {
-            console.log('Evento themechange recibido:', e.detail);
-            this.handleThemeChange(e.detail.theme);
+        // Actualizar el listener para ignorar el detalle del evento
+        window.addEventListener('themechange', () => {
+            this.handleThemeChange();
         });
     }
 
