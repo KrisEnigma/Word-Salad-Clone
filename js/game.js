@@ -46,31 +46,17 @@ class GameState {
 
     // Nuevo método para manejar cambios de tema
     handleThemeChange(themeName) {
-        console.log('handleThemeChange:', themeName);
-        
-        const recalculateAll = () => {
-            console.log('Recalculando después del cambio de tema');
+        const recalculateUI = () => {
             this.fitTitle();
             this.updateWordList();
         };
 
-        // Primera pasada inmediata
+        // Secuencia de recálculos para garantizar el ajuste correcto
         requestAnimationFrame(() => {
-            console.log('Primera pasada de recálculo');
-            recalculateAll();
-        });
-
-        // Segunda pasada después de cargar fuentes
-        document.fonts.ready.then(() => {
-            console.log('Fuentes cargadas, segunda pasada');
-            requestAnimationFrame(() => {
-                recalculateAll();
-                
-                // Tercera pasada después de un delay
-                setTimeout(() => {
-                    console.log('Recálculo final');
-                    this.fitTitle();
-                }, 150);
+            recalculateUI();
+            document.fonts.ready.then(() => {
+                recalculateUI();
+                setTimeout(this.fitTitle.bind(this), 150);
             });
         });
     }
@@ -464,61 +450,129 @@ class GameState {
         this.bindModalEvents();
         window.addEventListener('resize', () => this.selectionManager.drawLine());
 
+        // Unificar manejo de clicks globales
         document.addEventListener('click', event => {
-            // No procesar ningún click relacionado con el modal de victoria
-            if (event.target.closest('#victory-modal')) return;
-            
-            // No resetear si el click está en elementos de UI
-            if (event.target.closest('.modal-overlay') || 
-                event.target.closest('.menu') || 
-                event.target.closest('.modal-content')) {
-                return;
-            }
+            const target = event.target;
+            if (target.closest('#victory-modal') || 
+                target.closest('.modal-content') || 
+                target.closest('.menu')) return;
 
-            // Solo resetear si el click fue fuera del tablero
-            if (!event.target.closest('.board')) {
+            if (!target.closest('.board')) {
                 this.selectionManager.reset();
-                this.handleModalClose(event);
+                if (target.closest('.modal-overlay')) {
+                    this.handleModalClose();
+                }
             }
         });
 
-        // Modificar el ResizeObserver para recalcular los anchos
-        const resizeObserver = new ResizeObserver(() => {
+        // Solo mantener un ResizeObserver
+        new ResizeObserver(() => {
             requestAnimationFrame(() => {
                 AnimationManager.cleanupAnimations();
-                // Volver a calcular los anchos cuando cambia el tamaño
                 this.updateWordList();
             });
+        }).observe(document.documentElement);
+    }
+
+    bindModalEvents() {
+        const modalHandlers = {
+            menu: document.querySelector('.menu'),
+            modal: document.getElementById('modal'),
+            themeModal: document.getElementById('theme-modal'),
+            victoryModal: document.getElementById('victory-modal')
+        };
+
+        const isAnyModalActive = () => 
+            Object.values(modalHandlers)
+                .some(modal => modal?.classList.contains('active'));
+
+        const closeModal = (modal) => {
+            if (modal?.id === 'victory-modal') return;
+            
+            modal?.classList.remove('active');
+            if (!isAnyModalActive()) {
+                this.resumeTimer();
+            }
+        };
+
+        // Unificar manejo de navegación entre modales
+        const modalNavigation = {
+            'menu': () => {
+                modalHandlers.modal.classList.add('active');
+                this.pauseTimer();
+            },
+            'theme-button': () => {
+                modalHandlers.modal.classList.remove('active');
+                modalHandlers.themeModal.classList.add('active');
+            },
+            'back-button': () => {
+                modalHandlers.themeModal.classList.remove('active');
+                modalHandlers.modal.classList.add('active');
+            }
+        };
+
+        // Configurar navegación
+        Object.entries(modalNavigation).forEach(([id, handler]) => {
+            document.querySelector(id === 'menu' ? '.menu' : `#${id}`)
+                ?.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    handler();
+                });
         });
 
-        resizeObserver.observe(document.documentElement);
-
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', () => {
-                if (modal.classList.contains('active') && modal.id !== 'victory-modal') {
-                    modal.classList.remove('active');
-                    if (modal === document.getElementById('modal')) {
-                        this.resumeTimer();
-                    }
+        // Manejar botones de acción
+        const buttonHandlers = {
+            'reset-game': () => {
+                this.resetTimer();
+                this.loadLevel(this.currentLevel.id);
+                closeModal(modalHandlers.modal);
+            },
+            'restart-level': () => {
+                this.resetTimer();
+                this.loadLevel(this.currentLevel.id);
+                modalHandlers.victoryModal.classList.remove('active');
+            },
+            'next-level': () => {
+                const nextIndex = LEVEL_ORDER.indexOf(this.currentLevel.id) + 1;
+                if (nextIndex < LEVEL_ORDER.length) {
+                    this.resetTimer();
+                    this.loadLevel(LEVEL_ORDER[nextIndex]);
+                    modalHandlers.victoryModal.classList.remove('active');
                 }
-            });
+            }
+        };
+
+        Object.entries(buttonHandlers).forEach(([id, handler]) => {
+            document.getElementById(id)?.addEventListener('click', handler);
         });
 
-        // Eliminar el listener general de modales y reemplazarlo con uno más específico
+        // Prevenir cierre del modal de victoria
+        modalHandlers.victoryModal?.addEventListener('click', event => {
+            if (event.target === modalHandlers.victoryModal) {
+                event.stopPropagation();
+            }
+        });
+
+        // Manejar clicks en overlay de modales
         document.querySelectorAll('.modal-overlay').forEach(modal => {
-            // Ignorar completamente el modal de victoria
             if (modal.id === 'victory-modal') return;
-
-            modal.addEventListener('click', (event) => {
-                // Solo cerrar si el click fue directamente en el overlay
+            
+            modal.addEventListener('click', event => {
                 if (event.target === modal) {
-                    modal.classList.remove('active');
-                    if (modal.id === 'modal') {
-                        this.resumeTimer();
-                    }
+                    closeModal(modal);
                 }
             });
         });
+    }
+
+    handleModalClose() {
+        const activeModal = document.querySelector('.modal-overlay.active:not(#victory-modal)');
+        if (activeModal) {
+            activeModal.classList.remove('active');
+            if (!document.querySelector('.modal-overlay.active')) {
+                this.resumeTimer();
+            }
+        }
     }
 
     startTimer() {
@@ -582,124 +636,6 @@ class GameState {
 
     resetControls() {
         this.selectionManager.resetControls();
-    }
-
-    bindModalEvents() {
-        const modalHandlers = {
-            menu: document.querySelector('.menu'),
-            modal: document.getElementById('modal'),
-            themeModal: document.getElementById('theme-modal'),
-            victoryModal: document.getElementById('victory-modal')
-        };
-
-        // Agregar el evento click al botón del menú
-        modalHandlers.menu.addEventListener('click', (event) => {
-            event.stopPropagation();
-            modalHandlers.modal.classList.add('active');
-            this.pauseTimer();
-        });
-
-        const isAnyModalActive = () => {
-            return ['modal', 'theme-modal', 'victory-modal'].some(id => 
-                document.getElementById(id).classList.contains('active')
-            );
-        };
-
-        const closeModal = (modal) => {
-            if (modal?.id === 'victory-modal') return;
-            
-            modal?.classList.remove('active');
-            // Solo reanudar el timer si no hay ningún modal activo
-            if (!isAnyModalActive()) {
-                this.resumeTimer();
-            }
-        };
-
-        // Configurar navegación entre modales
-        document.querySelector('.back-button')?.addEventListener('click', () => {
-            modalHandlers.themeModal.classList.remove('active');
-            modalHandlers.modal.classList.add('active');
-            // No reanudar el timer aquí ya que seguimos en modales
-        });
-
-        document.getElementById('theme-button')?.addEventListener('click', () => {
-            modalHandlers.modal.classList.remove('active');
-            modalHandlers.themeModal.classList.add('active');
-            // No reanudar el timer aquí ya que seguimos en modales
-        });
-
-        const handleButton = (buttonId) => {
-            const buttonHandlers = {
-                'reset-game': () => {
-                    this.resetTimer();
-                    this.loadLevel(this.currentLevel.id);
-                    closeModal(modalHandlers.modal);
-                },
-                'restart-level': () => {
-                    this.resetTimer();
-                    this.loadLevel(this.currentLevel.id);
-                    modalHandlers.victoryModal.classList.remove('active');
-                },
-                'next-level': () => {
-                    const nextIndex = LEVEL_ORDER.indexOf(this.currentLevel.id) + 1;
-                    if (nextIndex < LEVEL_ORDER.length) {
-                        this.resetTimer();
-                        this.loadLevel(LEVEL_ORDER[nextIndex]);
-                        modalHandlers.victoryModal.classList.remove('active');
-                    }
-                }
-            };
-
-            buttonHandlers[buttonId]?.();
-        };
-
-        // Configurar event listeners para botones
-        ['reset-game', 'restart-level', 'next-level'].forEach(buttonId => {
-            const button = document.getElementById(buttonId);
-            if (button) {
-                button.addEventListener('click', () => handleButton(buttonId));
-            }
-        });
-
-        // Prevenir cierre del modal de victoria en clicks externos
-        modalHandlers.victoryModal.addEventListener('click', (event) => {
-            if (event.target === modalHandlers.victoryModal) {
-                event.stopPropagation();
-            }
-        });
-
-        // Configurar listeners para otros modales
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            if (modal.id === 'victory-modal') return;
-            
-            modal.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    closeModal(modal);
-                }
-            });
-        });
-
-        // ...existing code for menu and other modal handlers...
-
-        // Evitar la propagación de clicks dentro del contenido modal
-        document.querySelectorAll('.modal-content').forEach(content => {
-            content.addEventListener('click', event => event.stopPropagation());
-        });
-    }
-
-    handleModalClose() {
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            if (modal.id === 'victory-modal') return;
-            
-            if (modal.classList.contains('active')) {
-                const modalElement = modal;
-                modalElement.classList.remove('active');
-                // Solo reanudar el timer si no hay ningún modal activo
-                if (!document.querySelector('.modal-overlay.active')) {
-                    this.resumeTimer();
-                }
-            }
-        });
     }
 }
 document.addEventListener('DOMContentLoaded', () => new GameState());
