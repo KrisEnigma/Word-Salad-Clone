@@ -45,6 +45,8 @@
             rgb(10 10 26 / 95%) 0%,
             rgb(138 43 226 / 10%) 100%);
     border: 2px solid rgb(0 191 255 / 20%);
+    padding: 0;  /* Asegurar que no haya padding */
+    box-sizing: border-box;  /* Asegurar que el borde está incluido en el tamaño */
 }
 
 :root[data-theme='digitaldawn'] .cell {

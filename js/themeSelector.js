@@ -185,9 +185,87 @@ export class ThemeSelector {
                 if (themeData) {
                     const styleText = await this.getThemeStyles(themeData);
                     preview.setAttribute('style', styleText);
+                    
+                    // Ajustar el título del preview
+                    const title = preview.querySelector('.preview-title');
+                    if (title) {
+                        this.fitPreviewTitle(title);
+                    }
                 }
             }
         });
+    }
+
+    fitPreviewTitle(titleElement) {
+        const text = titleElement.textContent;
+        const words = text.split(/\s+/);
+        
+        // Reset inicial
+        titleElement.style = '';
+        titleElement.classList.remove('single-line', 'multi-line');
+        
+        // Forzar reflow
+        void titleElement.offsetWidth;
+
+        if (words.length === 1) {
+            this.fitSingleWord(titleElement);
+        } else {
+            this.fitMultipleWords(titleElement);
+        }
+    }
+
+    fitSingleWord(titleElement) {
+        titleElement.classList.add('single-line');
+        const container = titleElement.parentElement;
+        const maxWidth = container.clientWidth - 16;
+        const textWidth = titleElement.scrollWidth;
+        const isPixelFont = this.isPixelFont(titleElement);
+        
+        if (textWidth > maxWidth) {
+            const scale = maxWidth / textWidth;
+            // Ajustes específicos para fuentes pixel art
+            const minSize = isPixelFont ? 12 : 16;
+            const scaleFactor = isPixelFont ? 0.7 : 0.9; // Más agresivo con pixel fonts
+            const currentSize = parseFloat(getComputedStyle(titleElement).fontSize);
+            const newSize = Math.max(minSize, currentSize * scale * scaleFactor);
+            titleElement.style.fontSize = `${newSize}px`;
+        }
+    }
+
+    fitMultipleWords(titleElement) {
+        titleElement.classList.add('multi-line');
+        const isPixelFont = this.isPixelFont(titleElement);
+        
+        // Ajustar tamaño base según el tipo de fuente
+        const baseSize = parseFloat(getComputedStyle(titleElement).fontSize);
+        const initialSize = isPixelFont ? baseSize * 0.8 : baseSize;
+        titleElement.style.fontSize = `${initialSize}px`;
+        
+        const maxHeight = parseFloat(getComputedStyle(titleElement).lineHeight) * 2;
+        
+        if (titleElement.scrollHeight > maxHeight) {
+            let size = initialSize;
+            const minSize = isPixelFont ? 10 : 14;
+            const reductionFactor = isPixelFont ? 0.85 : 0.95;
+            
+            while (size > minSize && titleElement.scrollHeight > maxHeight) {
+                size *= reductionFactor;
+                titleElement.style.fontSize = `${size}px`;
+            }
+            
+            if (titleElement.scrollHeight > maxHeight) {
+                titleElement.classList.remove('multi-line');
+                this.fitSingleWord(titleElement);
+            }
+        }
+    }
+
+    isPixelFont(element) {
+        const fontFamily = getComputedStyle(element).fontFamily.toLowerCase();
+        return fontFamily.includes('press start') || 
+               fontFamily.includes('pixel') ||
+               fontFamily.includes('8bit') ||
+               fontFamily.includes('arcade');
     }
 
     async getThemeStyles(themeData) {
@@ -337,7 +415,9 @@ export class ThemeSelector {
     }
 
     setTheme(themeName) {
+        console.log('ThemeSelector.setTheme:', themeName);
         let found = false;
+        
         for (const [, themes] of this.availableThemes) {
             if (themes.has(themeName)) {
                 found = true;
@@ -346,8 +426,11 @@ export class ThemeSelector {
         }
 
         const themeToApply = found ? themeName : this.getDefaultTheme();
+        console.log('Aplicando tema:', themeToApply);
+        
         document.documentElement.setAttribute('data-theme', themeToApply);
         localStorage.setItem('theme', themeToApply);
+        
         return found;
     }
 
@@ -359,15 +442,28 @@ export class ThemeSelector {
     }
 
     bindEvents(themeGrid) {
-        themeGrid.addEventListener('click', event => {  // Renombrar e a event
+        console.log('Inicializando eventos de tema');
+        
+        themeGrid.addEventListener('click', event => {
             const themeButton = event.target.closest('.theme-option');
             if (!themeButton) return;
 
             const newTheme = themeButton.dataset.theme;
-            if (this.setTheme(newTheme)) {
+            console.log('Click en tema:', newTheme);
+            
+            // Disparar un evento personalizado para el cambio de tema
+            const themeChanged = this.setTheme(newTheme);
+            console.log('Tema cambiado:', themeChanged);
+            
+            if (themeChanged) {
                 themeGrid.querySelectorAll('.theme-option').forEach(btn => {
                     btn.classList.toggle('active', btn === themeButton);
                 });
+                
+                // Disparar evento personalizado
+                window.dispatchEvent(new CustomEvent('themechange', { 
+                    detail: { theme: newTheme } 
+                }));
             }
         });
 

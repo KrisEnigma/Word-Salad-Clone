@@ -14,6 +14,12 @@ class GameState {
                 console.error('Error during initialization:', error);
                 this.showContent();
             });
+
+        // Agregar listener para cambios de tema
+        window.addEventListener('themechange', (e) => {
+            console.log('Evento themechange recibido:', e.detail);
+            this.handleThemeChange(e.detail.theme);
+        });
     }
 
     async initPhase1() {
@@ -34,9 +40,39 @@ class GameState {
     }
 
     setTheme(themeName) {
-        if (this.themeSelector.setTheme(themeName)) {
-            requestAnimationFrame(() => this.updateWordList());
-        }
+        console.log('setTheme llamado:', themeName);
+        return this.themeSelector.setTheme(themeName);
+    }
+
+    // Nuevo método para manejar cambios de tema
+    handleThemeChange(themeName) {
+        console.log('handleThemeChange:', themeName);
+        
+        const recalculateAll = () => {
+            console.log('Recalculando después del cambio de tema');
+            this.fitTitle();
+            this.updateWordList();
+        };
+
+        // Primera pasada inmediata
+        requestAnimationFrame(() => {
+            console.log('Primera pasada de recálculo');
+            recalculateAll();
+        });
+
+        // Segunda pasada después de cargar fuentes
+        document.fonts.ready.then(() => {
+            console.log('Fuentes cargadas, segunda pasada');
+            requestAnimationFrame(() => {
+                recalculateAll();
+                
+                // Tercera pasada después de un delay
+                setTimeout(() => {
+                    console.log('Recálculo final');
+                    this.fitTitle();
+                }, 150);
+            });
+        });
     }
 
     showContent() {
@@ -73,6 +109,81 @@ class GameState {
             interval: null,
             isPaused: false
         };
+
+        // Agregar el ajuste automático del título
+        const title = this.titleElement;
+        
+        // Mover la función fitTitle fuera para poder reutilizarla
+        this.fitTitle = () => {
+            const title = this.titleElement;
+            const container = title.parentElement;
+            
+            const adjustTitle = () => {
+                // Reset completo de estilos
+                title.style = '';
+                
+                // Forzar reflow
+                void title.offsetWidth;
+                
+                const availableWidth = container.clientWidth - 
+                    (parseFloat(getComputedStyle(container).paddingLeft) + 
+                    parseFloat(getComputedStyle(container).paddingRight)) - 20;
+                
+                const titleWidth = title.scrollWidth;
+                const currentFontSize = parseFloat(getComputedStyle(title).fontSize);
+                
+                if (titleWidth > availableWidth) {
+                    const scale = availableWidth / titleWidth;
+                    const minFontSize = parseFloat(getComputedStyle(document.documentElement)
+                        .getPropertyValue('--title-min-font'));
+                    const newSize = Math.max(minFontSize, currentFontSize * scale);
+                    title.style.fontSize = `${newSize}px`;
+                }
+            };
+
+            // Secuencia de ajustes para asegurar el cálculo correcto
+            const performAdjustments = async () => {
+                // Primer intento inmediato
+                adjustTitle();
+
+                // Esperar a que las fuentes estén cargadas
+                await document.fonts.ready;
+                
+                // Segunda pasada después de cargar fuentes
+                requestAnimationFrame(() => {
+                    adjustTitle();
+                    
+                    // Tercera pasada después de un breve delay
+                    setTimeout(() => {
+                        adjustTitle();
+                        
+                        // Última pasada para asegurar
+                        requestAnimationFrame(() => {
+                            adjustTitle();
+                        });
+                    }, 100);
+                });
+            };
+
+            performAdjustments();
+        };
+
+        // Observar cambios en el contenido del título
+        new MutationObserver(() => {
+            this.fitTitle();
+        }).observe(title, {
+            childList: true,
+            characterData: true,
+            subtree: true
+        });
+
+        // Ajustar en cambios de tamaño
+        window.addEventListener('resize', () => {
+            requestAnimationFrame(() => this.fitTitle());
+        });
+        
+        // Ajuste inicial con retardo para asegurar carga
+        setTimeout(() => this.fitTitle(), 0);
     }
 
     initializeState() {
@@ -354,7 +465,18 @@ class GameState {
         window.addEventListener('resize', () => this.selectionManager.drawLine());
 
         document.addEventListener('click', event => {
-            if (!event.target.closest('.board') && !event.target.closest('.modal-content')) {
+            // No resetear ni cerrar nada si el click está relacionado con el modal de victoria
+            if (event.target.closest('#victory-modal')) return;
+
+            // No resetear si el click está relacionado con el menú o modales
+            if (event.target.closest('.modal-overlay') || 
+                event.target.closest('.menu') || 
+                event.target.closest('.modal-content')) {
+                return;
+            }
+
+            // Solo resetear si el click fue fuera del tablero y no en elementos de UI
+            if (!event.target.closest('.board')) {
                 this.selectionManager.reset();
                 this.handleModalClose(event);
             }
@@ -453,13 +575,38 @@ class GameState {
             victoryModal: document.getElementById('victory-modal')
         };
 
+        // Remover duplicados y asegurar consistencia en la lógica de cierre
         const closeModal = (modal) => {
-            modal.classList.remove('active');
+            // No cerrar si es el modal de victoria
+            if (modal?.id === 'victory-modal') return;
+            
+            modal?.classList.remove('active');
             if (modal === modalHandlers.modal) {
                 this.resumeTimer();
             }
         };
 
+        // Eliminar los listeners redundantes y mantener solo uno por modal
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            if (modal.id === 'victory-modal') return;
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        });
+
+        // Actualizar el manejo de botones para usar closeModal
+        document.querySelectorAll('.back-button, #modal .menu-options button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const modal = button.closest('.modal-overlay');
+                closeModal(modal);
+            });
+        });
+
+        // ...resto del código de bindModalEvents sin cambios...
         const handleButton = (buttonId) => {
             const buttonHandlers = {
                 'reset-game': () => {
@@ -500,6 +647,9 @@ class GameState {
             if (isOpening) {
                 modalHandlers.modal.classList.add('active');
                 this.pauseTimer();
+            } else {
+                modalHandlers.modal.classList.remove('active');
+                this.resumeTimer();
             }
         });
 
@@ -514,12 +664,11 @@ class GameState {
         });
 
         document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', () => {  // Remover parámetro e
-                if (modal.classList.contains('active') && modal.id !== 'victory-modal') {
-                    modal.classList.remove('active');
-                    if (modal === modalHandlers.modal) {
-                        this.resumeTimer();
-                    }
+            if (modal.id === 'victory-modal') return; // Skip victory modal
+            
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal(modal);
                 }
             });
         });
@@ -532,11 +681,33 @@ class GameState {
                 this.onLevelComplete();
             }
         });
+
+        // Asegurarse de que el evento de cierre se aplique a todos los modales
+        document.querySelectorAll('.back-button, #modal .menu-options button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevenir que el click se propague
+                // Cerrar el modal más cercano
+                const modal = button.closest('.modal-overlay');
+                modal.classList.remove('active');
+                this.resumeTimer();
+            });
+        });
+
+        // Manejar el cierre al hacer clic fuera del modal
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    this.resumeTimer();
+                }
+            });
+        });
     }
 
     handleModalClose() {
         document.querySelectorAll('.modal-overlay').forEach(modal => {
-            if (modal.classList.contains('active') && modal.id !== 'victory-modal') {
+            if (modal.id === 'victory-modal') return;
+            if (modal.classList.contains('active')) {
                 modal.classList.remove('active');
                 if (modal === document.getElementById('modal')) {
                     this.resumeTimer();

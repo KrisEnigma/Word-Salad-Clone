@@ -30,7 +30,7 @@
     --color-title: #1a1a1a;
     --color-selected: var(--portal-blue);
     --color-hover: var(--portal-orange);
-    --color-line: var(--portal-blue);
+    --color-line: var(--portal-orange);
 
     /* Usar el mismo azul del portal */
 
@@ -46,8 +46,7 @@
     --title-line-height: 0.9;
 
     /* Configuración de celdas */
-    --cell-transform: scaleY(1.2);
-    --mark-size-override: calc(var(--mark-size) * 1.4);
+    --mark-size-override: calc(var(--mark-size) * 1.1);
     --cell-radius: 0;
 
     /* Efectos y animaciones */
@@ -168,25 +167,41 @@
     background: var(--color-bg);
 }
 
+/* Agregar posición relativa al contenedor del tablero para usarlo como referencia */
+:root[data-theme='portal'] .game-container {
+    position: relative;
+}
+
+/* Modificar el pseudo-elemento para que se posicione respecto al tablero */
 :root[data-theme='portal'] body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 532 532"><g id="c"><g id="b"><path id="a" fill="rgba(0,0,0,0.08)" d="M165 32C108 56 60 101 34 159l248-46"/><use xlink:href="%23a" transform="rotate(45 266 266)"/></g><use xlink:href="%23b" transform="rotate(90 266 266)"/></g><use xlink:href="%23c" transform="rotate(180 266 266)"/></svg>') center / min(98vw, 80vh) no-repeat;
-    animation: logo-spin 60s linear infinite;
-    will-change: transform;
-    margin-bottom: 11.5vh;
-    overflow: visible;
+    display: none;
 }
 
 @keyframes logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
 
-    to {
-        transform: rotate(360deg);
-    }
+/* Vamos a usar el board como referencia */
+:root[data-theme='portal'] .board {
+    position: relative;
+    isolation: isolate;
+}
+
+:root[data-theme='portal'] .board::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(110%, 150vh);
+    aspect-ratio: 1;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 532 532"><g id="c"><g id="b"><path id="a" fill="rgba(0,0,0,0.08)" d="M165 32C108 56 60 101 34 159l248-46"/><use xlink:href="%23a" transform="rotate(45 266 266)"/></g><use xlink:href="%23b" transform="rotate(90 266 266)"/></g><use xlink:href="%23c" transform="rotate(180 266 266)"/></svg>') center / 100% no-repeat;
+    transform: translate(-50%, -50%);
+    animation: logo-spin 60s linear infinite;
+    will-change: transform;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: color;
 }
 
 /* Animación de encontrar palabra más dramática */
