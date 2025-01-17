@@ -15,6 +15,7 @@
     --color-modal: rgba(42, 42, 42, 0.95);
     --color-button: linear-gradient(145deg, #DC143C, #228B22);
     --color-text: #FFD700;
+    --color-title: #FFD700;
     --color-selected: #DC143C;
     --color-hover: rgba(220, 20, 60, 0.8);
     --color-line: #1E90FF;
@@ -45,9 +46,8 @@
         inset 0 0 10px rgba(220, 20, 60, 0.2),
         0 0 15px rgba(30, 144, 255, 0.2);
     background: linear-gradient(135deg,
-        rgba(42, 42, 42, 0.95),
-        rgba(42, 42, 42, 0.85)
-    );
+            rgba(42, 42, 42, 0.95),
+            rgba(42, 42, 42, 0.85));
 }
 
 :root[data-theme='battleready'] .title {
@@ -63,12 +63,15 @@
     0% {
         transform: scale(1);
     }
+
     25% {
         transform: scale(1.15) rotate(-2deg);
     }
+
     75% {
         transform: scale(1.15) rotate(2deg);
     }
+
     100% {
         transform: scale(1);
     }
@@ -84,11 +87,14 @@
 }
 
 @keyframes battle-pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow:
             0 0 15px #DC143C,
             0 0 30px #FFD700;
     }
+
     50% {
         box-shadow:
             0 0 20px #228B22,

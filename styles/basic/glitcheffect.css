@@ -15,6 +15,7 @@
     --color-modal: rgba(30, 30, 30, 0.95);
     --color-button: linear-gradient(145deg, #FF00FF, #00FFFF);
     --color-text: #00FFFF;
+    --color-title: #00FFFF;
     --color-selected: #FF00FF;
     --color-hover: rgba(255, 53, 0, 0.8);
     --color-line: #FF3700;
@@ -43,11 +44,9 @@
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(
-        transparent 0%,
-        rgba(0, 255, 255, 0.1) 0.5%,
-        transparent 1%
-    );
+    background: repeating-linear-gradient(transparent 0%,
+            rgba(0, 255, 255, 0.1) 0.5%,
+            transparent 1%);
     animation: scan-lines 8s linear infinite;
     pointer-events: none;
 }

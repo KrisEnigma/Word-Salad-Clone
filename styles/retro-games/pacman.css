@@ -13,6 +13,7 @@
     --color-modal: rgba(0, 0, 64, 0.95);
     --color-button: #ffb897;
     --color-text: #ffd800;
+    --color-title: #ffd800;
     --color-selected: #f00;
     --color-hover: rgba(255, 0, 0, 0.8);
     --color-line: #0ff;
@@ -45,15 +46,31 @@
 }
 
 @keyframes pacman-dots {
-    to { stroke-dashoffset: -16; }
+    to {
+        stroke-dashoffset: -16;
+    }
 }
 
 @keyframes pacman-found {
-    0% { transform: scale(1); }
-    25% { transform: scale(1.2) rotate(-15deg); }
-    50% { transform: scale(0.8) rotate(15deg); }
-    75% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.2) rotate(-15deg);
+    }
+
+    50% {
+        transform: scale(0.8) rotate(15deg);
+    }
+
+    75% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 :root[data-theme='pacman'] .found-temp {

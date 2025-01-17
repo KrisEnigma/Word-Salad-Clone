@@ -13,7 +13,9 @@
     --color-cell: #900C3F;
     --color-modal: rgba(88, 24, 69, 0.95);
     --color-button: #FF5733;
+    --color-title: #FFCC00;
     --color-text: #FFCC00;
+    --color-title: #FFCC00;
     --color-selected: #FF5733;
     --color-hover: #C70039;
     --color-line: #FFCC00;
@@ -57,11 +59,9 @@
 }
 
 :root[data-theme='8bitadventure'] .title {
-    color: #FFCC00;
     text-shadow:
         2px 2px 0 #FF5733,
         4px 4px 0 #C70039;
-    font-size: calc(var(--font-size-title) * 0.7);
     letter-spacing: 2px;
     image-rendering: pixelated;
 }

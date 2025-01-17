@@ -14,6 +14,7 @@
     --color-modal: #1c1c1c;
     --color-button: #b32d0f;
     --color-text: #f1efe9;
+    --color-title: #f1efe9;
     --color-selected: #d0491e;
     --color-hover: #f76b6b;
     --color-line: #991b1b;
@@ -39,23 +40,27 @@
 }
 
 @keyframes sekiro-found {
-    0% { 
+    0% {
         transform: scale(1) translateX(0);
         filter: brightness(1) blur(0);
     }
-    10% { 
+
+    10% {
         transform: scale(1.25) translateX(-5%);
         filter: brightness(2) blur(2px);
     }
-    20% { 
+
+    20% {
         transform: scale(0.9) translateX(5%);
         filter: brightness(0.8) blur(0);
     }
-    30% { 
+
+    30% {
         transform: scale(1.15) translateX(0);
         filter: brightness(1.5) blur(1px);
     }
-    100% { 
+
+    100% {
         transform: scale(1) translateX(0);
         filter: brightness(1) blur(0);
     }

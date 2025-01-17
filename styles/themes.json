@@ -1,8 +1,6 @@
 {
   "categories": {
     "basic": {
-      "name": "Basic",
-      "path": "basic",
       "themes": [
         {
           "file": "8bitadventure.css",
@@ -25,9 +23,9 @@
           "name": "Cyberpunk"
         },
         {
+          "isDefault": true,
           "file": "dark.css",
-          "name": "Dark",
-          "isDefault": true
+          "name": "Dark"
         },
         {
           "file": "digitaldawn.css",
@@ -86,10 +84,6 @@
           "name": "Pixel Paradise"
         },
         {
-          "file": "retro.css",
-          "name": "retro"
-        },
-        {
           "file": "retroarcade.css",
           "name": "Retro Arcade"
         },
@@ -120,8 +114,6 @@
       ]
     },
     "modern-games": {
-      "name": "Modern Games",
-      "path": "modern-games",
       "themes": [
         {
           "file": "bloodborne.css",
@@ -150,8 +142,6 @@
       ]
     },
     "retro-games": {
-      "name": "Retro Games",
-      "path": "retro-games",
       "themes": [
         {
           "file": "amongus.css",

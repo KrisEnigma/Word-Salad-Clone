@@ -13,6 +13,7 @@
     --color-modal: #000;
     --color-button: #0341ae;
     --color-text: #fff;
+    --color-title: #fff;
     --color-selected: #0f0;
     --color-hover: #40c2ff;
     --color-line: #ffa500;
@@ -37,37 +38,44 @@
 }
 
 :root[data-theme='tetris'] .board {
-    background: repeating-linear-gradient(
-        0deg,
-        #000,
-        #000 1px,
-        #111 1px,
-        #111 2px
-    );
+    background: repeating-linear-gradient(0deg,
+            #000,
+            #000 1px,
+            #111 1px,
+            #111 2px);
 }
 
 :root[data-theme='tetris'] .cell {
-    box-shadow: 
+    box-shadow:
         inset -2px -2px 0 #002a8d,
         inset 2px 2px 0 #17b2ff;
     animation: tetris-pulse 2s infinite;
 }
 
 @keyframes tetris-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
 }
 
 @keyframes tetris-found {
-    0% { 
-        transform: rotate(0) scale(1); 
+    0% {
+        transform: rotate(0) scale(1);
         filter: brightness(1);
     }
-    50% { 
-        transform: rotate(180deg) scale(0.8); 
+
+    50% {
+        transform: rotate(180deg) scale(0.8);
         filter: brightness(1.5);
     }
-    100% { 
+
+    100% {
         transform: rotate(360deg) scale(1);
         filter: brightness(1);
     }

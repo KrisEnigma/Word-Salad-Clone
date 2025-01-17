@@ -15,6 +15,7 @@
     --color-modal: rgba(26, 26, 26, 0.95);
     --color-button: #8B0000;
     --color-text: #D3D3D3;
+    --color-title: #D3D3D3;
     --color-selected: #FFD700;
     --color-hover: #32CD32;
     --color-line: #1E90FF;
@@ -40,9 +41,9 @@
 }
 
 :root[data-theme='herojourney'] .board {
-    background: radial-gradient(circle at center, 
-        rgba(139, 0, 0, 0.2) 0%,
-        rgba(26, 26, 26, 0.9) 70%);
+    background: radial-gradient(circle at center,
+            rgba(139, 0, 0, 0.2) 0%,
+            rgba(26, 26, 26, 0.9) 70%);
     border: 3px solid rgba(255, 215, 0, 0.3);
 }
 
@@ -50,8 +51,8 @@
     border: var(--border-light);
     box-shadow: 0 0 15px rgba(30, 144, 255, 0.2);
     background: linear-gradient(135deg,
-        rgba(42, 42, 42, 1) 0%,
-        rgba(42, 42, 42, 0.8) 100%);
+            rgba(42, 42, 42, 1) 0%,
+            rgba(42, 42, 42, 0.8) 100%);
 }
 
 :root[data-theme='herojourney'] .title {
@@ -67,12 +68,18 @@
 }
 
 @keyframes hero-found {
-    0% { transform: scale(1); }
-    50% { 
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
         transform: scale(var(--found-scale));
         box-shadow: 0 0 30px #FFD700;
     }
-    100% { transform: scale(1); }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 :root[data-theme='herojourney'] .found-temp {
@@ -84,11 +91,14 @@
 }
 
 @keyframes hero-selected {
-    0%, 100% { 
+
+    0%,
+    100% {
         transform: scale(1);
         box-shadow: 0 0 15px #FFD700;
     }
-    50% { 
+
+    50% {
         transform: scale(1.1);
         box-shadow: 0 0 25px #32CD32;
     }

@@ -14,6 +14,7 @@
     --color-modal: rgba(125, 125, 125, 0.95);
     --color-button: #A0522D;
     --color-text: #bb955c;
+    --color-title: #bb955c;
     --color-selected: #D2691E;
     --color-hover: #A0522D;
     --color-line: #F5DEB3;
@@ -47,7 +48,7 @@
 :root[data-theme='vintagevibes'] .cell {
     background: #C0C0C0;
     border: var(--border-light);
-    box-shadow: 
+    box-shadow:
         inset 0 0 15px rgba(160, 82, 45, 0.1),
         0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -69,18 +70,20 @@
 }
 
 @keyframes vintage-found {
-    0% { 
+    0% {
         transform: scale(1);
         filter: sepia(0);
     }
-    50% { 
+
+    50% {
         transform: scale(var(--found-scale));
         filter: sepia(0.5) brightness(1.2);
-        box-shadow: 
+        box-shadow:
             0 0 20px rgba(210, 105, 30, 0.6),
             0 0 40px rgba(245, 222, 179, 0.4);
     }
-    100% { 
+
+    100% {
         transform: scale(1);
         filter: sepia(0);
     }
@@ -95,11 +98,14 @@
 }
 
 @keyframes vintage-selected {
-    0%, 100% { 
+
+    0%,
+    100% {
         background: #D2691E;
         transform: scale(1);
     }
-    50% { 
+
+    50% {
         background: #A0522D;
         transform: scale(1.05);
     }

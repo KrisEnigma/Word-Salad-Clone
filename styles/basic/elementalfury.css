@@ -15,6 +15,7 @@
     --color-modal: rgba(47, 79, 79, 0.95);
     --color-button: linear-gradient(145deg, #32CD32, #FF4500);
     --color-text: #FFD700;
+    --color-title: #FFD700;
     --color-selected: #8B008B;
     --color-hover: rgba(139, 0, 139, 0.8);
     --color-line: #32CD32;
@@ -68,12 +69,14 @@
     0% {
         transform: scale(1) rotate(0deg);
     }
+
     50% {
         transform: scale(1.15) rotate(5deg);
-        box-shadow: 
+        box-shadow:
             0 0 30px #FF4500,
             0 0 60px #1E90FF;
     }
+
     100% {
         transform: scale(1) rotate(0deg);
     }
@@ -89,13 +92,16 @@
 }
 
 @keyframes elemental-pulse {
-    0%, 100% {
-        box-shadow: 
+
+    0%,
+    100% {
+        box-shadow:
             0 0 20px #FF4500,
             0 0 40px #1E90FF;
     }
+
     50% {
-        box-shadow: 
+        box-shadow:
             0 0 30px #32CD32,
             0 0 50px #FFD700;
     }

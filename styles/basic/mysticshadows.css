@@ -15,6 +15,7 @@
     --color-modal: rgba(47, 79, 79, 0.95);
     --color-button: linear-gradient(145deg, #4B0082, #8A2BE2);
     --color-text: #00FFFF;
+    --color-title: #00FFFF;
     --color-selected: #FF1493;
     --color-hover: rgba(255, 20, 147, 0.8);
     --color-line: #8A2BE2;
@@ -73,13 +74,15 @@
         transform: scale(1);
         filter: hue-rotate(0deg);
     }
+
     50% {
         transform: scale(1.1);
         filter: hue-rotate(180deg);
-        box-shadow: 
+        box-shadow:
             0 0 40px #4B0082,
             0 0 80px #8A2BE2;
     }
+
     100% {
         transform: scale(1);
         filter: hue-rotate(360deg);
@@ -96,11 +99,14 @@
 }
 
 @keyframes shadow-wave {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow:
             0 0 20px #4B0082,
             0 0 40px #8A2BE2;
     }
+
     50% {
         box-shadow:
             0 0 30px #00FFFF,

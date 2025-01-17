@@ -10,24 +10,26 @@
     --font-family-cell: 'Oswald', sans-serif;
 
     /* Colores base de Portal */
-    --portal-blue: #27a7d8;   /* Color del portal azul */
-    --portal-orange: #ff9a00; /* Color del portal naranja */
+    --portal-blue: #27a7d8;
+    /* Color del portal azul */
+    --portal-orange: #ff9a00;
+    /* Color del portal naranja */
 
     /* Colores funcionales */
     --color-bg: linear-gradient(135deg, #e6e6e6 0%, #d1d1d1 100%);
-    --color-cell: radial-gradient(
-        circle at center,
-        #ffffff 30%,
-        #f2f2f2 50%,
-        #e6e6e6 70%,
-        #d1d1d1 100%
-    );
+    --color-cell: radial-gradient(circle at center,
+            #ffffff 30%,
+            #f2f2f2 50%,
+            #e6e6e6 70%,
+            #d1d1d1 100%);
     --color-modal: rgba(220, 220, 220, 0.98);
     --color-button: #1a1a1a;
     --color-text: #1a1a1a;
+    --color-title: #1a1a1a;
     --color-selected: var(--portal-blue);
     --color-hover: var(--portal-orange);
-    --color-line: var(--portal-blue); /* Usar el mismo azul del portal */
+    --color-line: var(--portal-blue);
+    /* Usar el mismo azul del portal */
 
     /* Configuración tipográfica */
     --font-weight-word: 600;
@@ -50,7 +52,7 @@
     --shadow-opacity: 0.15;
     --found-bg: var(--portal-orange);
     --found-scale: 1.05;
-    --found-shadow: 
+    --found-shadow:
         0 0 0 1px rgba(0, 0, 0, 0.2),
         0 0 30px rgba(0, 168, 214, 0.4),
         0 0 60px rgba(255, 68, 0, 0.3);
@@ -58,9 +60,9 @@
     --unused-opacity: 0.2;
     --animation-duration-found: 800ms;
     --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
-    --confetti-colors: 
-        var(--portal-blue), 
-        var(--portal-orange), 
+    --confetti-colors:
+        var(--portal-blue),
+        var(--portal-orange),
         #ffc0cb,
         #ffffff;
 }
@@ -95,7 +97,8 @@
     font-family: var(--font-family-cell);
     font-weight: var(--cell-font-weight);
     letter-spacing: var(--cell-letter-spacing);
-    font-stretch: var(--font-stretch, condensed); /* Corregido: usar var() */
+    font-stretch: var(--font-stretch, condensed);
+    /* Corregido: usar var() */
     transform: var(--cell-transform);
     -webkit-font-smoothing: antialiased;
     padding-bottom: 0.1em;

@@ -9,14 +9,17 @@
     --font-family-content: 'Quicksand', sans-serif;
 
     /* Colores */
-    --color-bg: linear-gradient(135deg, 
-        rgba(70, 130, 180, 0.9),  /* Steel Blue */
-        rgba(138, 43, 226, 0.9)   /* Blue Violet */
-    );
+    --color-bg: linear-gradient(135deg,
+            rgba(70, 130, 180, 0.9),
+            /* Steel Blue */
+            rgba(138, 43, 226, 0.9)
+            /* Blue Violet */
+        );
     --color-cell: rgba(255, 99, 71, 0.15);
     --color-modal: rgba(0, 0, 0, 0.9);
     --color-button: #FF6347;
     --color-text: #FFD700;
+    --color-title: #FFD700;
     --color-selected: #32CD32;
     --color-hover: #4682B4;
     --color-line: #8A2BE2;

@@ -14,7 +14,9 @@
     --color-cell: #2a2a2a;
     --color-modal: linear-gradient(180deg, rgba(30, 30, 30, 0.95), rgba(255, 69, 0, 0.1));
     --color-button: linear-gradient(145deg, #2a2a2a, #FF4500);
+    --color-title: #00FF00;
     --color-text: #00FF00;
+    --color-title: #00FF00;
     --color-selected: #FF00FF;
     --color-hover: rgba(255, 0, 255, 0.8);
     --color-line: #00FFFF;
@@ -47,7 +49,7 @@
 :root[data-theme='cyberpunk'] .cell {
     border: 1px solid rgba(0, 255, 0, 0.2);
     background: linear-gradient(135deg, #1E1E1E, #2a2a2a);
-    box-shadow: 
+    box-shadow:
         inset 0 0 15px rgba(0, 255, 0, 0.1),
         0 0 10px rgba(0, 255, 255, 0.2),
         0 0 20px rgba(255, 69, 0, 0.1);
@@ -55,7 +57,7 @@
 
 :root[data-theme='cyberpunk'] .title {
     color: #00FF00;
-    text-shadow: 
+    text-shadow:
         0 0 10px rgba(0, 255, 0, 0.7),
         0 0 20px rgba(0, 255, 0, 0.5);
     letter-spacing: 2px;
@@ -78,13 +80,15 @@
         transform: scale(1) skew(0deg);
         filter: hue-rotate(0deg);
     }
+
     50% {
         transform: scale(1.1) skew(-5deg);
         filter: hue-rotate(90deg);
-        box-shadow: 
+        box-shadow:
             0 0 30px #FF00FF,
             0 0 60px #00FFFF;
     }
+
     100% {
         transform: scale(1) skew(0deg);
         filter: hue-rotate(0deg);
@@ -96,24 +100,27 @@
 }
 
 :root[data-theme='cyberpunk'] .mark.selected {
-    box-shadow: 
+    box-shadow:
         0 0 20px #FF00FF,
         0 0 40px #00FFFF;
     animation: cyberpunk-glow 2s infinite;
 }
 
 @keyframes cyberpunk-glow {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0.8;
         transform: scale(1);
-        box-shadow: 
+        box-shadow:
             0 0 20px #FF00FF,
             0 0 40px #00FFFF;
     }
+
     50% {
         opacity: 1;
         transform: scale(1.1);
-        box-shadow: 
+        box-shadow:
             0 0 30px #00FF00,
             0 0 50px #FF4500;
     }

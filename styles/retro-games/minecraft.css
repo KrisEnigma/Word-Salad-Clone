@@ -14,10 +14,11 @@
     --color-modal: #1a1a1a;
     --color-button: #549551;
     --color-text: #fff;
+    --color-title: #fff;
     --color-selected: #5794df;
     --color-hover: rgba(87, 148, 223, 0.8);
     --color-line: #ffd83d;
-    
+
     /* Efectos */
     --cell-radius: 0;
     --border-light: 2px solid #000;
@@ -39,24 +40,20 @@
 }
 
 :root[data-theme='minecraft'] .board {
-    background: repeating-conic-gradient(
-        from 0deg at 0% 0%,
-        #45523e 0% 25%,
-        #3b4734 25% 50%,
-        #45523e 50% 75%,
-        #3b4734 75%
-    );
+    background: repeating-conic-gradient(from 0deg at 0% 0%,
+            #45523e 0% 25%,
+            #3b4734 25% 50%,
+            #45523e 50% 75%,
+            #3b4734 75%);
     background-size: 32px 32px;
 }
 
 :root[data-theme='minecraft'] .cell {
-    background: repeating-conic-gradient(
-        from 0deg at 0% 0%,
-        #747474 0% 25%,
-        #656565 25% 50%,
-        #747474 50% 75%,
-        #656565 75%
-    );
+    background: repeating-conic-gradient(from 0deg at 0% 0%,
+            #747474 0% 25%,
+            #656565 25% 50%,
+            #747474 50% 75%,
+            #656565 75%);
     background-size: 16px 16px;
     image-rendering: pixelated;
     border: 2px solid #000;
@@ -72,11 +69,25 @@
 
 /* Animación específica de Minecraft */
 @keyframes minecraft-found {
-    0% { transform: translateY(0); }
-    25% { transform: translateY(-8px); }
-    50% { transform: translateY(-6px); }
-    75% { transform: translateY(-8px); }
-    100% { transform: translateY(0); }
+    0% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-8px);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+
+    75% {
+        transform: translateY(-8px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
 
 :root[data-theme='minecraft'] .found-temp {

@@ -15,6 +15,8 @@
     --color-modal: rgba(26, 26, 46, 0.95);
     --color-button: #2a2a3e;
     --color-text: #FFD700;
+    --color-title: #FFD700;
+    --color-title: #FFD700;
     --color-selected: #8A2BE2;
     --color-hover: rgba(138, 43, 226, 0.8);
     --color-line: #00BFFF;
@@ -40,26 +42,24 @@
 }
 
 :root[data-theme='arcade'] .board {
-    background: repeating-linear-gradient(
-        45deg,
-        #1a1a2e,
-        #1a1a2e 10px,
-        #2a2a3e 10px,
-        #2a2a3e 20px
-    );
+    background: repeating-linear-gradient(45deg,
+            #1a1a2e,
+            #1a1a2e 10px,
+            #2a2a3e 10px,
+            #2a2a3e 20px);
 }
 
 :root[data-theme='arcade'] .cell {
     border: 2px solid #FFD700;
     image-rendering: pixelated;
-    box-shadow: 
+    box-shadow:
         inset 0 0 0 2px rgba(255, 215, 0, 0.2),
         0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 :root[data-theme='arcade'] .title {
     color: #FFD700;
-    text-shadow: 
+    text-shadow:
         2px 2px 0 #FF6347,
         4px 4px 0 #8A2BE2;
     letter-spacing: 1px;
@@ -78,12 +78,15 @@
     0% {
         transform: scale(1) rotate(0deg);
     }
+
     25% {
         transform: scale(1.15) rotate(-5deg);
     }
+
     75% {
         transform: scale(1.15) rotate(5deg);
     }
+
     100% {
         transform: scale(1) rotate(0deg);
     }
@@ -99,10 +102,13 @@
 }
 
 @keyframes arcade-blink {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
         border-color: #FFD700;
     }
+
     50% {
         opacity: 0.7;
         border-color: #FF69B4;

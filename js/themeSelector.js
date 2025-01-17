@@ -5,6 +5,12 @@ export class ThemeSelector {
         this.categoryOrder = [];
     }
 
+    async applyInitialTheme() {
+        const savedTheme = localStorage.getItem('theme') || this.getDefaultTheme();
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        return this.preloadDefaultTheme();
+    }
+
     async initialize() {
         try {
             await this.loadThemesData();
@@ -12,13 +18,14 @@ export class ThemeSelector {
             this.initializeUI();
             return this.availableThemes;
         } catch (error) {
-            console.error('Error initializing theme selector:', error);
             throw error;
         }
     }
 
-    getThemeId(themeFile) {
-        return themeFile.replace('.css', '');
+    formatCategoryName(categoryId) {
+        return categoryId.split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
     }
 
     async loadThemesData() {
@@ -26,73 +33,149 @@ export class ThemeSelector {
             const response = await fetch('styles/themes.json');
             if (!response.ok) throw new Error('No se pudo obtener la lista de temas');
             
-            this.themesData = await response.json();
-            this.categoryOrder = Object.values(this.themesData.categories).map(cat => cat.name);
+            const data = await response.json();
             
-            // Procesar las categorías y temas usando el nombre del archivo como ID
+            this.themesData = {
+                categories: Object.fromEntries(
+                    Object.entries(data.categories).map(([id, category]) => {
+                        return [
+                            id,
+                            {
+                                ...category,
+                                name: this.formatCategoryName(id),
+                                path: id
+                            }
+                        ];
+                    })
+                )
+            };
+            
+            this.categoryOrder = Object.keys(this.themesData.categories)
+                .map(id => this.formatCategoryName(id));
+            
             Object.entries(this.themesData.categories).forEach(([categoryId, category]) => {
                 this.availableThemes.set(category.name, new Set(
                     category.themes.map(theme => this.getThemeId(theme.file))
                 ));
             });
         } catch (error) {
-            console.error('Error loading themes data:', error);
             throw error;
         }
-    }
-
-    async loadThemeStylesheets() {
-        if (!this.themesData) return;
-
-        try {
-            // Cargar todos los temas de forma asíncrona
-            const promises = Object.values(this.themesData.categories).flatMap(category => 
-                category.themes.map(theme => {
-                    const path = `styles/${category.path}/${theme.file}`;
-                    return this.loadStylesheet(path);
-                })
-            );
-
-            await Promise.all(promises);
-
-            // Aplicar el tema actual después de cargar todos
-            const currentTheme = localStorage.getItem('theme') || this.getDefaultTheme();
-            this.setTheme(currentTheme);
-        } catch (error) {
-            console.error('Error loading theme stylesheets:', error);
-        }
-    }
-
-    findThemeData(themeId) {
-        for (const category of Object.values(this.themesData.categories)) {
-            const theme = category.themes.find(t => this.getThemeId(t.file) === themeId);
-            if (theme) {
-                return { category, theme };
-            }
-        }
-        // Si no se encuentra, devolver el tema dark
-        const basicCategory = this.themesData.categories.basic;
-        return {
-            category: basicCategory,
-            theme: basicCategory.themes.find(t => this.getThemeId(t.file) === 'dark')
-        };
     }
 
     loadStylesheet(path) {
         const existingLink = document.querySelector(`link[href="${path}"]`);
         if (existingLink) return Promise.resolve();
 
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
             link.href = path;
             link.onload = () => resolve();
             link.onerror = () => {
-                console.warn(`⚠️ Error cargando tema: ${path}`);
-                resolve();
+                document.head.removeChild(link);
+                reject(new Error(`Error loading ${path}`));
             };
             document.head.appendChild(link);
         });
+    }
+
+    getThemeId(themeFile) {
+        return themeFile.replace('.css', '');
+    }
+
+    async loadThemeStylesheets() {
+        if (!this.themesData) {
+            return;
+        }
+
+        try {
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme) {
+                const savedThemeData = this.findThemeData(savedTheme);
+                const path = `styles/${savedThemeData.category.path}/${savedThemeData.theme.file}`;
+                
+                try {
+                    const response = await fetch(path);
+                    if (!response.ok) {
+                        localStorage.removeItem('theme');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('theme');
+                }
+            }
+
+            const defaultTheme = this.getDefaultTheme();
+            const defaultThemeData = this.findThemeData(defaultTheme);
+
+            if (defaultThemeData) {
+                const defaultPath = `styles/${defaultThemeData.category.path}/${defaultThemeData.theme.file}`;
+                await this.loadStylesheet(defaultPath).catch(error => {
+                });
+            }
+
+            const promises = Object.values(this.themesData.categories).flatMap(category => 
+                category.themes
+                    .filter(theme => this.getThemeId(theme.file) !== defaultTheme)
+                    .map(theme => {
+                        const path = `styles/${category.path}/${theme.file}`;
+                        return this.loadStylesheet(path).catch(() => {
+                        });
+                    })
+            );
+
+            await Promise.allSettled(promises);
+
+        } catch (error) {
+        } finally {
+            const themeToApply = localStorage.getItem('theme') || this.getDefaultTheme();
+            this.setTheme(themeToApply);
+            
+            document.body.classList.remove('js-loading');
+            document.querySelector('.js-loading-overlay')?.classList.add('hidden');
+        }
+    }
+
+    findThemeData(themeId) {
+        try {
+            for (const [categoryId, category] of Object.entries(this.themesData.categories)) {
+                
+                const theme = category.themes.find(t => this.getThemeId(t.file) === themeId);
+                if (theme) {
+                    const result = {
+                        category: category,
+                        theme
+                    };
+                    return result;
+                }
+            }
+            
+            for (const [categoryId, category] of Object.entries(this.themesData.categories)) {
+                const defaultTheme = category.themes.find(t => t.isDefault);
+                if (defaultTheme) {
+                    const result = {
+                        category: category,
+                        theme: defaultTheme
+                    };
+                    return result;
+                }
+            }
+            
+            throw new Error('No se encontró el tema ni un tema por defecto');
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    getDefaultTheme() {
+        for (const category of Object.values(this.themesData.categories)) {
+            const defaultTheme = category.themes.find(theme => theme.isDefault);
+            if (defaultTheme) {
+                return this.getThemeId(defaultTheme.file);
+            }
+        }
+        throw new Error('No se encontró un tema por defecto en el JSON');
     }
 
     initializeUI() {
@@ -117,7 +200,6 @@ export class ThemeSelector {
         themeGrid.innerHTML = html;
         this.bindEvents(themeGrid);
 
-        // Aplicar los estilos específicos a cada preview después de renderizar
         requestAnimationFrame(async () => {
             const previews = themeGrid.querySelectorAll('.preview-wrapper[data-theme]');
             for (const preview of previews) {
@@ -144,7 +226,6 @@ export class ThemeSelector {
             
             if (!styleMatch) return '';
             
-            // Primero procesar las variables internas (como --portal-blue)
             const variables = styleMatch[2];
             const internalVars = {};
             variables.match(/--[^:]+:[^;]+;/g)?.forEach(prop => {
@@ -154,13 +235,11 @@ export class ThemeSelector {
                 }
             });
 
-            // Luego procesar las variables que necesitamos, resolviendo referencias
             const cssVars = {};
             variables.match(/--[^:]+:[^;]+;/g)?.forEach(prop => {
                 const [name, value] = prop.split(':').map(s => s.trim());
                 if (name) {
                     let resolvedValue = value.replace(';', '');
-                    // Resolver referencias a variables internas
                     Object.entries(internalVars).forEach(([varName, varValue]) => {
                         resolvedValue = resolvedValue.replace(
                             `var(${varName})`,
@@ -171,7 +250,6 @@ export class ThemeSelector {
                 }
             });
 
-            // Agregar variables específicas del preview
             cssVars['--preview-shadow'] = '0 2px 8px rgba(0, 0, 0, 0.15)';
             cssVars['--preview-border'] = '1px solid rgba(0, 0, 0, 0.1)';
 
@@ -180,7 +258,6 @@ export class ThemeSelector {
                 .join(';');
                 
         } catch (error) {
-            console.warn(`Error cargando estilos para ${theme.name}:`, error);
             return '';
         }
     }
@@ -190,34 +267,29 @@ export class ThemeSelector {
         return `
             <button class="theme-option${isActive ? ' active' : ''}" 
                     data-theme="${themeId}">
-                <div class="theme-preview">
-                    <div class="preview-wrapper" data-theme="${themeId}">
-                        <div class="preview-container">
-                            <div class="preview-cell">
-                                <div class="preview-mark"></div>
-                                <div class="preview-text">A</div>
-                            </div>
-                            <div class="preview-title">${theme.name}</div>
-                        </div>
+                <div class="preview-wrapper" data-theme="${themeId}">
+                    <div class="preview-cell">
+                        <div class="preview-mark"></div>
+                        <div class="preview-text">A</div>
                     </div>
+                    <div class="preview-title">${theme.name}</div>
                 </div>
             </button>
         `;
     }
 
     getComputedThemeVariables(themeId) {
-        // Crear un elemento temporal para obtener las variables computadas
         const temp = document.createElement('div');
         temp.style.display = 'none';
         temp.setAttribute('data-theme', themeId);
         document.body.appendChild(temp);
 
-        // Obtener los valores computados
         const styles = getComputedStyle(temp);
         const variables = [
             '--color-bg',
             '--color-cell',
             '--color-text',
+            '--color-title',
             '--color-selected',
             '--color-modal',
             '--cell-radius',
@@ -235,14 +307,13 @@ export class ThemeSelector {
     }
 
     getDefaultTheme() {
-        // Buscar el tema marcado como default en el JSON
         for (const category of Object.values(this.themesData.categories)) {
             const defaultTheme = category.themes.find(theme => theme.isDefault);
             if (defaultTheme) {
                 return this.getThemeId(defaultTheme.file);
             }
         }
-        return 'dark'; // Fallback si no se encuentra ningún tema por defecto
+        return 'dark';
     }
 
     async loadThemeVariables() {
@@ -257,7 +328,6 @@ export class ThemeSelector {
                 
                 const css = await response.text();
                 
-                // Extraer las variables del tema
                 const themeName = file.theme;
                 const themeMatch = css.match(/:root\[data-theme=['"]([^'"]+)['"]\]\s*{([^}]+)}/);
                 
@@ -268,7 +338,6 @@ export class ThemeSelector {
                 }
             }
         } catch (error) {
-            console.error('Error loading theme variables:', error);
         }
         
         return themeStyles;
@@ -307,12 +376,10 @@ export class ThemeSelector {
             }
         }
 
-        if (found || themeName === this.getDefaultTheme()) {
-            document.documentElement.setAttribute('data-theme', themeName);
-            localStorage.setItem('theme', themeName);
-            return true;
-        }
-        return false;
+        const themeToApply = found ? themeName : this.getDefaultTheme();
+        document.documentElement.setAttribute('data-theme', themeToApply);
+        localStorage.setItem('theme', themeToApply);
+        return found;
     }
 
     formatThemeName(name) {
@@ -329,7 +396,6 @@ export class ThemeSelector {
 
             const newTheme = themeButton.dataset.theme;
             if (this.setTheme(newTheme)) {
-                // Actualizar la clase active en todos los botones
                 themeGrid.querySelectorAll('.theme-option').forEach(btn => {
                     btn.classList.toggle('active', btn === themeButton);
                 });
@@ -345,5 +411,31 @@ export class ThemeSelector {
             document.getElementById('theme-modal').classList.remove('active');
             document.getElementById('modal').classList.add('active');
         });
+    }
+
+    async preloadDefaultTheme() {
+        try {
+            const defaultTheme = localStorage.getItem('theme') || 'dark';
+            const defaultThemeData = this.findThemeData(defaultTheme);
+            const themePath = `styles/${defaultThemeData.category.path}/${defaultThemeData.theme.file}`;
+            
+            const existingLink = document.querySelector(`link[href="${themePath}"]`);
+            if (existingLink) {
+                return new Promise((resolve) => {
+                    if (existingLink.loaded || existingLink.getAttribute('rel') === 'stylesheet') {
+                        resolve();
+                    } else {
+                        existingLink.onload = () => resolve();
+                        existingLink.onerror = () => resolve();
+                    }
+                });
+            }
+
+            return this.loadStylesheet(themePath).catch(() => 
+                this.loadStylesheet('styles/basic/dark.css')
+            );
+        } catch (error) {
+            return this.loadStylesheet('styles/basic/dark.css');
+        }
     }
 }

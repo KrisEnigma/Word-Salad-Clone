@@ -13,6 +13,7 @@
     --color-modal: rgba(0, 0, 0, 0.9);
     --color-button: #000;
     --color-text: #fff;
+    --color-title: #fff;
     --color-selected: #f00;
     --color-hover: #0f0;
     --color-line: #0f0;
@@ -33,7 +34,8 @@
 }
 
 :root[data-theme='spaceinvaders'] body {
-    background: var(--color-bg); /* Solo el fondo base */
+    background: var(--color-bg);
+    /* Solo el fondo base */
 }
 
 :root[data-theme='spaceinvaders'] body::before {
@@ -58,16 +60,35 @@
 }
 
 @keyframes space-stars {
-    from { background-position: 0 0; }
-    to { background-position: 200px 200px; }
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 200px 200px;
+    }
 }
 
 @keyframes invader-found {
-    0% { transform: translateY(0) scale(1); }
-    25% { transform: translateY(-15px) scale(1.2); }
-    50% { transform: translateY(5px) scale(0.8); }
-    75% { transform: translateY(-5px) scale(1.1); }
-    100% { transform: translateY(0) scale(1); }
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    25% {
+        transform: translateY(-15px) scale(1.2);
+    }
+
+    50% {
+        transform: translateY(5px) scale(0.8);
+    }
+
+    75% {
+        transform: translateY(-5px) scale(1.1);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+    }
 }
 
 :root[data-theme='spaceinvaders'] .found-temp {
@@ -81,6 +102,13 @@
 }
 
 @keyframes invader-selected {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-2px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
 }

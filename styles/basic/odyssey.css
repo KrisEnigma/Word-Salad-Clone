@@ -15,6 +15,7 @@
     --color-modal: linear-gradient(180deg, rgba(30, 30, 30, 0.95), rgba(138, 43, 226, 0.1));
     --color-button: linear-gradient(145deg, #2a2a2a, #FF4500);
     --color-text: #00BFFF;
+    --color-title: #00BFFF;
     --color-selected: #FFD700;
     --color-hover: rgba(255, 215, 0, 0.8);
     --color-line: #FF4500;

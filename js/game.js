@@ -18,12 +18,9 @@ class GameState {
 
     async initPhase1() {
         try {
-            // Primero cargar los datos de temas para poder obtener el tema por defecto
             await this.themeSelector.loadThemesData();
-            const savedTheme = localStorage.getItem('theme') || this.themeSelector.getDefaultTheme();
-            document.documentElement.setAttribute('data-theme', savedTheme);
+            this.themeSelector.applyInitialTheme();
             
-            await this.preloadDefaultTheme();
             this.initializeElements();
             this.initializeState();
             this.initializeBoard();
@@ -37,14 +34,7 @@ class GameState {
         try {
             this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
             this.updateAll(LEVEL_ORDER[0]);
-
-            // Cargar los archivos CSS primero
-            await this.themeSelector.loadThemeStylesheets();
-            
-            // Luego inicializar el selector de temas
             await this.themeSelector.initialize();
-
-            // Mostrar contenido cuando esté todo listo
             this.showContent();
         } catch (error) {
             console.error('❌ Error en fase 2:', error);
@@ -52,67 +42,9 @@ class GameState {
         }
     }
 
-    async preloadDefaultTheme() {
-        try {
-            const response = await fetch('styles/themes.json');
-            const data = await response.json();
-            
-            const defaultTheme = localStorage.getItem('theme') || 'dark';
-            const basicCategory = data.categories.basic;
-            const themeData = basicCategory.themes.find(t => this.getThemeId(t.file) === defaultTheme) || 
-                            basicCategory.themes.find(t => this.getThemeId(t.file) === 'dark');
-            
-            const themePath = `styles/${basicCategory.path}/${themeData.file}`;
-            
-            const existingLink = document.querySelector(`link[href="${themePath}"]`);
-            if (existingLink) {
-                return new Promise((resolve) => {
-                    if (existingLink.loaded || existingLink.getAttribute('rel') === 'stylesheet') {
-                        resolve();
-                    } else {
-                        console.log('⏳ Esperando carga de tema básico...');
-                        existingLink.onload = () => resolve();
-                        existingLink.onerror = () => resolve();
-                    }
-                });
-            }
-
-            return new Promise((resolve) => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = themePath;
-                link.onload = () => resolve();
-                link.onerror = () => {
-                    console.warn(`⚠️ Error cargando tema ${themePath}, intentando cargar dark.css`);
-                    link.href = 'styles/basic/dark.css';
-                    link.onload = () => resolve();
-                    link.onerror = () => resolve();
-                };
-                document.head.appendChild(link);
-            });
-        } catch (error) {
-            console.error('Error loading default theme:', error);
-            // Fallback directo a dark.css
-            return new Promise((resolve) => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = 'styles/basic/dark.css';
-                link.onload = () => resolve();
-                link.onerror = () => resolve();
-                document.head.appendChild(link);
-            });
-        }
-    }
-
-    getThemeId(themeFile) {
-        return themeFile.replace('.css', '');
-    }
-
     setTheme(themeName) {
         if (this.themeSelector.setTheme(themeName)) {
             requestAnimationFrame(() => this.updateWordList());
-        } else {
-            this.themeSelector.setTheme('dark');
         }
     }
 

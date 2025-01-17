@@ -1,37 +1,41 @@
 /* stylelint-disable no-unknown-custom-properties */
 :root {
-    /* Dimensiones base del juego */
-    --viewport-height: 668px;
-    --viewport-width: 360px;
-    --toolbar-height: clamp(40px, 8vh, 60px);
+    --toolbar-height: clamp(40px, 6dvh, 50px);
     --game-width: min(85vw, 600px);
-    --game-height: calc(100vh - var(--toolbar-height) - var(--spacing));
-    --board-size: var(--game-width);
-    --word-list-height: min(
-            /* Espacio restante después del toolbar, título y tablero */
-            calc(100vh - var(--toolbar-height) - var(--title-height, 2rem) - var(--board-size) - var(--spacing) * 4),
-            /* Límite máximo */
+    --game-height: calc(100dvh - var(--toolbar-height) - var(--spacing) * 2);
+    --board-size: min(var(--game-width), calc(var(--game-height) * 0.6));
+    --word-list-height: min(calc(100dvh - var(--toolbar-height) - var(--title-height, 2rem) - var(--board-size) - var(--spacing) * 4),
             calc(var(--board-size) * 0.45));
-    --spacing: clamp(8px, 2vh, 16px);
+    --spacing: clamp(4px, 1vh, 8px);
+    --content-spacing: clamp(8px, 2dvh, 16px);
+    --game-padding-block: clamp(16px, 4dvh, 32px);
+    --title-max-height: clamp(40px, 8dvh, 60px);
+    --words-visible-height: clamp(10dvh, 30dvh, 50dvh);
 
     /* Dimensiones de elementos */
     --cell-size: calc((var(--board-size) - 12px) / 4);
     --cell-gap: 4px;
     --hitbox-size: 80px;
-    /* Valor fijo que funciona bien en móvil y desktop */
     --mark-size: calc(var(--board-size) / 8);
-    /* Este sí mantiene proporción */
     --line-width: 8px;
     --border-width: 1px;
 
-    /* Tipografía proporcional */
+    /* Tipografía */
     --base-font-size: calc(var(--board-size) * 0.06);
-    --font-size-title: clamp(1.5rem, calc(var(--base-font-size) * 2), 2.5rem);
-    --font-size-ui: clamp(0.75rem, calc(var(--base-font-size) * 0.8), 1.2rem);
-    --font-size-word: var(--base-font-size);
-    --font-size-cell: calc(var(--board-size) * 0.15);
-    /* Aumentado significativamente */
     --font-scale: 0.15;
+
+    /* Tamaños de fuente con unidades cqw */
+    --font-size-level-number: 2.5cqw;
+    --font-size-timer: 2.5cqw;
+    --font-size-text: 10cqw;
+    --font-size-victory-time: 1.3cqw;
+    --font-size-modal-h2: 4.5cqw;
+    --font-size-menu-button: 3.5cqw;
+    --font-size-theme-option: 1.1cqw;
+    --font-size-preview-title: 2cqw;
+
+    /* Añadir nueva variable para el color del título */
+    --color-title: var(--color-text);
 
     /* Efectos y animaciones */
     --modal-backdrop: rgba(0, 0, 0, 0.7);
@@ -54,10 +58,12 @@
     --shadow-md: 0 8px 12px rgba(0, 0, 0, var(--shadow-opacity));
     --shadow-lg: 0 12px 24px rgba(0, 0, 0, var(--shadow-opacity));
 
-    /* Dimensiones de words */
-    --word-height: calc(var(--word-list-height) * 0.28);
-    --word-padding-block: calc(var(--word-height) * 0.2);
-    --word-padding-inline: calc(var(--word-height) * 0.3);
+    /* Dimensiones de words - modificadas para altura fija */
+    --word-height: 28px;
+    /* Reducida para mejor ajuste */
+    --word-padding-block: 2px;
+    /* Reducido padding */
+    --word-padding-inline: 8px;
     --word-content-width: auto;
 
     /* Dimensiones de modal */
@@ -67,7 +73,7 @@
     --modal-border-radius: min(16px, 3vw);
 
     /* Aumentar el tamaño base del título */
-    --title-height: clamp(2.5rem, 4vh, 4rem);
+    --title-height: clamp(1.5rem, 2.5vh, 2.5rem);
 }
 
 /* Resto del CSS base */
@@ -83,13 +89,13 @@ html {
 }
 
 body {
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--spacing);
     overflow: hidden;
-    height: 100vh;
+    height: 100dvh;
     margin: 0;
     justify-content: flex-start;
     background: var(--color-bg);
@@ -97,7 +103,6 @@ body {
     font-family: var(--font-family-content);
 }
 
-/* Combinar los estilos de header y toolbar */
 .toolbar {
     width: 100%;
     height: var(--toolbar-height);
@@ -116,7 +121,7 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-size: var(--font-size-ui);
+    font-size: var(--font-size-level-number);
     font-weight: 600;
     color: var(--color-text);
     font-family: var(--font-family-header);
@@ -140,7 +145,6 @@ body {
     transition: transform 0.2s ease;
 }
 
-/* Eliminar los estilos antiguos del menú */
 .menu::before,
 .menu::after,
 .menu-middle,
@@ -149,15 +153,14 @@ body {
 }
 
 .timer {
-    font-size: var(--font-size-ui);
+    font-size: var(--font-size-timer);
     font-weight: 600;
     color: var(--color-text);
     font-family: var(--font-family-header);
 }
 
 .title {
-    height: var(--title-height);
-    font-size: clamp(1rem, 6vw, var(--font-size-title));
+    font-size: 5cqw;
     line-height: 1.3;
     padding: 0 var(--spacing);
     display: flex;
@@ -171,9 +174,15 @@ body {
     max-width: 100%;
     overflow-wrap: break-word;
     white-space: nowrap;
+    margin-bottom: clamp(8px, 2dvh, 16px);
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: calc(var(--spacing) * 0.5) 0;
+    padding: calc(var(--spacing) * 0.5);
+    max-height: var(--title-max-height);
 }
 
-/* Clase de utilidad para prevenir selección */
 .no-select {
     user-select: none;
     -webkit-user-select: none;
@@ -184,13 +193,12 @@ body {
 .board {
     width: var(--board-size);
     height: var(--board-size);
-    margin: auto;
+    margin: auto 0;
     flex-shrink: 0;
     aspect-ratio: 1;
     display: grid;
     grid-template: repeat(4, 1fr) / repeat(4, 1fr);
     gap: 4px;
-    /* Valor fijo en lugar de variable */
     position: relative;
     background: transparent;
     box-sizing: border-box;
@@ -198,6 +206,8 @@ body {
     user-select: none;
     -webkit-user-select: none;
     overflow: visible;
+    padding: clamp(4px, 2dvh, 8px) 0;
+    align-self: center;
 }
 
 .board svg {
@@ -230,7 +240,6 @@ body {
     overflow: visible;
 }
 
-/* Nuevos pseudo-elementos para efectos */
 .cell::before,
 .cell::after {
     content: '';
@@ -262,7 +271,7 @@ body {
     border: none;
     cursor: pointer;
     z-index: 4;
-    /* Mantener por encima de todo */
+
 }
 
 .mark {
@@ -290,18 +299,17 @@ body {
 }
 
 .text {
-    font-size: var(--font-size-cell);
+    font-size: var(--font-size-text);
     font-weight: 700;
     color: var(--color-text);
     z-index: 3;
-    /* Ajustado para estar por encima de la marca pero debajo del hitbox */
+
     pointer-events: none;
     transition: var(--transition-base);
     backface-visibility: hidden;
     will-change: transform, color;
 }
 
-/* Nuevos estilos para las animaciones */
 .cell.found-temp {
     background: var(--found-bg);
     box-shadow: var(--found-shadow);
@@ -351,6 +359,7 @@ svg {
     justify-content: center;
     align-items: center;
     z-index: 999;
+    height: 100dvh;
 }
 
 .modal-overlay.active {
@@ -373,7 +382,7 @@ svg {
 }
 
 .modal-content h2 {
-    font-size: var(--font-size-ui);
+    font-size: var(--font-size-modal-h2);
     margin-bottom: 16px;
     text-align: center;
 }
@@ -396,14 +405,13 @@ svg {
     text-align: center;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    font-size: var(--font-size-ui);
+    font-size: var(--font-size-menu-button);
 }
 
 .menu-options button:hover {
     background: var(--color-hover);
 }
 
-/* Añadir nuevos estilos para el modal de temas */
 .modal-header {
     display: flex;
     align-items: center;
@@ -453,19 +461,15 @@ svg {
 }
 
 .theme-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 12px 8px;
-    width: 100%;
     border: none;
     cursor: pointer;
     background: transparent;
     transition: transform 0.2s ease;
+    height: 110px;
 }
 
 .theme-option:hover {
-    transform: translateY(-2px);
+    transform: scale(1.05);
 }
 
 .theme-option.active {
@@ -477,7 +481,7 @@ svg {
     position: absolute;
     inset: 0;
     border: 2px solid var(--color-selected);
-    border-radius: inherit;
+    border-radius: 8px;
     pointer-events: none;
 }
 
@@ -497,63 +501,20 @@ svg {
     margin-top: 0;
 }
 
-/* Eliminar los estilos antiguos del preview y reemplazarlos por estos */
-
-/* Estilos base del preview */
-.theme-preview {
-    contain: style;
-    isolation: isolate;
-    width: 80px;
-    height: 120px;
-}
-
-/* Container principal con scope propio */
 .preview-wrapper {
-    /* Variables del preview */
-    --preview-width: 80px;
-    --preview-height: 120px;
-    --preview-cell-size: 48px;
-    --preview-mark-inset: 6px;
-    --preview-font-size: clamp(0.6em, 0.8em, 0.9em);
-    --preview-mark-size: 32px;
-    --preview-text-size: 1.4em;
-    --preview-title-size: 0.75em;
-
-    /* Estilos del wrapper */
-    border-radius: 12px;
-    padding: 6px;
+    container-type: inline-size;
+    width: 100%;
     height: 100%;
-    width: 100%;
-    isolation: isolate;
-    border: var(--preview-border);
-    box-shadow: var(--preview-shadow);
-    transition: transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.preview-wrapper[data-theme] {
-    background: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font-family-content);
-}
-
-.preview-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 8px;
+    display: grid;
+    gap: 4px;
+    padding: 6px;
     border-radius: 8px;
+    background: var(--color-bg);
 }
 
-/* Celda del preview */
 .preview-cell {
-    width: var(--preview-cell-size);
-    height: var(--preview-cell-size);
-    flex-shrink: 0;
+    width: min(60%, 48px);
+    aspect-ratio: 1;
     background: var(--color-cell);
     border: var(--border-light);
     border-radius: var(--cell-radius);
@@ -562,69 +523,51 @@ svg {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease;
+    transition: none;
+    /* Eliminar transición individual */
+    margin: auto;
+    transform: none;
+    /* Eliminar transformación individual */
 }
 
-/* Marca del preview */
 .preview-mark {
     position: absolute;
-    inset: var(--preview-mark-inset);
+    inset: 15%;
     border-radius: inherit;
     background: var(--color-selected);
     opacity: 0.8;
-    width: var(--preview-mark-size);
-    height: var(--preview-mark-size);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
-/* Texto del preview */
+
+.preview-title {
+    color: var(--color-title);
+    font-family: var(--font-family-title);
+}
+
 .preview-text {
     color: var(--color-text);
-    font-family: var(--font-family-content);
-    font-size: var(--preview-text-size);
-    font-weight: bold;
+    font-family: var(--font-family-title);
     z-index: 1;
 }
 
-/* Título del preview */
-.preview-title {
-    background: var(--color-modal);
-    color: var(--color-text);
-    font-family: var(--font-family-title);
-    border-radius: 6px;
-    width: 100%;
-    min-height: 2.4em;
-    padding: 6px;
-    font-size: var(--preview-title-size);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    line-height: 1.2;
-    word-break: normal;
-}
-
-/* Efectos hover */
-.theme-option:hover .preview-wrapper {
-    transform: translateY(-2px);
-}
-
-.theme-option:hover .preview-cell {
-    transform: scale(1.05);
-}
+var(--color-text)
 
 .word-list {
-    width: clamp(0px, var(--game-width), 100%);
-    height: 25vh;
-    gap: calc(var(--spacing) / 2);
+    display: flex;
+    gap: var(--spacing);
+    place-content: flex-start center;
+    padding-bottom: calc(var(--spacing) * 0.5);
+    margin-top: auto;
+    max-height: var(--words-max-height);
+    height: var(--words-visible-height);
+    overflow: hidden;
+    margin: 0;
+    padding: clamp(4px, 2dvh, 8px);
     display: flex;
     flex-wrap: wrap;
-    place-content: flex-start center;
-    margin: 0 auto;
-    min-height: 0;
-    flex-shrink: 1;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 3dvh, 12px);
 }
 
 .word {
@@ -632,6 +575,8 @@ svg {
     align-items: center;
     justify-content: center;
     height: var(--word-height);
+    min-height: var(--word-height);
+    max-height: var(--word-height);
     padding: var(--word-padding-block) var(--word-padding-inline);
     font-size: var(--font-size-word);
     border-radius: calc(var(--word-height) * 0.15);
@@ -690,12 +635,11 @@ svg {
 
 .victory-time {
     text-align: center;
-    font-size: var(--font-size-ui);
+    font-size: var(--font-size-victory-time);
     margin-bottom: 20px;
     color: var(--color-text);
 }
 
-/* Reducir la intensidad de las animaciones en dispositivos que prefieren reducir el movimiento */
 @media (prefers-reduced-motion: reduce) {
     :root {
         --animation-duration-found: 300ms;
@@ -715,17 +659,14 @@ svg {
     color: var(--color-text);
     opacity: 1 !important;
     will-change: transform;
-    transform: translate(0);
-    -webkit-font-smoothing: antialiased;
 }
 
-/* Eliminar los estilos específicos del canvas de confeti ya que no los necesitamos */
 #confetti-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     pointer-events: none;
     z-index: 9999;
 }
@@ -750,7 +691,6 @@ svg {
     z-index: 2;
 }
 
-/* Mejoras en las animaciones base */
 @keyframes cell-found {
     0% {
         transform: scale(1);
@@ -775,20 +715,19 @@ svg {
 
 .game-container {
     width: var(--game-width);
-    height: var(--game-height);
+    min-height: calc(100dvh - var(--toolbar-height));
+    max-height: 100dvh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing);
-    min-height: 0;
-    flex: 1;
-    max-height: calc(100vh - var(--toolbar-height));
-    overflow: visible;
+    padding: clamp(16px, 5dvh, 32px) 0 var(--game-padding-block);
+    gap: clamp(8px, 4dvh, 16px);
+    overflow: hidden;
+    justify-content: flex-start;
+    container-type: inline-size;
 }
 
 .animated-letter {
-    /* Estilos base de .word, excepto background y box-shadow */
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -803,7 +742,6 @@ svg {
     transform: translateZ(0);
     font-family: var(--font-family-content);
 
-    /* Estilos específicos de la animación */
     position: fixed;
     transform-origin: center;
     user-select: none;
@@ -812,20 +750,15 @@ svg {
 }
 
 .animated-letter.animating {
-    /* Solo cambiar el color del texto */
+
     color: white;
     animation: letter-motion-blur 300ms forwards;
     transition: all 300ms var(--animation-timing);
 }
 
-/* Heredar estilos específicos del tema */
 [data-theme] .animated-letter.animating {
     animation-duration: calc(var(--animation-duration-found) * 0.8);
     animation-timing-function: var(--animation-timing);
-}
-
-:root[data-theme='darksouls'] .animated-letter.animating {
-    text-shadow: 0 0 10px rgba(255, 140, 0, 0.8);
 }
 
 @keyframes letter-motion-blur {
@@ -856,4 +789,21 @@ svg {
 
 .modal-overlay.active .modal-content {
     animation: modal-open 0.3s ease-out;
+}
+
+@media (min-height: 700px) {
+    .game-container {
+        --content-spacing: clamp(12px, 3dvh, 24px);
+        padding-top: calc(var(--spacing) * 4);
+    }
+}
+
+@container (max-width: 120px) {
+    .preview-title {
+        font-size: 10cqw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+    }
 }

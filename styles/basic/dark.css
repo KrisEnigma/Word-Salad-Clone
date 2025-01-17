@@ -5,7 +5,7 @@
 
 :root[data-theme='dark'] {
     --cell-radius: min(8px, 1.5vw);
-    
+
     /* Fuentes */
     --font-family-header: 'JetBrains Mono', monospace;
     --font-family-title: 'Space Grotesk', sans-serif;
@@ -17,6 +17,7 @@
     --color-modal: rgba(23, 23, 23, 0.95);
     --color-button: linear-gradient(145deg, #2d2d2d, #232323);
     --color-text: #fff;
+    --color-title: #fff;
     --color-selected: #3498db;
     --color-hover: rgba(52, 152, 219, 0.8);
     --color-line: #2ecc71;
@@ -73,11 +74,13 @@
         transform: scale(1);
         filter: brightness(1);
     }
+
     50% {
         transform: scale(1.1);
         filter: brightness(1.5);
         box-shadow: 0 0 30px rgba(45, 125, 210, 0.6);
     }
+
     100% {
         transform: scale(1);
         filter: brightness(1);
