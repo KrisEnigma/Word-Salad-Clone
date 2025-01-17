@@ -38,7 +38,7 @@
     --color-title: var(--color-text);
 
     /* Efectos y animaciones */
-    --modal-backdrop: rgba(0, 0, 0, 0.7);
+    --modal-backdrop: rgb(0 0 0 / 70%);
     --blur-overlay: blur(4px);
     --animation-duration-found: 500ms;
     --animation-duration-particle: 350ms;
@@ -54,14 +54,16 @@
 
     /* Efectos base */
     --shadow-opacity: 0.3;
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, var(--shadow-opacity));
-    --shadow-md: 0 8px 12px rgba(0, 0, 0, var(--shadow-opacity));
-    --shadow-lg: 0 12px 24px rgba(0, 0, 0, var(--shadow-opacity));
+    --shadow-sm: 0 4px 6px rgb(0 0 0 / var(--shadow-opacity));
+    --shadow-md: 0 8px 12px rgb(0 0 0 / var(--shadow-opacity));
+    --shadow-lg: 0 12px 24px rgb(0 0 0 / var(--shadow-opacity));
 
     /* Dimensiones de words - modificadas para altura fija */
     --word-height: 28px;
+
     /* Reducida para mejor ajuste */
     --word-padding-block: 2px;
+
     /* Reducido padding */
     --word-padding-inline: 8px;
     --word-content-width: auto;
@@ -135,6 +137,16 @@ body {
     cursor: pointer;
 }
 
+svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
 .menu svg {
     width: 100%;
     height: 100%;
@@ -162,51 +174,49 @@ body {
 .title {
     font-size: 5cqw;
     line-height: 1.3;
-    padding: 0 var(--spacing);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin: 0;
     font-weight: 700;
     color: var(--color-text);
     font-family: var(--font-family-title);
     max-width: 100%;
     overflow-wrap: break-word;
     white-space: nowrap;
+    margin: calc(var(--spacing) * 0.5) 0;
     margin-bottom: clamp(8px, 2dvh, 16px);
     flex: 1 1 auto;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: calc(var(--spacing) * 0.5) 0;
     padding: calc(var(--spacing) * 0.5);
     max-height: var(--title-max-height);
 }
 
 .no-select {
     user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
 }
 
 .board {
     width: var(--board-size);
     height: var(--board-size);
-    margin: auto 0;
+
+    /* Eliminar margin auto */
+    margin: 0;
     flex-shrink: 0;
     aspect-ratio: 1;
     display: grid;
     grid-template: repeat(4, 1fr) / repeat(4, 1fr);
-    gap: 4px;
+    gap: var(--cell-gap);
     position: relative;
     background: transparent;
     box-sizing: border-box;
     touch-action: none;
     user-select: none;
-    -webkit-user-select: none;
     overflow: visible;
-    padding: clamp(4px, 2dvh, 8px) 0;
+
+    /* Ajustar el padding para que sea simétrico */
+    padding: var(--spacing);
     align-self: center;
 }
 
@@ -225,8 +235,8 @@ body {
 
 .cell {
     position: relative;
-    width: var(--cell-size);
-    height: var(--cell-size);
+    width: 100%;
+    height: 100%;
     background: var(--color-cell);
     border-radius: var(--cell-radius);
     display: flex;
@@ -303,7 +313,6 @@ body {
     font-weight: 700;
     color: var(--color-text);
     z-index: 3;
-
     pointer-events: none;
     transition: var(--transition-base);
     backface-visibility: hidden;
@@ -329,16 +338,6 @@ body {
 .cell.unused {
     transform: scale(var(--unused-scale));
     opacity: var(--unused-opacity);
-}
-
-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
 }
 
 .board svg line {
@@ -451,7 +450,7 @@ svg {
 }
 
 .theme-grid::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgb(0 0 0 / 10%);
     border-radius: 4px;
 }
 
@@ -524,9 +523,11 @@ svg {
     align-items: center;
     justify-content: center;
     transition: none;
+
     /* Eliminar transición individual */
     margin: auto;
     transform: none;
+
     /* Eliminar transformación individual */
 }
 
@@ -550,21 +551,22 @@ svg {
     z-index: 1;
 }
 
-var(--color-text)
-
 .word-list {
+    place-content: flex-start center;
+    margin: 0;
+    margin-top: auto;
+    padding: clamp(4px, 2dvh, 8px);
+    padding-bottom: calc(var(--spacing) * 0.5);
+    max-height: var(--words-max-height);
+    height: var(--words-visible-height);
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: clamp(6px, 3dvh, 12px);
-    padding: clamp(4px, 2dvh, 8px);
-    margin: auto 0;
-    height: var(--words-visible-height);
-    max-height: var(--word-list-height);
-    width: 100%;
-    overflow-y: auto;
-    scrollbar-width: thin;
+
+    /* Agregar gap para espaciado uniforme */
+    gap: clamp(8px, 1.5dvh, 16px) clamp(12px, 2dvh, 24px);
 }
 
 .word {
@@ -572,14 +574,18 @@ var(--color-text)
     align-items: center;
     justify-content: center;
     height: var(--word-height);
+    min-height: var(--word-height);
+    max-height: var(--word-height);
     padding: var(--word-padding-block) var(--word-padding-inline);
-    background: var(--color-cell);
+    font-size: var(--font-size-word);
     border-radius: calc(var(--word-height) * 0.15);
+    background: var(--color-cell);
+    font-weight: 500;
     border: var(--border-light);
     box-shadow: var(--shadow-sm);
-    font-weight: 500;
     transition: all 0.3s ease;
-    flex-shrink: 0;
+    position: relative;
+    width: calc(var(--word-content-width) + (var(--word-padding-inline) * 2));
 }
 
 .word-measure {
@@ -679,6 +685,10 @@ var(--color-text)
     z-index: 1;
 }
 
+.modal-overlay.active .modal-content {
+    animation: modal-open 0.3s ease-out;
+}
+
 #victory-modal .modal-content {
     position: relative;
     z-index: 2;
@@ -712,15 +722,17 @@ var(--color-text)
     max-height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding: clamp(16px, 5dvh, 32px) 0 var(--game-padding-block);
+
+    /* Ajustar el padding para que sea simétrico */
+    padding: var(--game-padding-block);
     gap: clamp(8px, 4dvh, 16px);
     overflow: hidden;
     justify-content: flex-start;
     container-type: inline-size;
+    align-items: center;
 }
 
 .animated-letter {
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -734,7 +746,6 @@ var(--color-text)
     backface-visibility: hidden;
     transform: translateZ(0);
     font-family: var(--font-family-content);
-
     position: fixed;
     transform-origin: center;
     user-select: none;
@@ -743,7 +754,6 @@ var(--color-text)
 }
 
 .animated-letter.animating {
-
     color: white;
     animation: letter-motion-blur 300ms forwards;
     transition: all 300ms var(--animation-timing);
@@ -780,13 +790,10 @@ var(--color-text)
     }
 }
 
-.modal-overlay.active .modal-content {
-    animation: modal-open 0.3s ease-out;
-}
-
-@media (min-height: 700px) {
+@media (height >=700px) {
     .game-container {
         --content-spacing: clamp(12px, 3dvh, 24px);
+
         padding-top: calc(var(--spacing) * 4);
     }
 }

@@ -12,10 +12,10 @@
     /* Colores */
     --color-bg: #0a0a1a;
     --color-cell: #1a1a2a;
-    --color-modal: rgba(10, 10, 26, 0.95);
+    --color-modal: rgb(10 10 26 / 95%);
     --color-button: #8A2BE2;
-    --color-text: #FFFFFF;
-    --color-title: #FFFFFF;
+    --color-text: #FFF;
+    --color-title: #FFF;
     --color-selected: #FF6347;
     --color-hover: #FFD700;
     --color-line: #00BFFF;
@@ -23,18 +23,18 @@
     /* Efectos */
     --cell-radius: 8px;
     --shadow-opacity: 0.6;
-    --border-light: 1px solid rgba(0, 191, 255, 0.3);
+    --border-light: 1px solid rgb(0 191 255 / 30%);
 
     /* Efectos especiales */
-    --effect-color-1: rgba(255, 99, 71, 0.1);
-    --effect-color-2: rgba(0, 191, 255, 0.1);
+    --effect-color-1: rgb(255 99 71 / 10%);
+    --effect-color-2: rgb(0 191 255 / 10%);
     --glow-radius: 25px;
-    --glow-color: rgba(138, 43, 226, 0.4);
+    --glow-color: rgb(138 43 226 / 40%);
 
     /* Animaciones */
     --found-bg: linear-gradient(135deg, #FF6347, #8A2BE2);
     --found-scale: 1.1;
-    --found-shadow: 0 0 40px rgba(0, 191, 255, 0.5);
+    --found-shadow: 0 0 40px rgb(0 191 255 / 50%);
     --unused-scale: 0.9;
     --unused-opacity: 0.15;
     --confetti-colors: #FF6347, #FFD700, #00BFFF, #8A2BE2;
@@ -42,32 +42,32 @@
 
 :root[data-theme='digitaldawn'] .board {
     background: linear-gradient(135deg,
-            rgba(10, 10, 26, 0.95) 0%,
-            rgba(138, 43, 226, 0.1) 100%);
-    border: 2px solid rgba(0, 191, 255, 0.2);
+            rgb(10 10 26 / 95%) 0%,
+            rgb(138 43 226 / 10%) 100%);
+    border: 2px solid rgb(0 191 255 / 20%);
 }
 
 :root[data-theme='digitaldawn'] .cell {
     background: linear-gradient(145deg,
-            rgba(26, 26, 42, 1) 0%,
-            rgba(26, 26, 42, 0.8) 100%);
+            rgb(26 26 42 / 100%) 0%,
+            rgb(26 26 42 / 80%) 100%);
     border: var(--border-light);
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.1);
+    box-shadow: 0 0 20px rgb(0 191 255 / 10%);
     backdrop-filter: blur(2px);
 }
 
 :root[data-theme='digitaldawn'] .title {
-    color: #FFFFFF;
+    color: #FFF;
     text-shadow:
-        0 0 10px rgba(0, 191, 255, 0.5),
-        0 0 20px rgba(138, 43, 226, 0.3);
+        0 0 10px rgb(0 191 255 / 50%),
+        0 0 20px rgb(138 43 226 / 30%);
     letter-spacing: 1px;
 }
 
 :root[data-theme='digitaldawn'] .timer,
 :root[data-theme='digitaldawn'] .level-number {
     color: #00BFFF;
-    text-shadow: 0 0 10px rgba(0, 191, 255, 0.4);
+    text-shadow: 0 0 10px rgb(0 191 255 / 40%);
 }
 
 @keyframes dawn-found {
@@ -80,8 +80,8 @@
         transform: scale(var(--found-scale));
         filter: brightness(1.5);
         box-shadow:
-            0 0 30px rgba(255, 99, 71, 0.6),
-            0 0 50px rgba(0, 191, 255, 0.4);
+            0 0 30px rgb(255 99 71 / 60%),
+            0 0 50px rgb(0 191 255 / 40%);
     }
 
     100% {

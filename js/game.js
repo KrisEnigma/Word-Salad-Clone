@@ -17,29 +17,20 @@ class GameState {
     }
 
     async initPhase1() {
-        try {
-            await this.themeSelector.loadThemesData();
-            this.themeSelector.applyInitialTheme();
-            
-            this.initializeElements();
-            this.initializeState();
-            this.initializeBoard();
-            this.bindEvents();
-        } catch (error) {
-            throw error;
-        }
+        await this.themeSelector.loadThemesData();
+        this.themeSelector.applyInitialTheme();
+        
+        this.initializeElements();
+        this.initializeState();
+        this.initializeBoard();
+        this.bindEvents();
     }
 
     async initPhase2() {
-        try {
-            this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
-            this.updateAll(LEVEL_ORDER[0]);
-            await this.themeSelector.initialize();
-            this.showContent();
-        } catch (error) {
-            console.error('❌ Error en fase 2:', error);
-            this.showContent(); // Mostrar contenido incluso si hay error
-        }
+        this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
+        this.updateAll(LEVEL_ORDER[0]);
+        await this.themeSelector.initialize();
+        this.showContent();
     }
 
     setTheme(themeName) {
@@ -362,10 +353,10 @@ class GameState {
         this.bindModalEvents();
         window.addEventListener('resize', () => this.selectionManager.drawLine());
 
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.board') && !e.target.closest('.modal-content')) {
+        document.addEventListener('click', event => {
+            if (!event.target.closest('.board') && !event.target.closest('.modal-content')) {
                 this.selectionManager.reset();
-                this.handleModalClose(e);
+                this.handleModalClose(event);
             }
         });
 
@@ -379,6 +370,17 @@ class GameState {
         });
 
         resizeObserver.observe(document.documentElement);
+
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', () => {
+                if (modal.classList.contains('active') && modal.id !== 'victory-modal') {
+                    modal.classList.remove('active');
+                    if (modal === document.getElementById('modal')) {
+                        this.resumeTimer();
+                    }
+                }
+            });
+        });
     }
 
     startTimer() {
@@ -486,15 +488,14 @@ class GameState {
         ['reset-game', 'restart-level', 'next-level'].forEach(buttonId => {
             const button = document.getElementById(buttonId);
             if (button) {
-                button.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                button.addEventListener('click', () => {  // Eliminar el parámetro event ya que no se usa
                     handleButton(buttonId);
                 });
             }
         });
 
-        modalHandlers.menu.addEventListener('click', e => {
-            e.stopPropagation();
+        modalHandlers.menu.addEventListener('click', event => {  // Cambiar e por event
+            event.stopPropagation();
             const isOpening = !modalHandlers.modal.classList.contains('active');
             if (isOpening) {
                 modalHandlers.modal.classList.add('active');
@@ -502,24 +503,22 @@ class GameState {
             }
         });
 
-        modalHandlers.modal.addEventListener('click', e => {
-            if (e.target === modalHandlers.modal) {
+        modalHandlers.modal.addEventListener('click', event => {  // Cambiar e por event
+            if (event.target === modalHandlers.modal) {
                 closeModal(modalHandlers.modal);
             }
         });
 
         document.querySelectorAll('.modal-content').forEach(content => {
-            content.addEventListener('click', e => e.stopPropagation());
+            content.addEventListener('click', event => event.stopPropagation());  // Renombrar e a event
         });
 
         document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal && modal.id !== 'victory-modal') {
+            modal.addEventListener('click', () => {  // Remover parámetro e
+                if (modal.classList.contains('active') && modal.id !== 'victory-modal') {
                     modal.classList.remove('active');
                     if (modal === modalHandlers.modal) {
                         this.resumeTimer();
-                    } else if (modal.id === 'theme-modal') {
-                        modalHandlers.modal.classList.add('active');
                     }
                 }
             });
@@ -535,7 +534,7 @@ class GameState {
         });
     }
 
-    handleModalClose(e) {
+    handleModalClose() {
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             if (modal.classList.contains('active') && modal.id !== 'victory-modal') {
                 modal.classList.remove('active');
@@ -545,45 +544,5 @@ class GameState {
             }
         });
     }
-
-    handleNativeEvents() {
-        const { App } = Capacitor.Plugins;
-        
-        // Manejar el botón de retroceso en Android
-        document.addEventListener('ionBackButton', (ev) => {
-            ev.detail.register(10, () => {
-                if (document.querySelector('.modal-overlay.active')) {
-                    this.handleModalClose();
-                } else {
-                    App?.exitApp();
-                }
-            });
-        });
-
-        // Manejar pausa/resume de la app
-        document.addEventListener('pause', () => this.pauseTimer());
-        document.addEventListener('resume', () => this.resumeTimer());
-    }
 }
-
-function checkVictory() {
-    if (foundWords.size === totalWords) {
-        stopTimer(); // Detener el timer inmediatamente
-        handleVictory();
-        return true;
-    }
-    return false;
-}
-
-function handleVictory() {
-    const finalTime = document.getElementById('final-time');
-    finalTime.textContent = timer.getTimeString();
-    
-    // Pequeño delay para las animaciones pero el timer ya está detenido
-    setTimeout(() => {
-        showModal('victory-modal');
-        startConfetti();
-    }, 500);
-}
-
 document.addEventListener('DOMContentLoaded', () => new GameState());

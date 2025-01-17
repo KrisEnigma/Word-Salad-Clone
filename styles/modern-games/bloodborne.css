@@ -12,7 +12,7 @@
     --color-bg: linear-gradient(135deg, #050203 0%, #1e0a0a 100%);
     --color-cell: #2b0b0b;
     --color-modal: #0d0404;
-    --color-button: #990000;
+    --color-button: #900;
     --color-text: #d4c1c1;
     --color-title: #d4c1c1;
     --color-selected: #c00;
@@ -21,13 +21,13 @@
 
     /* Efectos */
     --cell-radius: min(10px, 2vw);
-    --border-light: 1px solid rgba(139, 0, 0, 0.3);
+    --border-light: 1px solid rgb(139 0 0 / 30%);
     --shadow-opacity: 0.8;
 
     /* Animaciones */
     --found-bg: radial-gradient(circle, #c00 0%, #800000 100%);
     --found-scale: 1.12;
-    --found-shadow: 0 0 40px rgba(204, 0, 0, 0.7), 0 0 70px rgba(139, 0, 0, 0.5);
+    --found-shadow: 0 0 40px rgb(204 0 0 / 70%), 0 0 70px rgb(139 0 0 / 50%);
     --unused-scale: 0.88;
     --unused-opacity: 0.12;
     --animation-duration-found: 750ms;

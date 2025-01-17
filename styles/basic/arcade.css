@@ -12,13 +12,12 @@
     /* Colores */
     --color-bg: #1a1a2e;
     --color-cell: #2a2a3e;
-    --color-modal: rgba(26, 26, 46, 0.95);
+    --color-modal: rgb(26 26 46 / 95%);
     --color-button: #2a2a3e;
     --color-text: #FFD700;
     --color-title: #FFD700;
-    --color-title: #FFD700;
     --color-selected: #8A2BE2;
-    --color-hover: rgba(138, 43, 226, 0.8);
+    --color-hover: rgb(138 43 226 / 80%);
     --color-line: #00BFFF;
 
     /* Efectos */
@@ -27,15 +26,15 @@
     --border-light: 2px solid #FFD700;
 
     /* Efectos especiales */
-    --effect-color-1: rgba(255, 105, 180, 0.1);
-    --effect-color-2: rgba(0, 191, 255, 0.1);
+    --effect-color-1: rgb(255 105 180 / 10%);
+    --effect-color-2: rgb(0 191 255 / 10%);
     --glow-radius: 12px;
-    --glow-color: rgba(255, 215, 0, 0.3);
+    --glow-color: rgb(255 215 0 / 30%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, #FF6347, #8A2BE2);
     --found-scale: 1.15;
-    --found-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+    --found-shadow: 0 0 20px rgb(255 105 180 / 50%);
     --unused-scale: 0.85;
     --unused-opacity: 0.3;
     --confetti-colors: #FFD700, #FF6347, #8A2BE2, #FF69B4;
@@ -53,8 +52,8 @@
     border: 2px solid #FFD700;
     image-rendering: pixelated;
     box-shadow:
-        inset 0 0 0 2px rgba(255, 215, 0, 0.2),
-        0 0 10px rgba(255, 215, 0, 0.3);
+        inset 0 0 0 2px rgb(255 215 0 / 20%),
+        0 0 10px rgb(255 215 0 / 30%);
 }
 
 :root[data-theme='arcade'] .title {
@@ -102,7 +101,6 @@
 }
 
 @keyframes arcade-blink {
-
     0%,
     100% {
         opacity: 1;

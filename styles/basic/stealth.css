@@ -10,52 +10,52 @@
     --font-family-content: 'Inter', sans-serif;
 
     /* Colores */
-    --color-bg: linear-gradient(135deg, #000000, #696969);
-    --color-cell: linear-gradient(145deg, #696969, #000000);
-    --color-modal: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(169, 169, 169, 0.95));
+    --color-bg: linear-gradient(135deg, #000, #696969);
+    --color-cell: linear-gradient(145deg, #696969, #000);
+    --color-modal: linear-gradient(180deg, rgb(0 0 0 / 95%), rgb(169 169 169 / 95%));
     --color-button: linear-gradient(145deg, #696969, #A9A9A9);
-    --color-text: #FFFFFF;
-    --color-title: #FFFFFF;
+    --color-text: #FFF;
+    --color-title: #FFF;
     --color-selected: #C0C0C0;
-    --color-hover: rgba(192, 192, 192, 0.8);
+    --color-hover: rgb(192 192 192 / 80%);
     --color-line: #A9A9A9;
 
     /* Efectos */
     --cell-radius: 2px;
     --shadow-opacity: 0.4;
-    --border-light: 1px solid rgba(255, 255, 255, 0.1);
+    --border-light: 1px solid rgb(255 255 255 / 10%);
 
     /* Efectos especiales */
-    --effect-color-1: rgba(169, 169, 169, 0.1);
-    --effect-color-2: rgba(192, 192, 192, 0.1);
+    --effect-color-1: rgb(169 169 169 / 10%);
+    --effect-color-2: rgb(192 192 192 / 10%);
     --glow-radius: 16px;
-    --glow-color: rgba(255, 255, 255, 0.15);
+    --glow-color: rgb(255 255 255 / 15%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, #696969, #C0C0C0);
     --found-scale: 1.08;
-    --found-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    --found-shadow: 0 0 20px rgb(255 255 255 / 30%);
     --unused-scale: 0.92;
     --unused-opacity: 0.2;
-    --confetti-colors: #FFFFFF, #C0C0C0, #A9A9A9, #696969;
+    --confetti-colors: #FFF, #C0C0C0, #A9A9A9, #696969;
 }
 
 :root[data-theme='stealth'] .board {
-    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(26, 26, 26, 0.9));
+    background: linear-gradient(rgb(0 0 0 / 90%), rgb(26 26 26 / 90%));
     backdrop-filter: blur(10px);
 }
 
 :root[data-theme='stealth'] .cell {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(135deg, #696969, #000000);
+    border: 1px solid rgb(255 255 255 / 10%);
+    background: linear-gradient(135deg, #696969, #000);
     box-shadow:
-        inset 0 0 20px rgba(255, 255, 255, 0.05),
-        0 0 15px rgba(169, 169, 169, 0.2);
+        inset 0 0 20px rgb(255 255 255 / 5%),
+        0 0 15px rgb(169 169 169 / 20%);
 }
 
 :root[data-theme='stealth'] .title {
-    color: #FFFFFF;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    color: #FFF;
+    text-shadow: 0 0 15px rgb(255 255 255 / 30%);
     letter-spacing: 3px;
 }
 
@@ -63,17 +63,17 @@
 :root[data-theme='stealth'] .level-number {
     font-family: 'Roboto Mono', monospace;
     color: #C0C0C0;
-    text-shadow: 0 0 10px rgba(192, 192, 192, 0.4);
+    text-shadow: 0 0 10px rgb(192 192 192 / 40%);
 }
 
 :root[data-theme='stealth'] .timer {
     color: #C0C0C0;
-    text-shadow: 0 0 10px rgba(192, 192, 192, 0.4);
+    text-shadow: 0 0 10px rgb(192 192 192 / 40%);
 }
 
 :root[data-theme='stealth'] .level-number {
     color: #A9A9A9;
-    text-shadow: 0 0 10px rgba(169, 169, 169, 0.4);
+    text-shadow: 0 0 10px rgb(169 169 169 / 40%);
 }
 
 @keyframes stealth-found {
@@ -86,8 +86,8 @@
         transform: scale(1.08);
         filter: contrast(1.3);
         box-shadow:
-            0 0 25px rgba(192, 192, 192, 0.4),
-            0 0 40px rgba(169, 169, 169, 0.3);
+            0 0 25px rgb(192 192 192 / 40%),
+            0 0 40px rgb(169 169 169 / 30%);
     }
 
     100% {
@@ -101,22 +101,21 @@
 }
 
 :root[data-theme='stealth'] .mark.selected {
-    box-shadow: 0 0 20px rgba(192, 192, 192, 0.3);
+    box-shadow: 0 0 20px rgb(192 192 192 / 30%);
     animation: stealth-fade 2s ease-in-out infinite;
 }
 
 @keyframes stealth-fade {
-
     0%,
     100% {
         opacity: 0.7;
-        background: rgba(192, 192, 192, 0.7);
-        box-shadow: 0 0 20px rgba(169, 169, 169, 0.3);
+        background: rgb(192 192 192 / 70%);
+        box-shadow: 0 0 20px rgb(169 169 169 / 30%);
     }
 
     50% {
         opacity: 0.9;
-        background: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 0 30px rgba(192, 192, 192, 0.4);
+        background: rgb(255 255 255 / 90%);
+        box-shadow: 0 0 30px rgb(192 192 192 / 40%);
     }
 }

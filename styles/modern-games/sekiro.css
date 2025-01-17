@@ -21,13 +21,13 @@
 
     /* Efectos */
     --cell-radius: 8px;
-    --border-light: 1px solid rgba(185, 28, 28, 0.3);
+    --border-light: 1px solid rgb(185 28 28 / 30%);
     --shadow-opacity: 0.5;
 
     /* Animaciones */
     --found-bg: radial-gradient(circle, #dc2626 0%, #991b1b 100%);
     --found-scale: 1.2;
-    --found-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 0 60px rgba(153, 27, 27, 0.4);
+    --found-shadow: 0 0 30px rgb(220 38 38 / 60%), 0 0 60px rgb(153 27 27 / 40%);
     --unused-scale: 0.88;
     --unused-opacity: 0.2;
     --animation-duration-found: 600ms;

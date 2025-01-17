@@ -12,32 +12,32 @@
     /* Colores */
     --color-bg: #1E1E1E;
     --color-cell: #2a2a2a;
-    --color-modal: rgba(30, 30, 30, 0.95);
-    --color-button: linear-gradient(145deg, #FF00FF, #00FFFF);
-    --color-text: #00FFFF;
-    --color-title: #00FFFF;
-    --color-selected: #FF00FF;
-    --color-hover: rgba(255, 53, 0, 0.8);
+    --color-modal: rgb(30 30 30 / 95%);
+    --color-button: linear-gradient(145deg, #F0F, #0FF);
+    --color-text: #0FF;
+    --color-title: #0FF;
+    --color-selected: #F0F;
+    --color-hover: rgb(255 53 0 / 80%);
     --color-line: #FF3700;
 
     /* Efectos */
     --cell-radius: 2px;
     --shadow-opacity: 0.7;
-    --border-light: 1px solid rgba(0, 255, 255, 0.2);
+    --border-light: 1px solid rgb(0 255 255 / 20%);
 
     /* Efectos especiales */
-    --effect-color-1: rgba(255, 0, 255, 0.1);
-    --effect-color-2: rgba(0, 255, 255, 0.1);
+    --effect-color-1: rgb(255 0 255 / 10%);
+    --effect-color-2: rgb(0 255 255 / 10%);
     --glow-radius: 15px;
-    --glow-color: rgba(255, 53, 0, 0.3);
+    --glow-color: rgb(255 53 0 / 30%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #FF00FF, #00FFFF);
+    --found-bg: linear-gradient(45deg, #F0F, #0FF);
     --found-scale: 1.1;
-    --found-shadow: 0 0 30px rgba(255, 55, 0, 0.6);
+    --found-shadow: 0 0 30px rgb(255 55 0 / 60%);
     --unused-scale: 0.9;
     --unused-opacity: 0.2;
-    --confetti-colors: #FF00FF, #00FFFF, #FF3500, #FF3700;
+    --confetti-colors: #F0F, #0FF, #FF3500, #FF3700;
 }
 
 :root[data-theme='glitcheffect'] body::before {
@@ -45,7 +45,7 @@
     position: fixed;
     inset: 0;
     background: repeating-linear-gradient(transparent 0%,
-            rgba(0, 255, 255, 0.1) 0.5%,
+            rgb(0 255 255 / 10%) 0.5%,
             transparent 1%);
     animation: scan-lines 8s linear infinite;
     pointer-events: none;
@@ -58,16 +58,16 @@
 }
 
 :root[data-theme='glitcheffect'] .cell {
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    border: 1px solid rgb(0 255 255 / 20%);
     position: relative;
     overflow: hidden;
 }
 
 :root[data-theme='glitcheffect'] .title {
     position: relative;
-    color: #00FFFF;
+    color: #0FF;
     text-shadow:
-        2px 0 #FF00FF,
+        2px 0 #F0F,
         -2px 0 #FF3500;
     animation: glitch-title 3s infinite;
 }
@@ -77,7 +77,7 @@
 }
 
 :root[data-theme='glitcheffect'] .text::after {
-    color: #00FFFF;
+    color: #0FF;
     animation: glitch-text 2s infinite reverse;
     clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
@@ -93,7 +93,6 @@
 }
 
 @keyframes glitch-bg {
-
     0%,
     100% {
         transform: translateX(-100%);
@@ -105,7 +104,6 @@
 }
 
 @keyframes glitch-title {
-
     0%,
     100% {
         transform: none;
@@ -132,7 +130,6 @@
 }
 
 @keyframes glitch-text {
-
     0%,
     100% {
         transform: none;
@@ -196,15 +193,14 @@
 }
 
 @keyframes glitch-selected {
-
     0%,
     100% {
-        background: #FF00FF;
+        background: #F0F;
         transform: none;
     }
 
     25% {
-        background: #00FFFF;
+        background: #0FF;
         transform: translate(2px, -2px);
     }
 

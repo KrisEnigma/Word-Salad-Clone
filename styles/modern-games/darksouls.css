@@ -11,7 +11,7 @@
     /* Colores */
     --color-bg: linear-gradient(135deg, #0c0c0c 0%, #221e1b 100%);
     --color-cell: linear-gradient(135deg, #2b261f, #0f0b09);
-    --color-modal: rgba(13, 13, 13, 0.95);
+    --color-modal: rgb(13 13 13 / 95%);
     --color-button: #bb6f10;
     --color-text: #e4d6a7;
     --color-title: #e4d6a7;
@@ -21,13 +21,13 @@
 
     /* Efectos */
     --cell-radius: min(8px, 2vw);
-    --border-light: 1px solid rgba(255, 140, 0, 0.3);
+    --border-light: 1px solid rgb(255 140 0 / 30%);
     --shadow-opacity: 0.85;
 
     /* Animaciones */
     --found-bg: radial-gradient(circle, #ff8c00 0%, #b35a00 100%);
     --found-scale: 1.1;
-    --found-shadow: 0 0 30px rgba(255, 140, 0, 0.6), 0 0 60px rgba(255, 69, 0, 0.4);
+    --found-shadow: 0 0 30px rgb(255 140 0 / 60%), 0 0 60px rgb(255 69 0 / 40%);
     --found-brightness: 2.2;
     --found-blur: 4px;
     --unused-scale: 0.9;
@@ -51,8 +51,8 @@
         transform: scale(1.2);
         filter: brightness(2.2) blur(4px);
         box-shadow:
-            0 0 50px rgba(255, 140, 0, 0.8),
-            0 0 100px rgba(255, 69, 0, 0.6);
+            0 0 50px rgb(255 140 0 / 80%),
+            0 0 100px rgb(255 69 0 / 60%);
     }
 
     70% {

@@ -12,69 +12,68 @@
     /* Colores */
     --color-bg: linear-gradient(135deg, #1E1E1E, #8A2BE2 200%);
     --color-cell: linear-gradient(145deg, #1E1E1E, #2a2a2a);
-    --color-modal: linear-gradient(180deg, rgba(30, 30, 30, 0.95), rgba(138, 43, 226, 0.1));
+    --color-modal: linear-gradient(180deg, rgb(30 30 30 / 95%), rgb(138 43 226 / 10%));
     --color-button: linear-gradient(145deg, #2a2a2a, #FF4500);
     --color-text: #00BFFF;
     --color-title: #00BFFF;
     --color-selected: #FFD700;
-    --color-hover: rgba(255, 215, 0, 0.8);
+    --color-hover: rgb(255 215 0 / 80%);
     --color-line: #FF4500;
 
     /* Efectos */
     --cell-radius: 5px;
     --shadow-opacity: 0.55;
-    --border-light: 1px solid rgba(0, 191, 255, 0.2);
+    --border-light: 1px solid rgb(0 191 255 / 20%);
 
     /* Efectos especiales */
-    --effect-color-1: rgba(0, 191, 255, 0.15);
-    --effect-color-2: rgba(255, 69, 0, 0.15);
+    --effect-color-1: rgb(0 191 255 / 15%);
+    --effect-color-2: rgb(255 69 0 / 15%);
     --glow-radius: 22px;
-    --glow-color: rgba(138, 43, 226, 0.3);
+    --glow-color: rgb(138 43 226 / 30%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, #8A2BE2, #FF4500);
     --found-scale: 1.12;
-    --found-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+    --found-shadow: 0 0 30px rgb(138 43 226 / 50%);
     --unused-scale: 0.88;
     --unused-opacity: 0.25;
     --confetti-colors: #00BFFF, #FF4500, #FFD700, #8A2BE2;
 }
 
 :root[data-theme='odyssey'] .board {
-    background: linear-gradient(rgba(30, 30, 30, 0.85), rgba(42, 42, 42, 0.85));
+    background: linear-gradient(rgb(30 30 30 / 85%), rgb(42 42 42 / 85%));
     backdrop-filter: blur(12px);
 }
 
 :root[data-theme='odyssey'] .cell {
     background: linear-gradient(135deg, #1E1E1E, #2a2a2a);
-    border: 1px solid rgba(0, 191, 255, 0.2);
+    border: 1px solid rgb(0 191 255 / 20%);
     box-shadow:
-        inset 0 0 20px rgba(0, 191, 255, 0.1),
-        0 0 15px rgba(138, 43, 226, 0.2),
-        0 0 30px rgba(255, 69, 0, 0.1);
+        inset 0 0 20px rgb(0 191 255 / 10%),
+        0 0 15px rgb(138 43 226 / 20%),
+        0 0 30px rgb(255 69 0 / 10%);
 }
 
 :root[data-theme='odyssey'] .title {
     background: linear-gradient(to right, #00BFFF, #8A2BE2);
-    -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     text-shadow:
-        0 0 15px rgba(0, 191, 255, 0.5),
-        0 0 30px rgba(138, 43, 226, 0.3);
+        0 0 15px rgb(0 191 255 / 50%),
+        0 0 30px rgb(138 43 226 / 30%);
     letter-spacing: 2px;
 }
 
 :root[data-theme='odyssey'] .timer {
     font-family: Audiowide, cursive;
     color: #FF4500;
-    text-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+    text-shadow: 0 0 10px rgb(255 69 0 / 50%);
 }
 
 :root[data-theme='odyssey'] .level-number {
     font-family: Audiowide, cursive;
     color: #FFD700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    text-shadow: 0 0 10px rgb(255 215 0 / 50%);
 }
 
 @keyframes odyssey-found {
@@ -87,8 +86,8 @@
         transform: scale(1.12) rotate(3deg);
         filter: hue-rotate(180deg);
         box-shadow:
-            0 0 35px rgba(138, 43, 226, 0.6),
-            0 0 55px rgba(255, 69, 0, 0.4);
+            0 0 35px rgb(138 43 226 / 60%),
+            0 0 55px rgb(255 69 0 / 40%);
     }
 
     100% {
@@ -109,7 +108,6 @@
 }
 
 @keyframes odyssey-glow {
-
     0%,
     100% {
         box-shadow:

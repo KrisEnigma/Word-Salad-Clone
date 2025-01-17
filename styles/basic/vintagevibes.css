@@ -11,7 +11,7 @@
     /* Colores */
     --color-bg: #7D7D7D;
     --color-cell: #C0C0C0;
-    --color-modal: rgba(125, 125, 125, 0.95);
+    --color-modal: rgb(125 125 125 / 95%);
     --color-button: #A0522D;
     --color-text: #bb955c;
     --color-title: #bb955c;
@@ -22,18 +22,18 @@
     /* Efectos */
     --cell-radius: 2px;
     --shadow-opacity: 0.4;
-    --border-light: 1px solid rgba(245, 222, 179, 0.3);
+    --border-light: 1px solid rgb(245 222 179 / 30%);
 
     /* Efectos especiales */
-    --effect-color-1: rgba(160, 82, 45, 0.1);
-    --effect-color-2: rgba(210, 105, 30, 0.1);
+    --effect-color-1: rgb(160 82 45 / 10%);
+    --effect-color-2: rgb(210 105 30 / 10%);
     --glow-radius: 20px;
-    --glow-color: rgba(245, 222, 179, 0.2);
+    --glow-color: rgb(245 222 179 / 20%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, #A0522D, #D2691E);
     --found-scale: 1.08;
-    --found-shadow: 0 0 25px rgba(245, 222, 179, 0.4);
+    --found-shadow: 0 0 25px rgb(245 222 179 / 40%);
     --unused-scale: 0.92;
     --unused-opacity: 0.25;
     --confetti-colors: #C0C0C0, #A0522D, #D2691E, #F5DEB3;
@@ -41,22 +41,22 @@
 
 :root[data-theme='vintagevibes'] .board {
     background: transparent;
-    border: 3px solid rgba(245, 222, 179, 0.3);
-    box-shadow: inset 0 0 30px rgba(160, 82, 45, 0.2);
+    border: 3px solid rgb(245 222 179 / 30%);
+    box-shadow: inset 0 0 30px rgb(160 82 45 / 20%);
 }
 
 :root[data-theme='vintagevibes'] .cell {
     background: #C0C0C0;
     border: var(--border-light);
     box-shadow:
-        inset 0 0 15px rgba(160, 82, 45, 0.1),
-        0 2px 4px rgba(0, 0, 0, 0.1);
+        inset 0 0 15px rgb(160 82 45 / 10%),
+        0 2px 4px rgb(0 0 0 / 10%);
     position: relative;
 }
 
 :root[data-theme='vintagevibes'] .title {
     color: #F5DEB3;
-    text-shadow: 2px 2px 4px rgba(160, 82, 45, 0.4);
+    text-shadow: 2px 2px 4px rgb(160 82 45 / 40%);
     font-style: italic;
     letter-spacing: 0.05em;
 }
@@ -66,7 +66,7 @@
     font-family: 'Old Standard TT', serif;
     font-weight: 700;
     color: #F5DEB3;
-    text-shadow: 1px 1px 2px rgba(160, 82, 45, 0.3);
+    text-shadow: 1px 1px 2px rgb(160 82 45 / 30%);
 }
 
 @keyframes vintage-found {
@@ -79,8 +79,8 @@
         transform: scale(var(--found-scale));
         filter: sepia(0.5) brightness(1.2);
         box-shadow:
-            0 0 20px rgba(210, 105, 30, 0.6),
-            0 0 40px rgba(245, 222, 179, 0.4);
+            0 0 20px rgb(210 105 30 / 60%),
+            0 0 40px rgb(245 222 179 / 40%);
     }
 
     100% {
@@ -98,7 +98,6 @@
 }
 
 @keyframes vintage-selected {
-
     0%,
     100% {
         background: #D2691E;
@@ -119,5 +118,5 @@
 :root[data-theme='vintagevibes'] .word.found {
     background: var(--found-bg);
     color: #F5DEB3;
-    text-shadow: 1px 1px 2px rgba(160, 82, 45, 0.4);
+    text-shadow: 1px 1px 2px rgb(160 82 45 / 40%);
 }

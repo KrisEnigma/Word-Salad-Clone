@@ -25,15 +25,14 @@ export class AnimationManager {
         return metrics;
     }
 
-    static async animateWordFound(selection, wordElement, word) {
-        return new Promise(async resolve => {
+    static animateWordFound(selection, wordElement, word) {
+        return new Promise((resolve) => {
             const lastCell = document.getElementById(`tile-${selection[selection.length - 1]}`);
             const lastLetter = lastCell.querySelector('.text');
             const targetSpan = wordElement.querySelector('span');
-            
+
             targetSpan.style.opacity = '0';
 
-            const sourceFontStyle = window.getComputedStyle(lastLetter);
             const targetFontStyle = window.getComputedStyle(targetSpan);
 
             const computedThemeStyles = {
@@ -41,110 +40,113 @@ export class AnimationManager {
                 target: window.getComputedStyle(wordElement)
             };
 
-            const letterMetrics = await Promise.all([...word].map(async char => {
-                return this.measureText(char, {
-                    'font-size': targetFontStyle.fontSize,
-                    'font-family': 'var(--font-family-content)',
-                    'font-weight': computedThemeStyles.target.fontWeight,
-                    'letter-spacing': computedThemeStyles.target.letterSpacing,
-                    'text-transform': computedThemeStyles.target.textTransform,
-                    'font-feature-settings': computedThemeStyles.target.fontFeatureSettings
-                });
-            }));
-
-            const totalWidth = letterMetrics.reduce((sum, metric) => sum + metric.width, 0);
-            const targetRect = targetSpan.getBoundingClientRect();
-            const sourceRect = lastCell.getBoundingClientRect();
-
-            const startOffset = (targetRect.width - totalWidth) / 2;
-
-            const letters = [...word].map((char, index) => {
-                const letterSpan = document.createElement('span');
-                letterSpan.textContent = char === ' ' ? '\u00A0' : char;
-                letterSpan.className = 'animated-letter';
-
-                const sourceX = sourceRect.left + (sourceRect.width / 2);
-                const sourceY = sourceRect.top + (sourceRect.height / 2);
-
-                letterSpan.style.cssText = `
-                    position: fixed;
-                    left: ${sourceX}px;
-                    top: ${sourceY}px;
-                    transform: translate(-50%, -50%);
-                    opacity: 1;
-                `;
-                document.body.appendChild(letterSpan);
-
-                const previousLettersWidth = letterMetrics
-                    .slice(0, index)
-                    .reduce((sum, metric) => sum + metric.width, 0);
-                
-                const targetX = targetRect.left + startOffset + previousLettersWidth + (letterMetrics[index].width / 2);
-                const targetY = targetRect.top + (targetRect.height / 2);
-
-                return {
-                    element: letterSpan,
-                    endX: targetX,
-                    endY: targetY,
-                    startX: sourceX,
-                    startY: sourceY,
-                    sourceStyles: computedThemeStyles.source,
-                    targetStyles: computedThemeStyles.target
-                };
-            });
-
-            letters.forEach(({ element, endX, endY, startX, startY, targetStyles }, index) => {
-                setTimeout(() => {
-                    element.classList.add('animating');
-                    
-                    requestAnimationFrame(() => {
-                        element.classList.add('in-transit');
-                        const deltaX = endX - startX;
-                        const deltaY = endY - startY;
-
-                        element.style.cssText += `
-                            font-size: ${targetFontStyle.fontSize};
-                            color: white;
-                            transform: translate(
-                                calc(-50% + ${deltaX}px),
-                                calc(-50% + ${deltaY}px)
-                            );
-                        `;
-
-                        const handleTransitionEnd = (e) => {
-                            if (e.propertyName === 'transform') {
-                                element.removeEventListener('transitionend', handleTransitionEnd);
-                                element.classList.remove('animating', 'in-transit');
-                                
-                                if (index === letters.length - 1) {
-                                    targetSpan.textContent = word;
-                                    targetSpan.style.opacity = '1';
-                                    
-                                    requestAnimationFrame(() => {
-                                        document.querySelectorAll('.animated-letter').forEach(el => el.remove());
-                                    });
-                                }
-                            }
-                        };
-
-                        element.addEventListener('transitionend', handleTransitionEnd);
+            // Mover toda la lógica async dentro de una función async IIFE
+            (async () => {
+                const letterMetrics = await Promise.all([...word].map(async char => {
+                    return this.measureText(char, {
+                        'font-size': targetFontStyle.fontSize,
+                        'font-family': 'var(--font-family-content)',
+                        'font-weight': computedThemeStyles.target.fontWeight,
+                        'letter-spacing': computedThemeStyles.target.letterSpacing,
+                        'text-transform': computedThemeStyles.target.textTransform,
+                        'font-feature-settings': computedThemeStyles.target.fontFeatureSettings
                     });
-                }, index * this.DURATIONS.LETTER_DELAY);
-            });
+                }));
 
-            selection.forEach(position => {
-                const cell = document.getElementById(`tile-${position}`);
-                cell.classList.add('found-temp');
-            });
+                const totalWidth = letterMetrics.reduce((sum, metric) => sum + metric.width, 0);
+                const targetRect = targetSpan.getBoundingClientRect();
+                const sourceRect = lastCell.getBoundingClientRect();
 
-            const totalDuration = letters.length * this.DURATIONS.LETTER_DELAY + this.DURATIONS.LETTER_ANIMATION;
-            setTimeout(() => {
+                const startOffset = (targetRect.width - totalWidth) / 2;
+
+                const letters = [...word].map((char, index) => {
+                    const letterSpan = document.createElement('span');
+                    letterSpan.textContent = char === ' ' ? '\u00A0' : char;
+                    letterSpan.className = 'animated-letter';
+
+                    const sourceX = sourceRect.left + (sourceRect.width / 2);
+                    const sourceY = sourceRect.top + (sourceRect.height / 2);
+
+                    letterSpan.style.cssText = `
+                        position: fixed;
+                        left: ${sourceX}px;
+                        top: ${sourceY}px;
+                        transform: translate(-50%, -50%);
+                        opacity: 1;
+                    `;
+                    document.body.appendChild(letterSpan);
+
+                    const previousLettersWidth = letterMetrics
+                        .slice(0, index)
+                        .reduce((sum, metric) => sum + metric.width, 0);
+
+                    const targetX = targetRect.left + startOffset + previousLettersWidth + (letterMetrics[index].width / 2);
+                    const targetY = targetRect.top + (targetRect.height / 2);
+
+                    return {
+                        element: letterSpan,
+                        endX: targetX,
+                        endY: targetY,
+                        startX: sourceX,
+                        startY: sourceY,
+                        sourceStyles: computedThemeStyles.source,
+                        targetStyles: computedThemeStyles.target
+                    };
+                });
+
+                letters.forEach(({ element, endX, endY, startX, startY }, index) => {
+                    setTimeout(() => {
+                        element.classList.add('animating');
+
+                        requestAnimationFrame(() => {
+                            element.classList.add('in-transit');
+                            const deltaX = endX - startX;
+                            const deltaY = endY - startY;
+
+                            element.style.cssText += `
+                                font-size: ${targetFontStyle.fontSize};
+                                color: white;
+                                transform: translate(
+                                    calc(-50% + ${deltaX}px),
+                                    calc(-50% + ${deltaY}px)
+                                );
+                            `;
+
+                            const handleTransitionEnd = (e) => {
+                                if (e.propertyName === 'transform') {
+                                    element.removeEventListener('transitionend', handleTransitionEnd);
+                                    element.classList.remove('animating', 'in-transit');
+
+                                    if (index === letters.length - 1) {
+                                        targetSpan.textContent = word;
+                                        targetSpan.style.opacity = '1';
+
+                                        requestAnimationFrame(() => {
+                                            document.querySelectorAll('.animated-letter').forEach(el => el.remove());
+                                        });
+                                    }
+                                }
+                            };
+
+                            element.addEventListener('transitionend', handleTransitionEnd);
+                        });
+                    }, index * this.DURATIONS.LETTER_DELAY);
+                });
+
                 selection.forEach(position => {
                     const cell = document.getElementById(`tile-${position}`);
-                    cell.classList.remove('found-temp');
+                    cell.classList.add('found-temp');
                 });
-                resolve(totalDuration);
-            }, totalDuration);
+
+                const totalDuration = letters.length * this.DURATIONS.LETTER_DELAY + this.DURATIONS.LETTER_ANIMATION;
+                setTimeout(() => {
+                    selection.forEach(position => {
+                        const cell = document.getElementById(`tile-${position}`);
+                        cell.classList.remove('found-temp');
+                    });
+                    resolve(totalDuration);
+                }, totalDuration);
+            })();
         });
     }
 
@@ -160,19 +162,18 @@ export class AnimationManager {
         getColors() {
             const colorsVar = getComputedStyle(document.documentElement)
                 .getPropertyValue('--confetti-colors').trim();
-            return colorsVar ? colorsVar.split(',').map(c => c.trim()) 
-                             : ['#ffd700', '#ff3939', '#00ff7f', '#4169e1', '#ff69b4'];
+            return colorsVar ? colorsVar.split(',').map(c => c.trim())
+                : ['#ffd700', '#ff3939', '#00ff7f', '#4169e1', '#ff69b4'];
         },
         initialize() {
             const canvas = document.getElementById('confetti-canvas');
             if (!canvas) return;
-            this.instance = confetti.create(canvas, { resize: true });
+            // Usar confetti global en lugar del importado
+            this.instance = window.confetti.create(canvas, { resize: true });
         },
         fire(options) {
             if (!this.instance) this.initialize();
             if (this.instance) {
-                const screenWidth = window.innerWidth;
-                const normalizedX = options.origin.x * screenWidth;
                 this.instance(options);
             }
         },
@@ -185,7 +186,7 @@ export class AnimationManager {
         start() {
             return new Promise(resolve => {
                 if (!this.instance) this.initialize();
-                
+
                 const colors = this.getColors();
 
                 // Primera oleada: explosiones laterales
@@ -232,16 +233,16 @@ export class AnimationManager {
     static async animateVictory(callback) {
         // Ya no necesitamos isPlaying porque corregiremos el flujo
         const victoryModal = document.getElementById('victory-modal');
-        
+
         // Primero activar el modal
         victoryModal.classList.add('active');
-        
+
         // Esperar un frame para asegurar que el canvas esté listo
         await new Promise(resolve => requestAnimationFrame(resolve));
-        
+
         // Ahora iniciar la animación
         await this.confetti.start();
-        
+
         // Finalmente ejecutar el callback si existe
         callback?.();
     }

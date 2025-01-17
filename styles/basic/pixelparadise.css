@@ -11,7 +11,7 @@
     /* Colores */
     --color-bg: #6B5B95;
     --color-cell: #92A8D1;
-    --color-modal: rgba(107, 91, 149, 0.95);
+    --color-modal: rgb(107 91 149 / 95%);
     --color-button: #FF6F61;
     --color-text: #F7CAC9;
     --color-title: #F7CAC9;
@@ -25,15 +25,15 @@
     --border-light: 2px solid #F7CAC9;
 
     /* Efectos especiales */
-    --effect-color-1: rgba(255, 111, 97, 0.2);
-    --effect-color-2: rgba(136, 176, 75, 0.1);
+    --effect-color-1: rgb(255 111 97 / 20%);
+    --effect-color-2: rgb(136 176 75 / 10%);
     --glow-radius: 15px;
-    --glow-color: rgba(247, 202, 201, 0.3);
+    --glow-color: rgb(247 202 201 / 30%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, #FF6F61, #88B04B);
     --found-scale: 1.2;
-    --found-shadow: 0 0 20px rgba(247, 202, 201, 0.6);
+    --found-shadow: 0 0 20px rgb(247 202 201 / 60%);
     --unused-scale: 0.85;
     --unused-opacity: 0.2;
     --confetti-colors: #FF6F61, #88B04B, #92A8D1, #F7CAC9;
@@ -41,8 +41,8 @@
 
 :root[data-theme='pixelparadise'] .board {
     background: linear-gradient(45deg,
-            rgba(107, 91, 149, 0.8),
-            rgba(146, 168, 209, 0.4));
+            rgb(107 91 149 / 80%),
+            rgb(146 168 209 / 40%));
     border: 4px solid #F7CAC9;
     image-rendering: pixelated;
 }
@@ -91,7 +91,6 @@
 }
 
 @keyframes pixel-selected {
-
     0%,
     100% {
         transform: scale(1);

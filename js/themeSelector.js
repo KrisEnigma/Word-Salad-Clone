@@ -12,14 +12,10 @@ export class ThemeSelector {
     }
 
     async initialize() {
-        try {
-            await this.loadThemesData();
-            await this.loadThemeStylesheets();
-            this.initializeUI();
-            return this.availableThemes;
-        } catch (error) {
-            throw error;
-        }
+        await this.loadThemesData();
+        await this.loadThemeStylesheets();
+        this.initializeUI();
+        return this.availableThemes;
     }
 
     formatCategoryName(categoryId) {
@@ -29,38 +25,32 @@ export class ThemeSelector {
     }
 
     async loadThemesData() {
-        try {
-            const response = await fetch('styles/themes.json');
-            if (!response.ok) throw new Error('No se pudo obtener la lista de temas');
-            
-            const data = await response.json();
-            
-            this.themesData = {
-                categories: Object.fromEntries(
-                    Object.entries(data.categories).map(([id, category]) => {
-                        return [
-                            id,
-                            {
-                                ...category,
-                                name: this.formatCategoryName(id),
-                                path: id
-                            }
-                        ];
-                    })
-                )
-            };
-            
-            this.categoryOrder = Object.keys(this.themesData.categories)
-                .map(id => this.formatCategoryName(id));
-            
-            Object.entries(this.themesData.categories).forEach(([categoryId, category]) => {
-                this.availableThemes.set(category.name, new Set(
-                    category.themes.map(theme => this.getThemeId(theme.file))
-                ));
-            });
-        } catch (error) {
-            throw error;
-        }
+        const response = await fetch('styles/themes.json');
+        if (!response.ok) throw new Error('No se pudo obtener la lista de temas');
+        
+        const data = await response.json();
+        
+        this.themesData = {
+            categories: Object.fromEntries(
+                Object.entries(data.categories).map(([id, category]) => [
+                    id,
+                    {
+                        ...category,
+                        name: this.formatCategoryName(id),
+                        path: id
+                    }
+                ])
+            )
+        };
+        
+        this.categoryOrder = Object.keys(this.themesData.categories)
+            .map(id => this.formatCategoryName(id));
+        
+        Object.entries(this.themesData.categories).forEach(([, category]) => {
+            this.availableThemes.set(category.name, new Set(
+                category.themes.map(theme => this.getThemeId(theme.file))
+            ));
+        });
     }
 
     loadStylesheet(path) {
@@ -71,11 +61,8 @@ export class ThemeSelector {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
             link.href = path;
-            link.onload = () => resolve();
-            link.onerror = () => {
-                document.head.removeChild(link);
-                reject(new Error(`Error loading ${path}`));
-            };
+            link.onload = resolve;  // Simplificar
+            link.onerror = reject;
             document.head.appendChild(link);
         });
     }
@@ -101,7 +88,7 @@ export class ThemeSelector {
                     if (!response.ok) {
                         localStorage.removeItem('theme');
                     }
-                } catch (e) {
+                } catch {  // Eliminar "_" como parámetro
                     localStorage.removeItem('theme');
                 }
             }
@@ -112,6 +99,7 @@ export class ThemeSelector {
             if (defaultThemeData) {
                 const defaultPath = `styles/${defaultThemeData.category.path}/${defaultThemeData.theme.file}`;
                 await this.loadStylesheet(defaultPath).catch(error => {
+                    console.error('Error loading default theme stylesheet:', error);
                 });
             }
 
@@ -120,7 +108,8 @@ export class ThemeSelector {
                     .filter(theme => this.getThemeId(theme.file) !== defaultTheme)
                     .map(theme => {
                         const path = `styles/${category.path}/${theme.file}`;
-                        return this.loadStylesheet(path).catch(() => {
+                        return this.loadStylesheet(path).catch(error => {
+                            console.error(`Error loading stylesheet ${path}:`, error);
                         });
                     })
             );
@@ -128,6 +117,7 @@ export class ThemeSelector {
             await Promise.allSettled(promises);
 
         } catch (error) {
+            console.error('Error loading theme stylesheets:', error);
         } finally {
             const themeToApply = localStorage.getItem('theme') || this.getDefaultTheme();
             this.setTheme(themeToApply);
@@ -138,34 +128,21 @@ export class ThemeSelector {
     }
 
     findThemeData(themeId) {
-        try {
-            for (const [categoryId, category] of Object.entries(this.themesData.categories)) {
-                
-                const theme = category.themes.find(t => this.getThemeId(t.file) === themeId);
-                if (theme) {
-                    const result = {
-                        category: category,
-                        theme
-                    };
-                    return result;
-                }
+        for (const category of Object.values(this.themesData.categories)) {
+            const theme = category.themes.find(t => this.getThemeId(t.file) === themeId);
+            if (theme) {
+                return { category, theme };
             }
-            
-            for (const [categoryId, category] of Object.entries(this.themesData.categories)) {
-                const defaultTheme = category.themes.find(t => t.isDefault);
-                if (defaultTheme) {
-                    const result = {
-                        category: category,
-                        theme: defaultTheme
-                    };
-                    return result;
-                }
-            }
-            
-            throw new Error('No se encontró el tema ni un tema por defecto');
-        } catch (error) {
-            throw error;
         }
+        
+        for (const category of Object.values(this.themesData.categories)) {
+            const defaultTheme = category.themes.find(t => t.isDefault);
+            if (defaultTheme) {
+                return { category, theme: defaultTheme };
+            }
+        }
+        
+        throw new Error('No se encontró el tema ni un tema por defecto');
     }
 
     getDefaultTheme() {
@@ -257,7 +234,8 @@ export class ThemeSelector {
                 .map(([name, value]) => `${name}: ${value}`)
                 .join(';');
                 
-        } catch (error) {
+        } catch {
+            // Remover parámetro error no utilizado
             return '';
         }
     }
@@ -306,16 +284,6 @@ export class ThemeSelector {
         return cssText;
     }
 
-    getDefaultTheme() {
-        for (const category of Object.values(this.themesData.categories)) {
-            const defaultTheme = category.themes.find(theme => theme.isDefault);
-            if (defaultTheme) {
-                return this.getThemeId(defaultTheme.file);
-            }
-        }
-        return 'dark';
-    }
-
     async loadThemeVariables() {
         const themeStyles = new Map();
         
@@ -337,7 +305,8 @@ export class ThemeSelector {
                     themeStyles.set(themeName, styles);
                 }
             }
-        } catch (error) {
+        } catch {
+            console.error('Error loading theme variables');
         }
         
         return themeStyles;
@@ -390,8 +359,8 @@ export class ThemeSelector {
     }
 
     bindEvents(themeGrid) {
-        themeGrid.addEventListener('click', e => {
-            const themeButton = e.target.closest('.theme-option');
+        themeGrid.addEventListener('click', event => {  // Renombrar e a event
+            const themeButton = event.target.closest('.theme-option');
             if (!themeButton) return;
 
             const newTheme = themeButton.dataset.theme;
@@ -434,7 +403,7 @@ export class ThemeSelector {
             return this.loadStylesheet(themePath).catch(() => 
                 this.loadStylesheet('styles/basic/dark.css')
             );
-        } catch (error) {
+        } catch {
             return this.loadStylesheet('styles/basic/dark.css');
         }
     }

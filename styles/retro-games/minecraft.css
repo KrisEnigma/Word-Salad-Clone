@@ -16,7 +16,7 @@
     --color-text: #fff;
     --color-title: #fff;
     --color-selected: #5794df;
-    --color-hover: rgba(87, 148, 223, 0.8);
+    --color-hover: rgb(87 148 223 / 80%);
     --color-line: #ffd83d;
 
     /* Efectos */

@@ -12,51 +12,51 @@
     /* Colores */
     --color-bg: #8B4513;
     --color-cell: #A0522D;
-    --color-modal: rgba(139, 69, 19, 0.95);
+    --color-modal: rgb(139 69 19 / 95%);
     --color-button: #A0522D;
     --color-text: #F0E68C;
     --color-title: #F0E68C;
     --color-selected: #FF4500;
-    --color-hover: rgba(255, 69, 0, 0.8);
+    --color-hover: rgb(255 69 0 / 80%);
     --color-line: #6A5ACD;
 
     /* Efectos */
     --cell-radius: 8px;
     --shadow-opacity: 0.4;
-    --border-light: 2px solid rgba(240, 230, 140, 0.3);
+    --border-light: 2px solid rgb(240 230 140 / 30%);
 
     /* Efectos especiales */
-    --effect-color-1: rgba(255, 69, 0, 0.1);
-    --effect-color-2: rgba(106, 90, 205, 0.1);
+    --effect-color-1: rgb(255 69 0 / 10%);
+    --effect-color-2: rgb(106 90 205 / 10%);
     --glow-radius: 18px;
-    --glow-color: rgba(240, 230, 140, 0.25);
+    --glow-color: rgb(240 230 140 / 25%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, #FFD700, #FF4500);
     --found-scale: 1.1;
-    --found-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    --found-shadow: 0 0 20px rgb(255 215 0 / 40%);
     --unused-scale: 0.9;
     --unused-opacity: 0.3;
     --confetti-colors: #FFD700, #FF4500, #6A5ACD, #F0E68C;
 }
 
 :root[data-theme='fantasy'] .board {
-    background: linear-gradient(rgba(139, 69, 19, 0.8), rgba(160, 82, 45, 0.8));
+    background: linear-gradient(rgb(139 69 19 / 80%), rgb(160 82 45 / 80%));
     backdrop-filter: blur(8px);
 }
 
 :root[data-theme='fantasy'] .cell {
-    border: 2px solid rgba(240, 230, 140, 0.3);
+    border: 2px solid rgb(240 230 140 / 30%);
     box-shadow:
-        inset 0 0 15px rgba(240, 230, 140, 0.1),
-        0 0 10px rgba(106, 90, 205, 0.2);
+        inset 0 0 15px rgb(240 230 140 / 10%),
+        0 0 10px rgb(106 90 205 / 20%);
 }
 
 :root[data-theme='fantasy'] .title {
     color: #FFD700;
     text-shadow:
-        2px 2px 4px rgba(139, 69, 19, 0.8),
-        0 0 15px rgba(240, 230, 140, 0.5);
+        2px 2px 4px rgb(139 69 19 / 80%),
+        0 0 15px rgb(240 230 140 / 50%);
     letter-spacing: 1px;
 }
 
@@ -64,7 +64,7 @@
 :root[data-theme='fantasy'] .level-number {
     font-family: MedievalSharp, cursive;
     color: #F0E68C;
-    text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.6);
+    text-shadow: 2px 2px 4px rgb(139 69 19 / 60%);
 }
 
 @keyframes fantasy-found {
@@ -93,12 +93,11 @@
 
 :root[data-theme='fantasy'] .mark.selected {
     border: 2px solid #FFD700;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px rgb(255 215 0 / 50%);
     animation: fantasy-glow 1.5s ease-in-out infinite;
 }
 
 @keyframes fantasy-glow {
-
     0%,
     100% {
         box-shadow: 0 0 15px #FFD700;

@@ -11,14 +11,13 @@
     /* Colores */
     --color-bg: #581845;
     --color-cell: #900C3F;
-    --color-modal: rgba(88, 24, 69, 0.95);
+    --color-modal: rgb(88 24 69 / 95%);
     --color-button: #FF5733;
-    --color-title: #FFCC00;
-    --color-text: #FFCC00;
-    --color-title: #FFCC00;
+    --color-text: #FC0;
+    --color-title: #FC0;
     --color-selected: #FF5733;
     --color-hover: #C70039;
-    --color-line: #FFCC00;
+    --color-line: #FC0;
 
     /* Efectos */
     --cell-radius: 0;
@@ -26,18 +25,18 @@
     --border-light: 2px solid #FF5733;
 
     /* Efectos especiales */
-    --effect-color-1: rgba(255, 87, 51, 0.2);
-    --effect-color-2: rgba(255, 204, 0, 0.1);
+    --effect-color-1: rgb(255 87 51 / 20%);
+    --effect-color-2: rgb(255 204 0 / 10%);
     --glow-radius: 12px;
-    --glow-color: rgba(199, 0, 57, 0.4);
+    --glow-color: rgb(199 0 57 / 40%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #FF5733, #FFCC00);
+    --found-bg: linear-gradient(45deg, #FF5733, #FC0);
     --found-scale: 1.15;
-    --found-shadow: 0 0 25px rgba(255, 87, 51, 0.5);
+    --found-shadow: 0 0 25px rgb(255 87 51 / 50%);
     --unused-scale: 0.9;
     --unused-opacity: 0.15;
-    --confetti-colors: #FFCC00, #FF5733, #C70039, #900C3F;
+    --confetti-colors: #FC0, #FF5733, #C70039, #900C3F;
 }
 
 :root[data-theme='8bitadventure'] .board {
@@ -53,8 +52,8 @@
 :root[data-theme='8bitadventure'] .cell {
     background: #900C3F;
     border: 2px solid #FF5733;
-    box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.2),
-        inset -2px -2px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: inset 2px 2px 0 rgb(255 255 255 / 20%),
+        inset -2px -2px 0 rgb(0 0 0 / 20%);
     image-rendering: pixelated;
 }
 

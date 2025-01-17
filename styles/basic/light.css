@@ -17,17 +17,17 @@
     --color-text: #000;
     --color-title: #000;
     --color-selected: #228be6;
-    --color-hover: rgba(34, 139, 230, 0.8);
+    --color-hover: rgb(34 139 230 / 80%);
     --color-line: #1e5899;
 
     /* Efectos */
     --shadow-opacity: 0.2;
-    --border-light: 1px solid rgba(0, 0, 0, 0.08);
+    --border-light: 1px solid rgb(0 0 0 / 8%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, var(--color-selected), #4b9ced);
     --found-scale: 1.15;
-    --found-shadow: 0 0 16px rgba(45, 125, 210, 0.25);
+    --found-shadow: 0 0 16px rgb(45 125 210 / 25%);
     --unused-scale: 0.85;
     --unused-opacity: 0.4;
     --confetti-colors: #ffaf00, #fe5840, #00d779, #58f;
@@ -35,24 +35,24 @@
 
 /* Efectos especiales para Light */
 :root[data-theme='light'] .board {
-    background: linear-gradient(rgba(248, 249, 250, 0.7), rgba(233, 236, 239, 0.7));
+    background: linear-gradient(rgb(248 249 250 / 70%), rgb(233 236 239 / 70%));
     backdrop-filter: blur(5px);
 }
 
 :root[data-theme='light'] .cell {
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgb(0 0 0 / 8%);
     box-shadow:
-        inset 0 2px 4px rgba(255, 255, 255, 0.9),
-        0 4px 8px rgba(0, 0, 0, 0.1);
+        inset 0 2px 4px rgb(255 255 255 / 90%),
+        0 4px 8px rgb(0 0 0 / 10%);
 }
 
 :root[data-theme='light'] .mark.selected {
-    box-shadow: 0 0 15px rgba(34, 139, 230, 0.4);
+    box-shadow: 0 0 15px rgb(34 139 230 / 40%);
 }
 
 :root[data-theme='light'] .title {
     color: #1971c2;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    text-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
 }
 
 :root[data-theme='light'] .timer,
@@ -69,7 +69,7 @@
     50% {
         transform: scale(1.15);
         filter: brightness(1.3);
-        box-shadow: 0 0 25px rgba(45, 125, 210, 0.4);
+        box-shadow: 0 0 25px rgb(45 125 210 / 40%);
     }
 
     100% {

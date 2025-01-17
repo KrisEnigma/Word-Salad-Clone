@@ -12,7 +12,7 @@
     /* Colores */
     --color-bg: #1a1a1a;
     --color-cell: #2a2a2a;
-    --color-modal: rgba(26, 26, 26, 0.95);
+    --color-modal: rgb(26 26 26 / 95%);
     --color-button: #8B0000;
     --color-text: #D3D3D3;
     --color-title: #D3D3D3;
@@ -23,18 +23,18 @@
     /* Efectos */
     --cell-radius: 4px;
     --shadow-opacity: 0.5;
-    --border-light: 2px solid rgba(255, 215, 0, 0.3);
+    --border-light: 2px solid rgb(255 215 0 / 30%);
 
     /* Efectos especiales */
-    --effect-color-1: rgba(139, 0, 0, 0.2);
-    --effect-color-2: rgba(255, 215, 0, 0.1);
+    --effect-color-1: rgb(139 0 0 / 20%);
+    --effect-color-2: rgb(255 215 0 / 10%);
     --glow-radius: 20px;
-    --glow-color: rgba(50, 205, 50, 0.3);
+    --glow-color: rgb(50 205 50 / 30%);
 
     /* Animaciones */
     --found-bg: linear-gradient(45deg, #8B0000, #FFD700);
     --found-scale: 1.15;
-    --found-shadow: 0 0 30px rgba(30, 144, 255, 0.6);
+    --found-shadow: 0 0 30px rgb(30 144 255 / 60%);
     --unused-scale: 0.85;
     --unused-opacity: 0.2;
     --confetti-colors: #8B0000, #FFD700, #32CD32, #1E90FF;
@@ -42,29 +42,29 @@
 
 :root[data-theme='herojourney'] .board {
     background: radial-gradient(circle at center,
-            rgba(139, 0, 0, 0.2) 0%,
-            rgba(26, 26, 26, 0.9) 70%);
-    border: 3px solid rgba(255, 215, 0, 0.3);
+            rgb(139 0 0 / 20%) 0%,
+            rgb(26 26 26 / 90%) 70%);
+    border: 3px solid rgb(255 215 0 / 30%);
 }
 
 :root[data-theme='herojourney'] .cell {
     border: var(--border-light);
-    box-shadow: 0 0 15px rgba(30, 144, 255, 0.2);
+    box-shadow: 0 0 15px rgb(30 144 255 / 20%);
     background: linear-gradient(135deg,
-            rgba(42, 42, 42, 1) 0%,
-            rgba(42, 42, 42, 0.8) 100%);
+            rgb(42 42 42 / 100%) 0%,
+            rgb(42 42 42 / 80%) 100%);
 }
 
 :root[data-theme='herojourney'] .title {
     color: #FFD700;
-    text-shadow: 2px 2px 4px rgba(139, 0, 0, 0.6);
+    text-shadow: 2px 2px 4px rgb(139 0 0 / 60%);
     letter-spacing: 2px;
 }
 
 :root[data-theme='herojourney'] .timer,
 :root[data-theme='herojourney'] .level-number {
     color: #D3D3D3;
-    text-shadow: 1px 1px 2px rgba(139, 0, 0, 0.4);
+    text-shadow: 1px 1px 2px rgb(139 0 0 / 40%);
 }
 
 @keyframes hero-found {
@@ -91,7 +91,6 @@
 }
 
 @keyframes hero-selected {
-
     0%,
     100% {
         transform: scale(1);
