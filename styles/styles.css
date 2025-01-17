@@ -554,20 +554,17 @@ var(--color-text)
 
 .word-list {
     display: flex;
-    gap: var(--spacing);
-    place-content: flex-start center;
-    padding-bottom: calc(var(--spacing) * 0.5);
-    margin-top: auto;
-    max-height: var(--words-max-height);
-    height: var(--words-visible-height);
-    overflow: hidden;
-    margin: 0;
-    padding: clamp(4px, 2dvh, 8px);
-    display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: clamp(6px, 3dvh, 12px);
+    padding: clamp(4px, 2dvh, 8px);
+    margin: auto 0;
+    height: var(--words-visible-height);
+    max-height: var(--word-list-height);
+    width: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .word {
@@ -575,18 +572,14 @@ var(--color-text)
     align-items: center;
     justify-content: center;
     height: var(--word-height);
-    min-height: var(--word-height);
-    max-height: var(--word-height);
     padding: var(--word-padding-block) var(--word-padding-inline);
-    font-size: var(--font-size-word);
-    border-radius: calc(var(--word-height) * 0.15);
     background: var(--color-cell);
-    font-weight: 500;
+    border-radius: calc(var(--word-height) * 0.15);
     border: var(--border-light);
     box-shadow: var(--shadow-sm);
+    font-weight: 500;
     transition: all 0.3s ease;
-    position: relative;
-    width: calc(var(--word-content-width) + (var(--word-padding-inline) * 2));
+    flex-shrink: 0;
 }
 
 .word-measure {
