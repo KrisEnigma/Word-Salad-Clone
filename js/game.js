@@ -7,7 +7,6 @@ class GameState {
     constructor() {
         this.themeSelector = new ThemeSelector();
         
-        // Inicializar carga en dos fases
         this.initPhase1()
             .then(() => this.initPhase2())
             .catch(error => {
@@ -15,7 +14,6 @@ class GameState {
                 this.showContent();
             });
 
-        // Actualizar el listener para ignorar el detalle del evento
         window.addEventListener('themechange', () => {
             this.handleThemeChange();
         });
@@ -43,14 +41,12 @@ class GameState {
         return this.themeSelector.setTheme(themeName);
     }
 
-    // Nuevo método para manejar cambios de tema
-    handleThemeChange(themeName) {
+    handleThemeChange() {
         const recalculateUI = () => {
             this.fitTitle();
             this.updateWordList();
         };
 
-        // Secuencia de recálculos para garantizar el ajuste correcto
         requestAnimationFrame(() => {
             recalculateUI();
             document.fonts.ready.then(() => {
@@ -64,17 +60,13 @@ class GameState {
         const body = document.body;
         const overlay = document.querySelector('.js-loading-overlay');
         
-        // Asegurar que las transiciones funcionen
         requestAnimationFrame(() => {
-            // Primero mostrar el contenido del body
             body.style.opacity = '1';
             body.classList.remove('js-loading');
             
             if (overlay) {
-                // Ocultar el overlay
                 overlay.classList.add('hidden');
                 
-                // Remover el overlay después de la transición
                 overlay.addEventListener('transitionend', () => {
                     overlay.remove();
                 }, { once: true });
@@ -95,19 +87,15 @@ class GameState {
             isPaused: false
         };
 
-        // Agregar el ajuste automático del título
         const title = this.titleElement;
         
-        // Mover la función fitTitle fuera para poder reutilizarla
         this.fitTitle = () => {
             const title = this.titleElement;
             const container = title.parentElement;
             
             const adjustTitle = () => {
-                // Reset completo de estilos
                 title.style = '';
                 
-                // Forzar reflow
                 void title.offsetWidth;
                 
                 const availableWidth = container.clientWidth - 
@@ -126,23 +114,13 @@ class GameState {
                 }
             };
 
-            // Secuencia de ajustes para asegurar el cálculo correcto
             const performAdjustments = async () => {
-                // Primer intento inmediato
                 adjustTitle();
-
-                // Esperar a que las fuentes estén cargadas
                 await document.fonts.ready;
-                
-                // Segunda pasada después de cargar fuentes
                 requestAnimationFrame(() => {
                     adjustTitle();
-                    
-                    // Tercera pasada después de un breve delay
                     setTimeout(() => {
                         adjustTitle();
-                        
-                        // Última pasada para asegurar
                         requestAnimationFrame(() => {
                             adjustTitle();
                         });
@@ -153,7 +131,6 @@ class GameState {
             performAdjustments();
         };
 
-        // Observar cambios en el contenido del título
         new MutationObserver(() => {
             this.fitTitle();
         }).observe(title, {
@@ -162,12 +139,10 @@ class GameState {
             subtree: true
         });
 
-        // Ajustar en cambios de tamaño
         window.addEventListener('resize', () => {
             requestAnimationFrame(() => this.fitTitle());
         });
         
-        // Ajuste inicial con retardo para asegurar carga
         setTimeout(() => this.fitTitle(), 0);
     }
 
@@ -252,7 +227,6 @@ class GameState {
     loadLevel(levelId) {
         AnimationManager.stopConfetti();
         this.resetControls();
-        // Limpiar cualquier letra animada que quede en el body
         document.querySelectorAll('.animated-letter').forEach(el => el.remove());
         this.currentLevel = { ...LEVELS[levelId], id: levelId };
         [this.foundWords, this.usedLetters].forEach(set => set.clear());
@@ -261,7 +235,7 @@ class GameState {
     }
 
     updateAll(levelId) {
-        if (!this.currentLevel) return; // Agregar esta verificación
+        if (!this.currentLevel) return;
         this.updateBoard();
         this.updateTitle();
         this.updateWordList();
@@ -303,7 +277,6 @@ class GameState {
             const isFound = this.foundWords.has(word);
             const span = document.createElement('span');
 
-            // Agregar una M extra al final para asegurar espacio suficiente
             measureElement.textContent = word + 'M';
             el.style.setProperty('--word-content-width', `${measureElement.offsetWidth}px`);
 
@@ -361,10 +334,8 @@ class GameState {
             .find(([, path]) => path === currentPath)?.[0];
 
         if (foundWord) {
-            // Verificar victoria y detener timer ANTES de todo
             if (this.foundWords.size === Object.keys(this.currentLevel.data).length) {
                 this.pauseTimer();
-                // Actualizar el tiempo final inmediatamente
                 document.getElementById('final-time').textContent = this.timer.element.textContent;
             }
 
@@ -422,7 +393,7 @@ class GameState {
         }
     }
 
-    onLevelComplete() {
+    async onLevelComplete() {
         AnimationManager.animateVictory(() => this.showVictoryModal());
     }
 
@@ -449,7 +420,6 @@ class GameState {
         this.bindModalEvents();
         window.addEventListener('resize', () => this.selectionManager.drawLine());
 
-        // Unificar manejo de clicks globales
         document.addEventListener('click', event => {
             const target = event.target;
             if (target.closest('#victory-modal') || 
@@ -464,7 +434,6 @@ class GameState {
             }
         });
 
-        // Solo mantener un ResizeObserver
         new ResizeObserver(() => {
             requestAnimationFrame(() => {
                 AnimationManager.cleanupAnimations();
@@ -494,7 +463,6 @@ class GameState {
             }
         };
 
-        // Unificar manejo de navegación entre modales
         const modalNavigation = {
             'menu': () => {
                 modalHandlers.modal.classList.add('active');
@@ -510,7 +478,6 @@ class GameState {
             }
         };
 
-        // Configurar navegación
         Object.entries(modalNavigation).forEach(([id, handler]) => {
             document.querySelector(id === 'menu' ? '.menu' : `#${id}`)
                 ?.addEventListener('click', (event) => {
@@ -519,7 +486,6 @@ class GameState {
                 });
         });
 
-        // Manejar botones de acción
         const buttonHandlers = {
             'reset-game': () => {
                 this.resetTimer();
@@ -545,14 +511,12 @@ class GameState {
             document.getElementById(id)?.addEventListener('click', handler);
         });
 
-        // Prevenir cierre del modal de victoria
         modalHandlers.victoryModal?.addEventListener('click', event => {
             if (event.target === modalHandlers.victoryModal) {
                 event.stopPropagation();
             }
         });
 
-        // Manejar clicks en overlay de modales
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             if (modal.id === 'victory-modal') return;
             
@@ -622,7 +586,6 @@ class GameState {
     showVictoryModal() {
         this.pauseTimer();
         document.getElementById('final-time').textContent = this.timer.element.textContent;
-        // El modal y confeti se activan en onLevelComplete
         document.getElementById('victory-modal').classList.add('active');
     }
 

@@ -1,3 +1,5 @@
+import { Haptics } from '@capacitor/haptics';
+
 export class AnimationManager {
     static DURATIONS = {
         LETTER_DELAY: 50,
@@ -25,7 +27,13 @@ export class AnimationManager {
         return metrics;
     }
 
-    static animateWordFound(selection, wordElement, word) {
+    static async animateWordFound(selection, wordElement, word) {
+        try {
+            await Haptics.impact({ style: 'medium' });
+        } catch (error) {
+            console.warn('Haptics no disponible:', error);
+        }
+
         return new Promise((resolve) => {
             const lastCell = document.getElementById(`tile-${selection[selection.length - 1]}`);
             const lastLetter = lastCell.querySelector('.text');
@@ -186,25 +194,30 @@ export class AnimationManager {
         start() {
             return new Promise(resolve => {
                 if (!this.instance) this.initialize();
-
                 const colors = this.getColors();
 
                 // Primera oleada: explosiones laterales
-                this.fire({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { x: 0.1, y: 0.35 },
-                    colors
-                });
-                this.fire({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { x: 0.9, y: 0.35 },
-                    colors
-                });
+                const triggerFirstWave = () => {
+                    this.fire({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { x: 0.1, y: 0.35 },
+                        colors
+                    });
+                    this.fire({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { x: 0.9, y: 0.35 },
+                        colors
+                    });
+                    
+                    // Vibración después de que aparece el confeti
+                    Haptics.impact({ style: 'heavy' })
+                        .catch(error => console.warn('Haptics no disponible:', error));
+                };
 
                 // Segunda oleada: explosión central
-                setTimeout(() => {
+                const triggerSecondWave = () => {
                     this.fire({
                         particleCount: 150,
                         spread: 100,
@@ -215,8 +228,16 @@ export class AnimationManager {
                         ticks: 300,
                         colors
                     });
+                    
+                    // Vibración después de que aparece el confeti central
+                    Haptics.impact({ style: 'heavy' })
+                        .catch(error => console.warn('Haptics no disponible:', error));
+                        
                     resolve();
-                }, 250);
+                };
+
+                triggerFirstWave();
+                setTimeout(triggerSecondWave, 250);
             });
         },
         // Método de prueba para depuración
@@ -231,7 +252,12 @@ export class AnimationManager {
     };
 
     static async animateVictory(callback) {
-        // Ya no necesitamos isPlaying porque corregiremos el flujo
+        try {
+            await Haptics.notification({ type: 'SUCCESS' });
+        } catch (error) {
+            console.warn('Haptics no disponible:', error);
+        }
+
         const victoryModal = document.getElementById('victory-modal');
 
         // Primero activar el modal
