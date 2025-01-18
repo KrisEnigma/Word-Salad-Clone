@@ -8,17 +8,53 @@ import { Config } from './config.js';
 class GameState {
     constructor() {
         this.themeSelector = new ThemeSelector();
-        this.initialize();
+        this.initialize().catch(error => {
+            console.error('Error crítico durante inicialización:', error);
+            // Mostrar un mensaje de error al usuario
+            this.handleInitializationError(error);
+        });
+    }
+
+    handleInitializationError(error) {
+        const overlay = document.querySelector('.js-loading-overlay');
+        if (overlay) {
+            const loader = overlay.querySelector('.loader');
+            if (loader) loader.style.display = 'none';
+
+            const errorMessage = document.createElement('div');
+            errorMessage.style.cssText = 'color: white; text-align: center; padding: 20px;';
+            errorMessage.innerHTML = `
+                <p>Error al cargar el juego</p>
+                <small style="color: #ff6b6b;">${error.message || 'Error desconocido'}</small>
+                <button onclick="location.reload()" style="
+                    margin-top: 15px;
+                    padding: 8px 16px;
+                    border: none;
+                    background: #4a4a4a;
+                    color: white;
+                    border-radius: 4px;
+                ">Reintentar</button>
+            `;
+            overlay.appendChild(errorMessage);
+        }
     }
 
     async initialize() {
+        console.log('🎮 Iniciando GameState...');
         try {
+            console.log('📝 Inicializando Config...');
             await Config.init();
+
+            console.log('🎨 Iniciando fase 1...');
             await this.initPhase1();
+
+            console.log('🎯 Iniciando fase 2...');
             await this.initPhase2();
+
+            console.log('✅ Inicialización completada');
         } catch (error) {
-            console.error('Error durante initialization:', error);
-            this.showContent();
+            console.error('❌ Error durante inicialización:', error);
+            throw error;
         }
     }
 
@@ -699,4 +735,17 @@ class GameState {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => new GameState());
+// Agregar detector global de errores
+window.addEventListener('error', function (event) {
+    console.error('Error global capturado:', event.error);
+});
+
+// Agregar detector de promesas no manejadas
+window.addEventListener('unhandledrejection', function (event) {
+    console.error('Promesa rechazada no manejada:', event.reason);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 DOM cargado, iniciando juego...');
+    new GameState();
+});

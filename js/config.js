@@ -11,38 +11,102 @@ export class Config {
     };
 
     static async init() {
-        console.log('🚀 Inicializando config...');
+        console.log('🔧 Iniciando configuración...');
 
-        // Validar progresión antes de inicializar
-        await this.validateProgression();
+        try {
+            // Verificar disponibilidad de APIs antes de usarlas
+            if (typeof Preferences === 'undefined') {
+                throw new Error('Preferences API no está disponible');
+            }
 
-        // Aseguramos que el nivel más alto se cargue primero
-        const keys = Object.values(this.KEYS);
-        const theme = await this.getTheme();
-        const highestLevel = await this.getHighestLevel();
-        const lastLevel = await this.getLastLevel();
+            // Verificar capacidad de almacenamiento
+            const testStore = await this.testStorage();
+            console.log('Storage test:', testStore ? 'OK' : 'FAIL');
 
-        // Primero cargar el nivel más alto que será nuestro limite
-        await this.set(this.KEYS.HIGHEST_LEVEL, String(Math.max(highestLevel, 0)));
+            // Intentar una operación de prueba
+            await Preferences.get({ key: 'test' });
+            console.log('✅ Preferences API funciona correctamente');
 
+            await this.validateProgression();
+
+            // Aseguramos que el nivel más alto se cargue primero
+            const keys = Object.values(this.KEYS);
+            const theme = await this.getTheme();
+            const highestLevel = await this.getHighestLevel();
+            const lastLevel = await this.getLastLevel();
+
+            // Primero cargar el nivel más alto que será nuestro limite
+            await this.set(this.KEYS.HIGHEST_LEVEL, String(Math.max(highestLevel, 0)));
+
+            const defaults = {
+                [this.KEYS.THEME]: theme,
+                [this.KEYS.HAPTICS]: 'true',
+                [this.KEYS.LAST_LEVEL]: lastLevel || '0'
+            };
+
+            // Asegurar que todos los valores existan
+            for (const key of keys) {
+                const { value } = await Preferences.get({ key });
+                if (value === null) {
+                    await this.set(key, defaults[key]);
+                }
+            }
+
+            console.log('✅ Config inicializada:', {
+                theme,
+                highestLevel,
+                lastLevel
+            });
+        } catch (error) {
+            console.error('❌ Error inicializando Config:', error);
+
+            // Intentar usar localStorage como fallback
+            if (this.canUseLocalStorage()) {
+                console.log('⚠️ Usando localStorage como fallback');
+                // Implementar lógica de fallback aquí
+                return this.initWithLocalStorage();
+            }
+
+            throw new Error('No se pudo inicializar el almacenamiento: ' + error.message);
+        }
+    }
+
+    static async testStorage() {
+        try {
+            const testKey = '_test_' + Date.now();
+            await Preferences.set({ key: testKey, value: 'test' });
+            const { value } = await Preferences.get({ key: testKey });
+            await Preferences.remove({ key: testKey });
+            return value === 'test';
+        } catch (e) {
+            console.error('Storage test failed:', e);
+            return false;
+        }
+    }
+
+    static canUseLocalStorage() {
+        try {
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    static async initWithLocalStorage() {
+        // Implementar versión simplificada usando localStorage
         const defaults = {
-            [this.KEYS.THEME]: theme,
-            [this.KEYS.HAPTICS]: 'true',
-            [this.KEYS.LAST_LEVEL]: lastLevel || '0'
+            theme: 'dark',
+            haptics_enabled: 'true',
+            last_level: '0',
+            highest_level: '0'
         };
 
-        // Asegurar que todos los valores existan
-        for (const key of keys) {
-            const { value } = await Preferences.get({ key });
-            if (value === null) {
-                await this.set(key, defaults[key]);
+        Object.entries(defaults).forEach(([key, value]) => {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, value);
             }
-        }
-
-        console.log('✅ Config inicializada:', {
-            theme,
-            highestLevel,
-            lastLevel
         });
     }
 

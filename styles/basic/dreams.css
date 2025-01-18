@@ -45,7 +45,6 @@
 
 :root[data-theme='dreams'] .board {
     background: linear-gradient(rgb(47 79 79 / 80%), rgb(58 95 95 / 80%));
-    backdrop-filter: blur(12px);
 }
 
 :root[data-theme='dreams'] .cell {

@@ -39,7 +39,6 @@
 /* Efectos especiales para Light */
 :root[data-theme='light'] .board {
     background: linear-gradient(rgb(248 249 250 / 70%), rgb(233 236 239 / 70%));
-    backdrop-filter: blur(5px);
 }
 
 :root[data-theme='light'] .cell {

@@ -49,7 +49,6 @@
 
 :root[data-theme='cyberpunk'] .board {
     background: linear-gradient(rgb(30 30 30 / 80%), rgb(42 42 42 / 80%));
-    backdrop-filter: blur(8px);
 }
 
 :root[data-theme='cyberpunk'] .cell {
