@@ -159,7 +159,7 @@ body {
     height: var(--game-height);
     background: var(--color-bg);
     color: var(--color-text);
-    font-family: var(--font-family-letters);
+    font-family: var(--font-cell-family);
     align-items: center;
     min-height: 100dvh;
     max-height: 100dvh;
@@ -225,7 +225,7 @@ body.js-loading {
     top: 0;
     z-index: 10;
     color: var(--color-ui);
-    font-family: var(--font-family-toolbar);
+    font-family: var(--font-toolbar-family);
     font-size: var(--font-size-ui);
 }
 
@@ -291,7 +291,7 @@ svg {
     font-size: var(--font-size-title);
     line-height: 1.2;
     color: var(--color-title);
-    font-family: var(--font-family-title);
+    font-family: var(--font-title-family);
     text-align: center;
     white-space: nowrap;
     overflow: visible;
@@ -352,7 +352,7 @@ svg {
     width: var(--cell-size);
     height: var(--cell-size);
     aspect-ratio: 1;
-    font-weight: var(--font-weight-cell);
+    font-weight: var(--font-cell-weight);
 }
 
 .cell::before,
@@ -678,7 +678,7 @@ svg {
     margin: 0;
     padding: 0 var(--theme-title-spacing);
     color: var(--color-title);
-    font-family: var(--font-family-title);
+    font-family: var(--font-title-family);
     font-weight: 500;
     text-align: center;
     transition: all 0.2s ease;
@@ -707,7 +707,7 @@ svg {
 
 .preview-text {
     color: var(--color-letters);
-    font-family: var(--font-family-title);
+    font-family: var(--font-title-family);
     z-index: 1;
 }
 

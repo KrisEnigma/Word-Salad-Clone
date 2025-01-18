@@ -5,9 +5,9 @@
 
 :root[data-theme='pixel'] {
     /* Fuentes */
-    --font-family-toolbar: 'Silkscreen', cursive;
-    --font-family-title: 'Press Start 2P', cursive;
-    --font-family-letters: 'DotGothic16', sans-serif;
+    --font-toolbar-family: 'Silkscreen', cursive;
+    --font-title-family: 'Press Start 2P', cursive;
+    --font-cell-family: 'DotGothic16', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #1a1a1a, #8a2be2 200%);

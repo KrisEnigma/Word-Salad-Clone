@@ -5,9 +5,9 @@
 
 :root[data-theme='stealth'] {
     /* Fuentes */
-    --font-family-toolbar: 'Roboto Mono', monospace;
-    --font-family-title: 'Space Grotesk', sans-serif;
-    --font-family-letters: 'Inter', sans-serif;
+    --font-toolbar-family: 'Roboto Mono', monospace;
+    --font-title-family: 'Space Grotesk', sans-serif;
+    --font-cell-family: 'Inter', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #000, #696969);

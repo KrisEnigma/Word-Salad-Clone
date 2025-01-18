@@ -3,9 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root[data-theme='pacman'] {
-    --font-family-toolbar: 'Press Start 2P', monospace;
-    --font-family-title: 'Press Start 2P', monospace;
-    --font-family-letters: 'VT323', monospace;
+    --font-toolbar-family: 'Press Start 2P', monospace;
+    --font-title-family: 'Press Start 2P', monospace;
+    --font-cell-family: 'VT323', monospace;
 
     /* Colores */
     --color-bg: #000;

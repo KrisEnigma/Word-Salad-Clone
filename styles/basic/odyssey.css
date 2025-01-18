@@ -5,9 +5,9 @@
 
 :root[data-theme='odyssey'] {
     /* Fuentes */
-    --font-family-toolbar: 'Audiowide', cursive;
-    --font-family-title: 'Exo 2', sans-serif;
-    --font-family-letters: 'Tomorrow', sans-serif;
+    --font-toolbar-family: 'Audiowide', cursive;
+    --font-title-family: 'Exo 2', sans-serif;
+    --font-cell-family: 'Tomorrow', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #1e1e1e, #8a2be2 200%);

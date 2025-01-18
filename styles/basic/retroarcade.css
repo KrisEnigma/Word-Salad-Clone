@@ -4,9 +4,9 @@
 
 :root[data-theme='retroarcade'] {
     /* Fuentes */
-    --font-family-toolbar: 'Press Start 2P', cursive;
-    --font-family-title: 'Press Start 2P', cursive;
-    --font-family-letters: 'VT323', monospace;
+    --font-toolbar-family: 'Press Start 2P', cursive;
+    --font-title-family: 'Press Start 2P', cursive;
+    --font-cell-family: 'VT323', monospace;
 
     /* Colores */
     --color-bg: #121212;

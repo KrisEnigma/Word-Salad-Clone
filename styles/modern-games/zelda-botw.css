@@ -4,9 +4,9 @@
 
 :root[data-theme='zelda-botw'] {
     /* Fuentes */
-    --font-family-toolbar: 'Cardo', serif;
-    --font-family-title: 'Cardo', serif;
-    --font-family-letters: 'Noto Sans', sans-serif;
+    --font-toolbar-family: 'Cardo', serif;
+    --font-title-family: 'Cardo', serif;
+    --font-cell-family: 'Noto Sans', sans-serif;
 
     /* Colores - Paleta Sheikah mejorada */
     --color-bg: linear-gradient(135deg, #0f1922 0%, #1a2f3d 50%, #243b4d 100%);

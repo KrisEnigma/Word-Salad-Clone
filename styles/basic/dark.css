@@ -6,10 +6,10 @@
     --cell-radius: min(8px, 1.5vw);
 
     /* Fuentes */
-    --font-family-toolbar: 'JetBrains Mono', monospace;
-    --font-family-title: 'Rubik', sans-serif;
-    --font-family-letters: 'Rubik', sans-serif;
-    --font-weight-cell: 700;
+    --font-toolbar-family: 'JetBrains Mono', monospace;
+    --font-title-family: 'Rubik', sans-serif;
+    --font-cell-family: 'Rubik', sans-serif;
+    --font-cell-weight: 700;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);

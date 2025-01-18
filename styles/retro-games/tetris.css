@@ -3,9 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root[data-theme='tetris'] {
-    --font-family-toolbar: 'Press Start 2P', monospace;
-    --font-family-title: 'VT323', monospace;
-    --font-family-letters: 'Press Start 2P', monospace;
+    --font-toolbar-family: 'Press Start 2P', monospace;
+    --font-title-family: 'VT323', monospace;
+    --font-cell-family: 'Press Start 2P', monospace;
 
     /* Colores */
     --color-bg: #000;

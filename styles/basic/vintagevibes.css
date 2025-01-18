@@ -4,9 +4,9 @@
 
 :root[data-theme='vintagevibes'] {
     /* Fuentes */
-    --font-family-toolbar: 'Playfair Display', serif;
-    --font-family-title: 'Playfair Display', serif;
-    --font-family-letters: 'Old Standard TT', serif;
+    --font-toolbar-family: 'Playfair Display', serif;
+    --font-title-family: 'Playfair Display', serif;
+    --font-cell-family: 'Old Standard TT', serif;
 
     /* Colores */
     --color-bg: #7d7d7d;
@@ -108,7 +108,7 @@
 }
 
 :root[data-theme='vintagevibes'] .word {
-    font-family: var(--font-family-letters);
+    font-family: var(--font-cell-family);
     font-style: italic;
 }
 

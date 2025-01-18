@@ -5,9 +5,9 @@
 
 :root[data-theme='fantasy'] {
     /* Fuentes */
-    --font-family-toolbar: 'MedievalSharp', cursive;
-    --font-family-title: 'Cinzel', serif;
-    --font-family-letters: 'Alegreya', serif;
+    --font-toolbar-family: 'MedievalSharp', cursive;
+    --font-title-family: 'Cinzel', serif;
+    --font-cell-family: 'Alegreya', serif;
 
     /* Colores */
     --color-bg: #8b4513;

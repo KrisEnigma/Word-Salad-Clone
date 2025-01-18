@@ -4,9 +4,9 @@
 
 :root[data-theme='eldenring'] {
     /* Fuentes */
-    --font-family-toolbar: 'Cinzel', serif;
-    --font-family-title: 'Cinzel', serif;
-    --font-family-letters: 'Cormorant', serif;
+    --font-toolbar-family: 'Cinzel', serif;
+    --font-title-family: 'Cinzel', serif;
+    --font-cell-family: 'Cormorant', serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #0f0e0a 0%, #2b2615 100%);

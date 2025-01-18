@@ -5,9 +5,9 @@
 
 :root[data-theme='elementalfury'] {
     /* Fuentes */
-    --font-family-toolbar: 'Righteous', cursive;
-    --font-family-title: 'Permanent Marker', cursive;
-    --font-family-letters: 'Rubik', sans-serif;
+    --font-toolbar-family: 'Righteous', cursive;
+    --font-title-family: 'Permanent Marker', cursive;
+    --font-cell-family: 'Rubik', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #1e90ff, #ff4500);

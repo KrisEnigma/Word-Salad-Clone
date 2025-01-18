@@ -64,7 +64,7 @@ export class AnimationManager {
                 const letterMetrics = await Promise.all([...word].map(async char => {
                     return this.measureText(char, {
                         'font-size': targetFontStyle.fontSize,
-                        'font-family': 'var(--font-family-letters)',
+                        'font-family': 'var(--font-cell-family)',
                         'font-weight': computedThemeStyles.target.fontWeight,
                         'letter-spacing': computedThemeStyles.target.letterSpacing,
                         'text-transform': computedThemeStyles.target.textTransform,

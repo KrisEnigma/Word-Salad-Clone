@@ -5,9 +5,9 @@
 
 :root[data-theme='cyberpunk'] {
     /* Fuentes */
-    --font-family-toolbar: 'Share Tech Mono', monospace;
-    --font-family-title: 'Orbitron', sans-serif;
-    --font-family-letters: 'Rajdhani', sans-serif;
+    --font-toolbar-family: 'Share Tech Mono', monospace;
+    --font-title-family: 'Orbitron', sans-serif;
+    --font-cell-family: 'Rajdhani', sans-serif;
 
     /* Colores */
     --color-bg: #1e1e1e;

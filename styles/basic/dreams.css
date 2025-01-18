@@ -5,9 +5,9 @@
 
 :root[data-theme='dreams'] {
     /* Fuentes */
-    --font-family-toolbar: 'Syne Mono', monospace;
-    --font-family-title: 'Chakra Petch', sans-serif;
-    --font-family-letters: 'Righteous', cursive;
+    --font-toolbar-family: 'Syne Mono', monospace;
+    --font-title-family: 'Chakra Petch', sans-serif;
+    --font-cell-family: 'Righteous', cursive;
 
     /* Colores */
     --color-bg: #2f4f4f;

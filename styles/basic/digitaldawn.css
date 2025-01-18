@@ -5,9 +5,9 @@
 
 :root[data-theme='digitaldawn'] {
     /* Fuentes */
-    --font-family-toolbar: 'Orbitron', sans-serif;
-    --font-family-title: 'Rajdhani', sans-serif;
-    --font-family-letters: 'Space Grotesk', sans-serif;
+    --font-toolbar-family: 'Orbitron', sans-serif;
+    --font-title-family: 'Rajdhani', sans-serif;
+    --font-cell-family: 'Space Grotesk', sans-serif;
 
     /* Colores */
     --color-bg: #0a0a1a;

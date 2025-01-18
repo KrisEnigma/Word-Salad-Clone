@@ -5,9 +5,9 @@
 
 :root[data-theme='herojourney'] {
     /* Fuentes */
-    --font-family-toolbar: 'MedievalSharp', cursive;
-    --font-family-title: 'Cinzel', serif;
-    --font-family-letters: 'Metamorphous', cursive;
+    --font-toolbar-family: 'MedievalSharp', cursive;
+    --font-title-family: 'Cinzel', serif;
+    --font-cell-family: 'Metamorphous', cursive;
 
     /* Colores */
     --color-bg: #1a1a1a;

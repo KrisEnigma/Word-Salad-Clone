@@ -5,9 +5,9 @@
 
 :root[data-theme='battleready'] {
     /* Fuentes */
-    --font-family-toolbar: 'Black Ops One', cursive;
-    --font-family-title: 'Staatliches', cursive;
-    --font-family-letters: 'Quantico', sans-serif;
+    --font-toolbar-family: 'Black Ops One', cursive;
+    --font-title-family: 'Staatliches', cursive;
+    --font-cell-family: 'Quantico', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #2f2f2f, #8b4513);

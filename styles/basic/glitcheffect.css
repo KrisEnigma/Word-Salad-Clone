@@ -5,9 +5,9 @@
 
 :root[data-theme='glitcheffect'] {
     /* Fuentes */
-    --font-family-toolbar: 'Share Tech Mono', monospace;
-    --font-family-title: 'Rubik Glitch', cursive;
-    --font-family-letters: 'Teko', sans-serif;
+    --font-toolbar-family: 'Share Tech Mono', monospace;
+    --font-title-family: 'Rubik Glitch', cursive;
+    --font-cell-family: 'Teko', sans-serif;
 
     /* Colores */
     --color-bg: #1e1e1e;

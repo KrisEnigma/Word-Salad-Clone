@@ -4,9 +4,9 @@
 
 :root[data-theme='darksouls'] {
     /* Fuentes */
-    --font-family-toolbar: 'Cinzel', serif;
-    --font-family-title: 'Cinzel', serif;
-    --font-family-letters: 'Marcellus', serif;
+    --font-toolbar-family: 'Cinzel', serif;
+    --font-title-family: 'Cinzel', serif;
+    --font-cell-family: 'Marcellus', serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #0c0c0c 0%, #221e1b 100%);

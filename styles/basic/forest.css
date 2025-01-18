@@ -5,9 +5,9 @@
 
 :root[data-theme='forest'] {
     /* Fuentes */
-    --font-family-toolbar: 'Philosopher', serif;
-    --font-family-title: 'Cormorant', serif;
-    --font-family-letters: 'Crimson Pro', serif;
+    --font-toolbar-family: 'Philosopher', serif;
+    --font-title-family: 'Cormorant', serif;
+    --font-cell-family: 'Crimson Pro', serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #2f4f4f 0%, #228b22 200%);

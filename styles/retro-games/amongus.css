@@ -5,10 +5,10 @@
 
 :root[data-theme='amongus'] {
     /* Fuentes */
-    --font-family-toolbar: 'VT323', monospace;
-    --font-family-title: 'Goldman', sans-serif;
-    --font-family-letters: 'Share Tech Mono', monospace;
-    --font-weight-cell: 600;
+    --font-toolbar-family: 'VT323', monospace;
+    --font-title-family: 'Goldman', sans-serif;
+    --font-cell-family: 'Share Tech Mono', monospace;
+    --font-cell-weight: 600;
 
     /* Colores */
     --color-bg: linear-gradient(180deg, #0b1015 0%, #1b2a32 100%);

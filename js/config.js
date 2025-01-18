@@ -1,5 +1,6 @@
 import { Preferences } from '@capacitor/preferences';
 import { LEVELS, LEVEL_ORDER } from './levels.js';
+import { Haptics } from '@capacitor/haptics';
 
 export class Config {
     static KEYS = {
@@ -63,6 +64,14 @@ export class Config {
 
     static async setHapticsEnabled(enabled) {
         await this.set(this.KEYS.HAPTICS, enabled);
+        // Si se está activando la vibración, dar feedback inmediato
+        if (enabled) {
+            try {
+                await Haptics.impact({ style: 'light' });
+            } catch (error) {
+                console.warn('Haptics no disponible:', error);
+            }
+        }
     }
 
     static async getLastLevel() {

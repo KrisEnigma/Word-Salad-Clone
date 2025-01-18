@@ -5,9 +5,9 @@
 
 :root[data-theme='technovibes'] {
     /* Fuentes */
-    --font-family-toolbar: 'Syncopate', sans-serif;
-    --font-family-title: 'Orbitron', sans-serif;
-    --font-family-letters: 'Chakra Petch', sans-serif;
+    --font-toolbar-family: 'Syncopate', sans-serif;
+    --font-title-family: 'Orbitron', sans-serif;
+    --font-cell-family: 'Chakra Petch', sans-serif;
 
     /* Colores */
     --color-bg: #2d0036;

@@ -4,9 +4,9 @@
 
 :root[data-theme='neonnostalgia'] {
     /* Fuentes */
-    --font-family-toolbar: 'Monoton', cursive;
-    --font-family-title: 'Monoton', cursive;
-    --font-family-letters: 'Chakra Petch', sans-serif;
+    --font-toolbar-family: 'Monoton', cursive;
+    --font-title-family: 'Monoton', cursive;
+    --font-cell-family: 'Chakra Petch', sans-serif;
 
     /* Colores */
     --color-bg: #360000;

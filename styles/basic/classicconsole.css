@@ -4,9 +4,9 @@
 
 :root[data-theme='classicconsole'] {
     /* Fuentes */
-    --font-family-toolbar: 'IBM Plex Mono', monospace;
-    --font-family-title: 'IBM Plex Mono', monospace;
-    --font-family-letters: 'Inconsolata', monospace;
+    --font-toolbar-family: 'IBM Plex Mono', monospace;
+    --font-title-family: 'IBM Plex Mono', monospace;
+    --font-cell-family: 'Inconsolata', monospace;
 
     /* Colores */
     --color-bg: #2c3e50;

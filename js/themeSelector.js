@@ -399,8 +399,8 @@ export class ThemeSelector {
             '--color-modal',
             '--cell-radius',
             '--border-light',
-            '--font-family-title',
-            '--font-family-letters'
+            '--font-title-family',
+            '--font-cell-family'
         ];
 
         const cssText = variables
@@ -441,8 +441,8 @@ export class ThemeSelector {
 
     extractRequiredVariables(variables) {
         const requiredVars = [
-            '--font-family-title',
-            '--font-family-letters',
+            '--font-title-family',
+            '--font-cell-family',
             '--color-bg',
             '--color-cell',
             '--color-text',

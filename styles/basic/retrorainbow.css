@@ -4,9 +4,9 @@
 
 :root[data-theme='retrorainbow'] {
     /* Fuentes */
-    --font-family-toolbar: 'Righteous', cursive;
-    --font-family-title: 'Righteous', cursive;
-    --font-family-letters: 'Quicksand', sans-serif;
+    --font-toolbar-family: 'Righteous', cursive;
+    --font-title-family: 'Righteous', cursive;
+    --font-cell-family: 'Quicksand', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(

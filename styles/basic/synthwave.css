@@ -4,9 +4,9 @@
 
 :root[data-theme='synthwave'] {
     /* Fuentes */
-    --font-family-toolbar: 'Space Mono', monospace;
-    --font-family-title: 'Space Grotesk', sans-serif;
-    --font-family-letters: 'Space Mono', monospace;
+    --font-toolbar-family: 'Space Mono', monospace;
+    --font-title-family: 'Space Grotesk', sans-serif;
+    --font-cell-family: 'Space Mono', monospace;
 
     /* Colores */
     --color-bg: linear-gradient(180deg, #1a0f2e 0%, #2d1f3d 100%);

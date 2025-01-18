@@ -5,9 +5,9 @@
 
 :root[data-theme='solarized'] {
     /* Fuentes más apropiadas para un tema tipo terminal */
-    --font-family-toolbar: 'Source Code Pro', monospace;
-    --font-family-title: 'Fira Code', monospace;
-    --font-family-letters: 'IBM Plex Mono', monospace;
+    --font-toolbar-family: 'Source Code Pro', monospace;
+    --font-title-family: 'Fira Code', monospace;
+    --font-cell-family: 'IBM Plex Mono', monospace;
     --color-bg: #002b36;
     --color-cell: #073642;
     --color-modal: rgb(0 43 54 / 95%);

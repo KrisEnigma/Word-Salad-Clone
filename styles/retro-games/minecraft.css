@@ -3,9 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root[data-theme='minecraft'] {
-    --font-family-toolbar: 'VT323', monospace;
-    --font-family-title: 'Press Start 2P', monospace;
-    --font-family-letters: 'VT323', monospace;
+    --font-toolbar-family: 'VT323', monospace;
+    --font-title-family: 'Press Start 2P', monospace;
+    --font-cell-family: 'VT323', monospace;
 
     /* Colores */
     --color-bg: #45523e;
