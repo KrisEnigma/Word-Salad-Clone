@@ -321,7 +321,7 @@ class GameState {
                 span.textContent = word;
             } else {
                 const lengths = word.split(' ').map(part => part.length);
-                span.innerHTML = `<span class="word-length">${lengths.join(', ')}</span>`;
+                span.innerHTML = `<span class="word-length">${lengths.join(' + ')}</span>`;
             }
 
             el.appendChild(span);
@@ -431,40 +431,48 @@ class GameState {
 
     async onLevelComplete() {
         const currentIndex = LEVEL_ORDER.indexOf(this.currentLevel.id);
-        if (currentIndex < LEVEL_ORDER.length - 1) {
+        const isLastLevel = currentIndex === LEVEL_ORDER.length - 1;
+
+        // Preparar el botón antes de cualquier animación
+        const nextLevelButton = document.getElementById('next-level');
+        if (nextLevelButton) {
+            if (isLastLevel) {
+                nextLevelButton.textContent = 'Reiniciar Juego';
+                nextLevelButton.onclick = async () => {
+                    await Config.set(Config.KEYS.LAST_LEVEL, LEVEL_ORDER[0]);
+                    await Config.set(Config.KEYS.HIGHEST_LEVEL, '0');
+                    location.reload();
+                };
+            } else {
+                const nextLevelId = LEVEL_ORDER[currentIndex + 1];
+                nextLevelButton.textContent = 'Siguiente Nivel';
+                nextLevelButton.onclick = () => this.loadLevel(nextLevelId);
+                nextLevelButton.disabled = true; // Empezar deshabilitado
+            }
+        }
+
+        if (!isLastLevel) {
             const nextLevelId = LEVEL_ORDER[currentIndex + 1];
             console.log('🎯 Desbloqueando siguiente nivel:', nextLevelId);
 
             try {
-                // Primero desbloquear el nivel y esperar confirmación
                 const unlocked = await Config.unlockLevel(nextLevelId);
-
                 if (unlocked) {
-                    // Solo proceder si el desbloqueo fue exitoso
                     console.log('✅ Nivel desbloqueado:', nextLevelId);
-
-                    // Actualizar UI basado en el estado real
-                    const nextLevelButton = document.getElementById('next-level');
                     if (nextLevelButton) {
                         nextLevelButton.disabled = false;
-                        console.log('🎮 Botón de siguiente nivel habilitado');
                     }
                 } else {
                     console.warn('⚠️ No se pudo desbloquear el nivel:', nextLevelId);
                 }
-
-                // Mostrar la animación de victoria independientemente del desbloqueo
-                await AnimationManager.animateVictory(() => {
-                    this.showVictoryModal();
-                });
-
             } catch (error) {
                 console.error('❌ Error al desbloquear nivel:', error);
-                await AnimationManager.animateVictory(() => this.showVictoryModal());
             }
-        } else {
-            await AnimationManager.animateVictory(() => this.showVictoryModal());
         }
+
+        await AnimationManager.animateVictory(() => {
+            this.showVictoryModal();
+        });
     }
 
     bindEvents() {
@@ -667,19 +675,28 @@ class GameState {
 
     showVictoryModal() {
         this.pauseTimer();
-        document.getElementById('final-time').textContent = this.timer.element.textContent;
+        const finalTimeSpan = document.getElementById('final-time');
+        const restartLevelButton = document.getElementById('restart-level');
+
+        finalTimeSpan.textContent = this.timer.element.textContent;
+        restartLevelButton.onclick = () => this.loadLevel(this.currentLevel.id);
+
         document.getElementById('victory-modal').classList.add('active');
     }
 
     updateLevelNumber(levelId) {
-        if (this.levelNumberElement) {
-            const levelNumber = LEVEL_ORDER.indexOf(levelId) + 1;
-            this.levelNumberElement.textContent = `#${levelNumber}`;
+        const levelNumber = LEVEL_ORDER.indexOf(levelId) + 1;
+        const levelNumberElement = document.querySelector('.level-number');
+        if (levelNumberElement) {
+            levelNumberElement.textContent = `#${levelNumber}`;
         }
     }
 
     resetControls() {
-        this.selectionManager.resetControls();
+        if (this.selectionManager) {
+            this.selectionManager.resetControls();
+        }
     }
 }
+
 document.addEventListener('DOMContentLoaded', () => new GameState());
