@@ -5,7 +5,7 @@ export const Haptics = {
             navigator.vibrate(duration);
         }
     },
-    notification: async ({ type = 'success' } = {}) => {
+    notification: async () => {
         if ('vibrate' in navigator) {
             navigator.vibrate([100, 30, 100]);
         }
