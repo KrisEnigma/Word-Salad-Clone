@@ -4,25 +4,27 @@
 
 :root[data-theme='8bitadventure'] {
     /* Fuentes */
-    --font-family-header: 'Press Start 2P', cursive;
+    --font-family-toolbar: 'Press Start 2P', cursive;
     --font-family-title: 'Press Start 2P', cursive;
-    --font-family-content: 'DotGothic16', sans-serif;
+    --font-family-letters: 'DotGothic16', sans-serif;
 
     /* Colores */
     --color-bg: #581845;
-    --color-cell: #900C3F;
+    --color-cell: #900c3f;
     --color-modal: rgb(88 24 69 / 95%);
-    --color-button: #FF5733;
-    --color-text: #FC0;
-    --color-title: #FC0;
-    --color-selected: #FF5733;
-    --color-hover: #C70039;
-    --color-line: #FC0;
+    --color-button: #ff5733;
+    --color-letters: #fc0;
+    --color-title: #fc0;
+    --color-selected: #ff5733;
+    --color-hover: #c70039;
+    --color-line: #fc0;
+    --color-ui: #fc0;
+    --color-words: #fc0;
+    --color-menu: #fc0;
 
     /* Efectos */
-    --cell-radius: 0;
     --shadow-opacity: 0.6;
-    --border-light: 2px solid #FF5733;
+    --border-light: 2px solid #ff5733;
 
     /* Efectos especiales */
     --effect-color-1: rgb(255 87 51 / 20%);
@@ -31,36 +33,40 @@
     --glow-color: rgb(199 0 57 / 40%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #FF5733, #FC0);
+    --found-bg: linear-gradient(45deg, #ff5733, #fc0);
     --found-scale: 1.15;
     --found-shadow: 0 0 25px rgb(255 87 51 / 50%);
     --unused-scale: 0.9;
     --unused-opacity: 0.15;
-    --confetti-colors: #FC0, #FF5733, #C70039, #900C3F;
+    --confetti-colors: #fc0, #ff5733, #c70039, #900c3f;
 }
 
 :root[data-theme='8bitadventure'] .board {
-    background: repeating-linear-gradient(45deg,
-            #581845,
-            #581845 10px,
-            #4a1339 10px,
-            #4a1339 20px);
-    border: 4px solid #FF5733;
+    background: repeating-linear-gradient(
+        45deg,
+        #581845,
+        #581845 10px,
+        #4a1339 10px,
+        #4a1339 20px
+    );
+    border: 4px solid #ff5733;
     image-rendering: pixelated;
 }
 
 :root[data-theme='8bitadventure'] .cell {
-    background: #900C3F;
-    border: 2px solid #FF5733;
-    box-shadow: inset 2px 2px 0 rgb(255 255 255 / 20%),
+    background: #900c3f;
+    border: 2px solid #ff5733;
+    box-shadow:
+        inset 2px 2px 0 rgb(255 255 255 / 20%),
         inset -2px -2px 0 rgb(0 0 0 / 20%);
     image-rendering: pixelated;
+    align-items: baseline;
 }
 
 :root[data-theme='8bitadventure'] .title {
     text-shadow:
-        2px 2px 0 #FF5733,
-        4px 4px 0 #C70039;
+        2px 2px 0 #ff5733,
+        4px 4px 0 #c70039;
     letter-spacing: 2px;
     image-rendering: pixelated;
 }
@@ -93,18 +99,18 @@
 
 @keyframes bit8-selected {
     0% {
-        background: #FF5733;
+        background: #ff5733;
     }
 
     33% {
-        background: #C70039;
+        background: #c70039;
     }
 
     66% {
-        background: #900C3F;
+        background: #900c3f;
     }
 
     100% {
-        background: #FF5733;
+        background: #ff5733;
     }
 }

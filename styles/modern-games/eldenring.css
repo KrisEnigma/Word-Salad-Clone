@@ -4,20 +4,23 @@
 
 :root[data-theme='eldenring'] {
     /* Fuentes */
-    --font-family-header: 'Cinzel', serif;
+    --font-family-toolbar: 'Cinzel', serif;
     --font-family-title: 'Cinzel', serif;
-    --font-family-content: 'Cormorant', serif;
+    --font-family-letters: 'Cormorant', serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #0f0e0a 0%, #2b2615 100%);
     --color-cell: #2a2a2a;
     --color-modal: #1f1f1f;
-    --color-button: #dac083;
-    --color-text: #ffebc2;
+    --color-button: #a58c00;
+    --color-letters: #ffebc2;
     --color-title: #ffebc2;
-    --color-selected: #ffd700;
-    --color-hover: #eabf52;
+    --color-selected: #a58c00;
+    --color-hover: #634700;
     --color-line: #ffc125;
+    --color-ui: #dac083;
+    --color-words: #ffebc2;
+    --color-menu: #ffebc2;
 
     /* Efectos */
     --cell-radius: 15%;
@@ -27,7 +30,8 @@
     /* Animaciones */
     --found-bg: radial-gradient(circle, #ffd700 0%, #daa520 100%);
     --found-scale: 1.12;
-    --found-shadow: 0 0 45px rgb(255 215 0 / 60%), 0 0 80px rgb(218 165 32 / 50%);
+    --found-shadow: 0 0 45px rgb(255 215 0 / 60%),
+        0 0 80px rgb(218 165 32 / 50%);
     --unused-scale: 0.9;
     --unused-opacity: 0.25;
     --animation-duration-found: 900ms;
@@ -67,8 +71,4 @@
 
 :root[data-theme='eldenring'] .found-temp {
     animation-name: eldenring-found !important;
-}
-
-:root[data-theme='eldenring'] body {
-    background: var(--color-bg);
 }

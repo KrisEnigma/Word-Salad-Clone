@@ -5,23 +5,25 @@
 
 :root[data-theme='technovibes'] {
     /* Fuentes */
-    --font-family-header: 'Syncopate', sans-serif;
+    --font-family-toolbar: 'Syncopate', sans-serif;
     --font-family-title: 'Orbitron', sans-serif;
-    --font-family-content: 'Chakra Petch', sans-serif;
+    --font-family-letters: 'Chakra Petch', sans-serif;
 
     /* Colores */
     --color-bg: #2d0036;
     --color-cell: #1a1a1a;
     --color-modal: rgb(26 26 26 / 95%);
-    --color-button: linear-gradient(145deg, #0F0, #1E90FF);
-    --color-text: #FFD700;
-    --color-title: #FFD700;
-    --color-selected: #F0F;
+    --color-button: linear-gradient(145deg, #f0f, #1e90ff);
+    --color-letters: #ffd700;
+    --color-title: #0f0;
+    --color-selected: #f0f;
     --color-hover: rgb(255 0 255 / 70%);
-    --color-line: #0F0;
+    --color-line: #0f0;
+    --color-ui: #1e90ff;
+    --color-words: #fff;
+    --color-menu: #fff;
 
     /* Efectos */
-    --cell-radius: 0;
     --shadow-opacity: 0.6;
     --border-light: 1px solid rgb(0 255 0 / 30%);
 
@@ -32,16 +34,12 @@
     --glow-color: rgb(0 255 0 / 20%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #F0F, #1E90FF);
+    --found-bg: linear-gradient(45deg, #f0f, #1e90ff);
     --found-scale: 1.1;
     --found-shadow: 0 0 35px rgb(0 255 0 / 50%);
     --unused-scale: 0.9;
     --unused-opacity: 0.2;
-    --confetti-colors: #0F0, #F0F, #1E90FF, #FFD700;
-}
-
-:root[data-theme='technovibes'] .board {
-    background: transparent;
+    --confetti-colors: #0f0, #f0f, #1e90ff, #ffd700;
 }
 
 :root[data-theme='technovibes'] .cell {
@@ -49,22 +47,18 @@
     box-shadow:
         inset 0 0 15px rgb(30 144 255 / 20%),
         0 0 10px rgb(255 0 255 / 20%);
-    background: linear-gradient(135deg,
-            rgb(26 26 26 / 90%),
-            rgb(26 26 26 / 70%));
+    background: linear-gradient(
+        135deg,
+        rgb(26 26 26 / 90%),
+        rgb(26 26 26 / 70%)
+    );
 }
 
 :root[data-theme='technovibes'] .title {
-    color: #0F0;
     text-shadow:
         0 0 10px rgb(0 255 0 / 70%),
         0 0 20px rgb(30 144 255 / 50%);
     letter-spacing: 3px;
-}
-
-:root[data-theme='technovibes'] .text {
-    font-family: Orbitron, sans-serif;
-    letter-spacing: 1px;
 }
 
 @keyframes techno-found {
@@ -76,7 +70,7 @@
     50% {
         transform: scale(1.1);
         filter: hue-rotate(180deg);
-        border-color: #F0F;
+        border-color: #f0f;
     }
 
     100% {
@@ -90,7 +84,6 @@
 }
 
 :root[data-theme='technovibes'] .mark.selected {
-    background: #F0F;
     animation: techno-pulse 2s infinite;
 }
 
@@ -98,13 +91,13 @@
     0%,
     100% {
         box-shadow:
-            0 0 15px #0F0,
-            0 0 30px #1E90FF;
+            0 0 15px #0f0,
+            0 0 30px #1e90ff;
     }
 
     50% {
         box-shadow:
-            0 0 25px #F0F,
-            0 0 50px #FFD700;
+            0 0 25px #f0f,
+            0 0 50px #ffd700;
     }
 }

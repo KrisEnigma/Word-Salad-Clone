@@ -5,20 +5,23 @@
 
 :root[data-theme='fantasy'] {
     /* Fuentes */
-    --font-family-header: 'MedievalSharp', cursive;
+    --font-family-toolbar: 'MedievalSharp', cursive;
     --font-family-title: 'Cinzel', serif;
-    --font-family-content: 'Alegreya', serif;
+    --font-family-letters: 'Alegreya', serif;
 
     /* Colores */
-    --color-bg: #8B4513;
-    --color-cell: #A0522D;
+    --color-bg: #8b4513;
+    --color-cell: #a0522d;
     --color-modal: rgb(139 69 19 / 95%);
-    --color-button: #A0522D;
-    --color-text: #F0E68C;
-    --color-title: #F0E68C;
-    --color-selected: #FF4500;
+    --color-button: #a0522d;
+    --color-letters: #f0e68c;
+    --color-title: #f0e68c;
+    --color-selected: #ff4500;
     --color-hover: rgb(255 69 0 / 80%);
-    --color-line: #6A5ACD;
+    --color-line: #6a5acd;
+    --color-ui: #f0e68c;
+    --color-words: #f0e68c;
+    --color-menu: #ffd700;
 
     /* Efectos */
     --cell-radius: 8px;
@@ -32,12 +35,12 @@
     --glow-color: rgb(240 230 140 / 25%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #FFD700, #FF4500);
+    --found-bg: linear-gradient(45deg, #ffd700, #ff4500);
     --found-scale: 1.1;
     --found-shadow: 0 0 20px rgb(255 215 0 / 40%);
     --unused-scale: 0.9;
     --unused-opacity: 0.3;
-    --confetti-colors: #FFD700, #FF4500, #6A5ACD, #F0E68C;
+    --confetti-colors: #ffd700, #ff4500, #6a5acd, #f0e68c;
 }
 
 :root[data-theme='fantasy'] .board {
@@ -53,18 +56,14 @@
 }
 
 :root[data-theme='fantasy'] .title {
-    color: #FFD700;
     text-shadow:
         2px 2px 4px rgb(139 69 19 / 80%),
         0 0 15px rgb(240 230 140 / 50%);
     letter-spacing: 1px;
 }
 
-:root[data-theme='fantasy'] .timer,
-:root[data-theme='fantasy'] .level-number {
-    font-family: MedievalSharp, cursive;
-    color: #F0E68C;
-    text-shadow: 2px 2px 4px rgb(139 69 19 / 60%);
+:root[data-theme='fantasy'] .toolbar {
+    filter: drop-shadow(2px 2px 4px rgb(139 69 19 / 60%));
 }
 
 @keyframes fantasy-found {
@@ -77,8 +76,8 @@
         transform: scale(1.1) rotate(3deg);
         filter: brightness(1.3);
         box-shadow:
-            0 0 25px #FFD700,
-            0 0 40px #FF4500;
+            0 0 25px #ffd700,
+            0 0 40px #ff4500;
     }
 
     100% {
@@ -92,7 +91,7 @@
 }
 
 :root[data-theme='fantasy'] .mark.selected {
-    border: 2px solid #FFD700;
+    border: 2px solid #ffd700;
     box-shadow: 0 0 20px rgb(255 215 0 / 50%);
     animation: fantasy-glow 1.5s ease-in-out infinite;
 }
@@ -100,10 +99,10 @@
 @keyframes fantasy-glow {
     0%,
     100% {
-        box-shadow: 0 0 15px #FFD700;
+        box-shadow: 0 0 15px #ffd700;
     }
 
     50% {
-        box-shadow: 0 0 25px #FF4500;
+        box-shadow: 0 0 25px #ff4500;
     }
 }

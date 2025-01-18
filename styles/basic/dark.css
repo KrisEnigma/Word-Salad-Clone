@@ -1,23 +1,26 @@
 /* Theme: Dark */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&display=swap');
 
 :root[data-theme='dark'] {
     --cell-radius: min(8px, 1.5vw);
 
     /* Fuentes */
-    --font-family-header: 'JetBrains Mono', monospace;
-    --font-family-title: 'Space Grotesk', sans-serif;
-    --font-family-content: 'Rubik', sans-serif;
+    --font-family-toolbar: 'JetBrains Mono', monospace;
+    --font-family-title: 'Rubik', sans-serif;
+    --font-family-letters: 'Rubik', sans-serif;
+    --font-weight-cell: 700;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
     --color-cell: linear-gradient(145deg, #1e1e1e, #2d2d2d);
     --color-modal: rgb(23 23 23 / 95%);
     --color-button: linear-gradient(145deg, #2d2d2d, #232323);
-    --color-text: #fff;
-    --color-title: #fff;
+    --color-letters: #fff;
+    --color-title: #3498db;
+    --color-words: #fff;
+    --color-menu: #fff;
+    --color-ui: #3498db;
     --color-selected: #3498db;
     --color-hover: rgb(52 152 219 / 80%);
     --color-line: #2ecc71;
@@ -41,7 +44,6 @@
 /* Efectos especiales para Dark */
 :root[data-theme='dark'] .board {
     background: linear-gradient(rgb(18 18 18 / 70%), rgb(26 26 26 / 70%));
-    backdrop-filter: blur(10px);
 }
 
 :root[data-theme='dark'] .cell {
@@ -51,21 +53,14 @@
         0 4px 8px rgb(0 0 0 / 20%);
 }
 
-:root[data-theme='dark'] .cell::before {
-    background: linear-gradient(135deg, rgb(52 152 219 / 10%), rgb(46 204 113 / 10%));
-}
-
 :root[data-theme='dark'] .title {
+    color: transparent;
     background: linear-gradient(to right, #3498db, #2ecc71);
     background-clip: text;
-    color: transparent;
-    text-shadow: 2px 2px 4px rgb(0 0 0 / 30%);
 }
 
-:root[data-theme='dark'] .timer,
-:root[data-theme='dark'] .level-number {
-    color: #3498db;
-    text-shadow: 0 0 10px rgb(52 152 219 / 40%);
+:root[data-theme='dark'] .toolbar {
+    filter: drop-shadow(3px 3px 2px rgb(52 152 219 / 40%));
 }
 
 @keyframes dark-found {

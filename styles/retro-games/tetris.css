@@ -3,23 +3,25 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root[data-theme='tetris'] {
-    --font-family-header: 'Press Start 2P', monospace;
+    --font-family-toolbar: 'Press Start 2P', monospace;
     --font-family-title: 'VT323', monospace;
-    --font-family-content: 'Press Start 2P', monospace;
+    --font-family-letters: 'Press Start 2P', monospace;
 
     /* Colores */
     --color-bg: #000;
     --color-cell: #0341ae;
     --color-modal: #000;
     --color-button: #0341ae;
-    --color-text: #fff;
+    --color-letters: #fff;
     --color-title: #fff;
     --color-selected: #0f0;
     --color-hover: #40c2ff;
     --color-line: #ffa500;
+    --color-ui: #17b2ff;
+    --color-words: #fff;
+    --color-menu: #fff;
 
     /* Efectos */
-    --cell-radius: 0;
     --border-light: 2px solid #17b2ff;
 
     /* Animaciones */
@@ -29,38 +31,22 @@
     --unused-scale: 0.8;
     --unused-opacity: 0.25;
     --animation-duration-found: 800ms;
-    --animation-timing: steps(4);
     --confetti-colors: #f00, #0f0, #00f, #ff0;
 }
 
-:root[data-theme='tetris'] body {
-    background: var(--color-bg);
-}
-
 :root[data-theme='tetris'] .board {
-    background: repeating-linear-gradient(0deg,
-            #000,
-            #000 1px,
-            #111 1px,
-            #111 2px);
+    background: repeating-linear-gradient(
+        0deg,
+        #000,
+        #000 1px,
+        #111 1px,
+        #111 2px
+    );
 }
 
-:root[data-theme='tetris'] .cell {
-    box-shadow:
-        inset -2px -2px 0 #002a8d,
-        inset 2px 2px 0 #17b2ff;
-    animation: tetris-pulse 2s infinite;
-}
-
-@keyframes tetris-pulse {
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.8;
-    }
+:root[data-theme='tetris'] .text {
+    margin-left: calc(var(--cell-size) * 0.07);
+    margin-top: calc(var(--cell-size) * 0.1);
 }
 
 @keyframes tetris-found {
@@ -81,7 +67,8 @@
 }
 
 :root[data-theme='tetris'] .found-temp {
-    animation: tetris-found var(--animation-duration-found) var(--animation-timing);
+    animation: tetris-found var(--animation-duration-found)
+        var(--animation-timing);
     background: linear-gradient(45deg, #f00, #ff8e00);
     box-shadow: 0 0 20px #17b2ff;
 }

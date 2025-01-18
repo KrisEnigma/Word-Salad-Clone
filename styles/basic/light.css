@@ -5,20 +5,23 @@
 
 :root[data-theme='light'] {
     /* Fuentes */
-    --font-family-header: 'Space Mono', monospace;
+    --font-family-toolbar: 'Space Mono', monospace;
     --font-family-title: 'Outfit', sans-serif;
-    --font-family-content: 'DM Sans', sans-serif;
+    --font-family-letters: 'DM Sans', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     --color-cell: linear-gradient(145deg, #e9ecef, #dee2e6);
     --color-modal: #f0f0f0;
     --color-button: #e0e0e0;
-    --color-text: #000;
-    --color-title: #000;
+    --color-letters: #000;
+    --color-title: #1971c2;
     --color-selected: #228be6;
     --color-hover: rgb(34 139 230 / 80%);
     --color-line: #1e5899;
+    --color-ui: #1864ab;
+    --color-words: #000;
+    --color-menu: #000;
 
     /* Efectos */
     --shadow-opacity: 0.2;
@@ -51,13 +54,7 @@
 }
 
 :root[data-theme='light'] .title {
-    color: #1971c2;
     text-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
-}
-
-:root[data-theme='light'] .timer,
-:root[data-theme='light'] .level-number {
-    color: #1864ab;
 }
 
 @keyframes light-found {

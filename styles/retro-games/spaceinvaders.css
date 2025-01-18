@@ -3,23 +3,25 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root[data-theme='spaceinvaders'] {
-    --font-family-header: 'Press Start 2P', monospace;
+    --font-family-toolbar: 'Press Start 2P', monospace;
     --font-family-title: 'Press Start 2P', monospace;
-    --font-family-content: 'VT323', monospace;
+    --font-family-letters: 'VT323', monospace;
 
     /* Colores */
     --color-bg: #000;
     --color-cell: #111;
     --color-modal: rgb(0 0 0 / 90%);
-    --color-button: #000;
-    --color-text: #fff;
+    --color-button: #f00;
+    --color-letters: #fff;
     --color-title: #fff;
     --color-selected: #f00;
     --color-hover: #0f0;
     --color-line: #0f0;
+    --color-ui: #0f0;
+    --color-words: #fff;
+    --color-menu: #fff;
 
     /* Efectos */
-    --cell-radius: 0;
     --border-light: 1px solid #0f0;
 
     /* Animaciones */
@@ -29,22 +31,14 @@
     --unused-scale: 0.8;
     --unused-opacity: 0.15;
     --animation-duration-found: 600ms;
-    --animation-timing: steps(4);
     --confetti-colors: #0f0, #f00, #ff0, #fff;
-}
-
-:root[data-theme='spaceinvaders'] body {
-    background: var(--color-bg);
-
-    /* Solo el fondo base */
 }
 
 :root[data-theme='spaceinvaders'] body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background:
-        radial-gradient(2px 2px at 20px 30px, #fff, transparent 70%),
+    background: radial-gradient(2px 2px at 20px 30px, #fff, transparent 70%),
         radial-gradient(2px 2px at 40px 70px, #fff, transparent 70%),
         radial-gradient(3px 3px at 50px 160px, #fff, transparent 70%),
         radial-gradient(2px 2px at 80px 120px, #fff, transparent 70%);
@@ -55,9 +49,13 @@
     opacity: 0.8;
 }
 
-:root[data-theme='spaceinvaders'] .cell {
-    border: 2px solid #0f0;
-    box-shadow: inset 0 0 10px rgb(0 255 0 / 30%);
+:root[data-theme='spaceinvaders'] .toolbar {
+    filter: drop-shadow(0 0 10px rgb(0 255 0 / 100%));
+}
+
+:root[data-theme='spaceinvaders'] .cell,
+:root[data-theme='spaceinvaders'] .word {
+    box-shadow: inset 0 0 10px rgb(0 255 0 / 60%);
 }
 
 @keyframes space-stars {

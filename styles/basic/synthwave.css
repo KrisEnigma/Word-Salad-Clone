@@ -4,23 +4,26 @@
 
 :root[data-theme='synthwave'] {
     /* Fuentes */
-    --font-family-header: 'Space Mono', monospace;
+    --font-family-toolbar: 'Space Mono', monospace;
     --font-family-title: 'Space Grotesk', sans-serif;
-    --font-family-content: 'Space Mono', monospace;
+    --font-family-letters: 'Space Mono', monospace;
 
     /* Colores */
     --color-bg: linear-gradient(180deg, #1a0f2e 0%, #2d1f3d 100%);
     --color-cell: linear-gradient(135deg, #2d1f3d 0%, #1a0f2e 100%);
     --color-modal: rgb(26 15 46 / 95%);
     --color-button: linear-gradient(145deg, #2d1f3d, #241831);
-    --color-text: #ff65d4;
+    --color-letters: #ff65d4;
     --color-title: #ff65d4;
     --color-selected: #f700ff;
     --color-hover: rgb(247 0 255 / 80%);
     --color-line: #00fff9;
+    --color-ui: #00fff9;
+    --color-words: #fff;
+    --color-menu: #fff;
 
     /* Efectos */
-    --cell-radius: min(12px, 2.5vw);
+    --cell-radius: 12px;
     --shadow-opacity: 0.5;
     --border-light: 1px solid rgb(255 101 212 / 20%);
 
@@ -36,7 +39,6 @@
 /* Efectos especiales para Synthwave */
 :root[data-theme='synthwave'] .board {
     background: linear-gradient(rgb(26 15 46 / 70%), rgb(45 31 61 / 70%));
-    backdrop-filter: blur(15px);
 }
 
 :root[data-theme='synthwave'] .cell {
@@ -55,12 +57,8 @@
         0 0 20px rgb(0 255 249 / 30%);
 }
 
-:root[data-theme='synthwave'] .timer,
-:root[data-theme='synthwave'] .level-number {
-    color: #00fff9;
-    text-shadow:
-        0 0 10px rgb(0 255 249 / 60%),
-        0 0 20px rgb(0 255 249 / 30%);
+:root[data-theme='synthwave'] .toolbar {
+    filter: drop-shadow(0 0 10px rgb(0 255 249 / 70%));
 }
 
 @keyframes synthwave-found {

@@ -4,25 +4,27 @@
 
 :root[data-theme='pixelparadise'] {
     /* Fuentes */
-    --font-family-header: 'Press Start 2P', cursive;
+    --font-family-toolbar: 'Press Start 2P', cursive;
     --font-family-title: 'Press Start 2P', cursive;
-    --font-family-content: 'VT323', monospace;
+    --font-family-letters: 'VT323', monospace;
 
     /* Colores */
-    --color-bg: #6B5B95;
-    --color-cell: #92A8D1;
+    --color-bg: #6b5b95;
+    --color-cell: #92a8d1;
     --color-modal: rgb(107 91 149 / 95%);
-    --color-button: #FF6F61;
-    --color-text: #F7CAC9;
-    --color-title: #F7CAC9;
-    --color-selected: #88B04B;
-    --color-hover: #FF6F61;
-    --color-line: #F7CAC9;
+    --color-button: #ff6f61;
+    --color-letters: #f7cac9;
+    --color-title: #f7cac9;
+    --color-selected: #88b04b;
+    --color-hover: #ff6f61;
+    --color-line: #f7cac9;
+    --color-ui: #f7cac9;
+    --color-words: #f7cac9;
+    --color-menu: #fff;
 
     /* Efectos */
-    --cell-radius: 0;
     --shadow-opacity: 0.4;
-    --border-light: 2px solid #F7CAC9;
+    --border-light: 2px solid #f7cac9;
 
     /* Efectos especiales */
     --effect-color-1: rgb(255 111 97 / 20%);
@@ -31,39 +33,26 @@
     --glow-color: rgb(247 202 201 / 30%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #FF6F61, #88B04B);
+    --found-bg: linear-gradient(45deg, #ff6f61, #88b04b);
     --found-scale: 1.2;
     --found-shadow: 0 0 20px rgb(247 202 201 / 60%);
     --unused-scale: 0.85;
     --unused-opacity: 0.2;
-    --confetti-colors: #FF6F61, #88B04B, #92A8D1, #F7CAC9;
+    --confetti-colors: #ff6f61, #88b04b, #92a8d1, #f7cac9;
 }
 
 :root[data-theme='pixelparadise'] .board {
-    background: linear-gradient(45deg,
-            rgb(107 91 149 / 80%),
-            rgb(146 168 209 / 40%));
-    border: 4px solid #F7CAC9;
+    background: linear-gradient(
+        45deg,
+        rgb(107 91 149 / 80%),
+        rgb(146 168 209 / 40%)
+    );
     image-rendering: pixelated;
-}
-
-:root[data-theme='pixelparadise'] .cell {
-    border: var(--border-light);
-    background: #92A8D1;
-    image-rendering: pixelated;
-    transform: scale(0.98);
-    transition: transform 0.2s steps(5);
-}
-
-:root[data-theme='pixelparadise'] .cell:hover {
-    transform: scale(1);
 }
 
 :root[data-theme='pixelparadise'] .title {
-    color: #F7CAC9;
-    text-shadow: 2px 2px 0 #FF6F61;
+    text-shadow: 2px 2px 0 #ff6f61;
     letter-spacing: 1px;
-    font-size: calc(var(--font-size-title) * 0.8);
     image-rendering: pixelated;
 }
 

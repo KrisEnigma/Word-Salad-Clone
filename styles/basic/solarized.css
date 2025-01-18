@@ -5,33 +5,23 @@
 
 :root[data-theme='solarized'] {
     /* Fuentes más apropiadas para un tema tipo terminal */
-    --font-family-header: 'Source Code Pro', monospace;
+    --font-family-toolbar: 'Source Code Pro', monospace;
     --font-family-title: 'Fira Code', monospace;
-    --font-family-content: 'IBM Plex Mono', monospace;
-
-    /* Paleta Solarized Dark completa */
+    --font-family-letters: 'IBM Plex Mono', monospace;
     --color-bg: #002b36;
-
-    /* base03 */
     --color-cell: #073642;
-
-    /* base02 */
     --color-modal: rgb(0 43 54 / 95%);
     --color-button: #073642;
-    --color-text: #93a1a1;
-    --color-title: #93a1a1;
-
-    /* base1 */
+    --color-letters: #b9c3c3;
+    --color-title: #b9c3c3;
     --color-selected: #859900;
-
-    /* green */
-    --color-hover: rgb(133 153 0 / 80%);
+    --color-hover: #687800;
     --color-line: #cb4b16;
-
-    /* orange */
+    --color-ui: #2aa198;
+    --color-words: #b9c3c3;
+    --color-menu: #b9c3c3;
 
     /* Efectos de terminal */
-    --cell-radius: 0;
     --shadow-opacity: 0.4;
     --border-light: 1px solid #094754;
 
@@ -46,12 +36,9 @@
 
     /* green to cyan */
     --found-scale: 1.05;
-    --found-shadow: 0 0 20px rgb(133 153 0 / 40%);
     --unused-scale: 0.95;
     --unused-opacity: 0.25;
     --confetti-colors: #859900, #2aa198, #268bd2, #6c71c4;
-
-    /* green, cyan, blue, violet */
 }
 
 :root[data-theme='solarized'] .board {
@@ -70,24 +57,12 @@
 }
 
 :root[data-theme='solarized'] .title {
-    color: #93a1a1;
-    font-size: calc(var(--font-size-title) * 0.9);
     letter-spacing: 1px;
     text-shadow: 0 0 10px rgb(147 161 161 / 30%);
 }
 
-:root[data-theme='solarized'] .timer {
-    color: #2aa198;
-
-    /* cyan */
-    text-shadow: 0 0 8px rgb(42 161 152 / 40%);
-}
-
-:root[data-theme='solarized'] .level-number {
-    color: #268bd2;
-
-    /* blue */
-    text-shadow: 0 0 8px rgb(38 139 210 / 40%);
+:root[data-theme='solarized'] .toolbar {
+    filter: drop-shadow(0 0 8px rgb(42 161 152 / 40%));
 }
 
 @keyframes solarized-found {
@@ -111,19 +86,16 @@
 }
 
 :root[data-theme='solarized'] .mark.selected {
-    background: rgb(133 153 0 / 80%);
     animation: solarized-cursor 2s ease infinite;
 }
 
 @keyframes solarized-cursor {
     0%,
     100% {
-        opacity: 0.8;
-        box-shadow: 0 0 15px rgb(133 153 0 / 40%);
+        box-shadow: 0 0 15px rgb(133 153 0);
     }
 
     50% {
-        opacity: 1;
-        box-shadow: 0 0 25px rgb(203 75 22 / 50%);
+        box-shadow: 0 0 25px rgb(203 75 22);
     }
 }

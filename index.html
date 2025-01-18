@@ -1,97 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-    <title>Game Salad</title>
-    <link rel="icon" href="#" type="image/x-icon">
-    <link rel="stylesheet" href="styles/styles.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "@capacitor/core": "https://cdn.jsdelivr.net/npm/@capacitor/core@6.2.0/+esm",
-            "@capacitor/haptics": "https://cdn.jsdelivr.net/npm/@capacitor/haptics@6.0.2/+esm"
-        }
-    }
-    </script>
-
-</head>
-
-<body class="js-loading no-select">
-    <div class="js-loading-overlay">
-        <div class="loader"></div>
-    </div>
-
-    <div class="toolbar">
-        <button class="menu">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 18L20 18" stroke-width="2" stroke-linecap="round" />
-                <path d="M4 12L20 12" stroke-width="2" stroke-linecap="round" />
-                <path d="M4 6L20 6" stroke-width="2" stroke-linecap="round" />
-            </svg>
-        </button>
-        <div class="level-number"></div>
-        <div class="timer"></div>
-    </div>
-    <div class="game-container">
-        <div class="title-container">
-            <h1 class="title" style="user-select: text; -webkit-user-select: text;"></h1>
-        </div>
-        <div class="board"></div>
-        <div class="word-list"></div>
-    </div>
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content">
-            <h2>Menú</h2>
-            <div class="menu-options">
-                <button id="theme-button">Cambiar Tema</button>
-                <button id="reset-game">Reiniciar Nivel</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="theme-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="back-button">
-                    <div class="arrow-left"></div>
-                </button>
-                <h2>Temas</h2>
-            </div>
-            <div class="theme-grid"></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="victory-modal">
-        <canvas id="confetti-canvas"></canvas>
-        <div class="modal-content">
-            <h2>¡Nivel Completado!</h2>
-            <p class="victory-time">Tiempo: <span id="final-time"></span></p>
-            <div class="menu-options">
-                <button id="restart-level">Reiniciar Nivel</button>
-                <button id="next-level">Siguiente Nivel</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/game.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <script type="module">
-        import { Haptics } from '@capacitor/haptics';
-
-        document.getElementById('test-haptic')?.addEventListener('click', async () => {
-            try {
-                await Haptics.vibrate();
-                console.log('Vibración de prueba ejecutada');
-            } catch (error) {
-                console.error('Error en vibración:', error);
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>Game Salad</title>
+        <link rel="icon" href="#" type="image/x-icon" />
+        <link rel="stylesheet" href="styles/styles.css" />
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "@capacitor/core": "https://cdn.jsdelivr.net/npm/@capacitor/core@6.2.0/+esm",
+                    "@capacitor/haptics": "https://cdn.jsdelivr.net/npm/@capacitor/haptics@6.0.2/+esm",
+                    "@capacitor/app": "https://cdn.jsdelivr.net/npm/@capacitor/app@5.0.7/+esm",
+                    "@capacitor/preferences": "https://cdn.jsdelivr.net/npm/@capacitor/preferences@5.0.7/+esm"
+                }
             }
-        });
-    </script>
-</body>
+        </script>
+    </head>
 
+    <body class="js-loading no-select">
+        <div class="js-loading-overlay">
+            <div class="loader"></div>
+        </div>
+
+        <div class="toolbar">
+            <button class="menu">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M4 18L20 18"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                    />
+                    <path
+                        d="M4 12L20 12"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                    />
+                    <path
+                        d="M4 6L20 6"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                    />
+                </svg>
+            </button>
+            <div class="level-number"></div>
+            <div class="timer"></div>
+        </div>
+        <div class="game-container">
+            <div class="title-container">
+                <h1
+                    class="title"
+                    style="user-select: text; -webkit-user-select: text"
+                ></h1>
+            </div>
+            <div class="board"></div>
+            <div class="word-list"></div>
+        </div>
+        <div class="modal-overlay" id="modal">
+            <div class="modal-content">
+                <h2>Menú</h2>
+                <div class="menu-options">
+                    <button id="theme-button">Cambiar Tema</button>
+                    <button id="reset-game">Reiniciar Nivel</button>
+                    <button id="toggle-haptics" class="toggle-button">
+                        <span class="icon">🔊</span>
+                        Vibración
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="theme-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="back-button">
+                        <div class="arrow-left"></div>
+                    </button>
+                    <h2>Temas</h2>
+                </div>
+                <div class="theme-grid"></div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="victory-modal">
+            <canvas id="confetti-canvas"></canvas>
+            <div class="modal-content">
+                <h2>¡Nivel Completado!</h2>
+                <p class="victory-time">
+                    Tiempo: <span id="final-time"></span>
+                </p>
+                <div class="menu-options">
+                    <button id="restart-level">Reiniciar Nivel</button>
+                    <button id="next-level">Siguiente Nivel</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/game.js" type="module"></script>
+    </body>
 </html>

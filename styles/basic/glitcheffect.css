@@ -5,20 +5,23 @@
 
 :root[data-theme='glitcheffect'] {
     /* Fuentes */
-    --font-family-header: 'Share Tech Mono', monospace;
+    --font-family-toolbar: 'Share Tech Mono', monospace;
     --font-family-title: 'Rubik Glitch', cursive;
-    --font-family-content: 'Teko', sans-serif;
+    --font-family-letters: 'Teko', sans-serif;
 
     /* Colores */
-    --color-bg: #1E1E1E;
+    --color-bg: #1e1e1e;
     --color-cell: #2a2a2a;
     --color-modal: rgb(30 30 30 / 95%);
-    --color-button: linear-gradient(145deg, #F0F, #0FF);
-    --color-text: #0FF;
-    --color-title: #0FF;
-    --color-selected: #F0F;
+    --color-button: linear-gradient(145deg, #f0f, #0ff);
+    --color-letters: #0ff;
+    --color-title: #0ff;
+    --color-selected: #f0f;
     --color-hover: rgb(255 53 0 / 80%);
-    --color-line: #FF3700;
+    --color-line: #ff3700;
+    --color-ui: #f0f;
+    --color-words: #fff;
+    --color-menu: #0ff;
 
     /* Efectos */
     --cell-radius: 2px;
@@ -32,27 +35,28 @@
     --glow-color: rgb(255 53 0 / 30%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #F0F, #0FF);
+    --found-bg: linear-gradient(45deg, #f0f, #0ff);
     --found-scale: 1.1;
     --found-shadow: 0 0 30px rgb(255 55 0 / 60%);
     --unused-scale: 0.9;
     --unused-opacity: 0.2;
-    --confetti-colors: #F0F, #0FF, #FF3500, #FF3700;
+    --confetti-colors: #f0f, #0ff, #ff3500, #ff3700;
 }
 
 :root[data-theme='glitcheffect'] body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(transparent 0%,
-            rgb(0 255 255 / 10%) 0.5%,
-            transparent 1%);
+    background: repeating-linear-gradient(
+        transparent 0%,
+        rgb(0 255 255 / 10%) 0.5%,
+        transparent 1%
+    );
     animation: scan-lines 8s linear infinite;
     pointer-events: none;
 }
 
 :root[data-theme='glitcheffect'] .board {
-    position: relative;
     background: transparent;
     overflow: hidden;
 }
@@ -64,20 +68,14 @@
 }
 
 :root[data-theme='glitcheffect'] .title {
-    position: relative;
-    color: #0FF;
     text-shadow:
-        2px 0 #F0F,
-        -2px 0 #FF3500;
+        2px 0 #f0f,
+        -2px 0 #ff3500;
     animation: glitch-title 3s infinite;
 }
 
-:root[data-theme='glitcheffect'] .text {
-    position: relative;
-}
-
 :root[data-theme='glitcheffect'] .text::after {
-    color: #0FF;
+    color: var(--color-title);
     animation: glitch-text 2s infinite reverse;
     clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
@@ -195,22 +193,22 @@
 @keyframes glitch-selected {
     0%,
     100% {
-        background: #F0F;
+        background: #f0f;
         transform: none;
     }
 
     25% {
-        background: #0FF;
+        background: #0ff;
         transform: translate(2px, -2px);
     }
 
     50% {
-        background: #FF3500;
+        background: #ff3500;
         transform: translate(-2px, 2px);
     }
 
     75% {
-        background: #FF3700;
+        background: #ff3700;
         transform: none;
     }
 }

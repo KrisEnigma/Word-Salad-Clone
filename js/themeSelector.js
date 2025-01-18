@@ -1,3 +1,5 @@
+import { Config } from './config.js';
+
 export class ThemeSelector {
     constructor() {
         this.themesData = null;
@@ -6,16 +8,52 @@ export class ThemeSelector {
     }
 
     async applyInitialTheme() {
-        const savedTheme = localStorage.getItem('theme') || this.getDefaultTheme();
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        return this.preloadDefaultTheme();
+        try {
+            await this.loadThemesData(); // Cargar datos primero
+            const defaultTheme = 'dark';
+            const savedTheme = await Config.get(Config.KEYS.THEME) || defaultTheme;
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const themeData = await this.findThemeData(savedTheme);
+            if (!themeData) {
+                // Si no se encuentra el tema, usar el tema por defecto
+                return this.loadStylesheet('styles/basic/dark.css');
+            }
+
+            const themePath = `styles/${themeData.category.path}/${themeData.theme.file}`;
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = themePath;
+
+            return new Promise((resolve, reject) => {
+                link.onload = () => resolve(true);
+                link.onerror = reject;
+                document.head.appendChild(link);
+            });
+        } catch (error) {
+            console.error('Error en applyInitialTheme:', error);
+            return this.loadStylesheet('styles/basic/dark.css');
+        }
     }
 
     async initialize() {
-        await this.loadThemesData();
-        await this.loadThemeStylesheets();
-        this.initializeUI();
-        return this.availableThemes;
+        try {
+            // Cargar datos primero
+            if (!this.themesData) {
+                await this.loadThemesData();
+            }
+
+            // Cargar los stylesheets
+            await this.loadThemeStylesheets();
+
+            // Inicializar UI una vez que todo esté listo
+            await this.initializeUI();
+
+            return this.availableThemes;
+        } catch (error) {
+            console.error('Error en initialize:', error);
+            throw error;
+        }
     }
 
     formatCategoryName(categoryId) {
@@ -27,9 +65,9 @@ export class ThemeSelector {
     async loadThemesData() {
         const response = await fetch('styles/themes.json');
         if (!response.ok) throw new Error('No se pudo obtener la lista de temas');
-        
+
         const data = await response.json();
-        
+
         this.themesData = {
             categories: Object.fromEntries(
                 Object.entries(data.categories).map(([id, category]) => [
@@ -42,10 +80,10 @@ export class ThemeSelector {
                 ])
             )
         };
-        
+
         this.categoryOrder = Object.keys(this.themesData.categories)
             .map(id => this.formatCategoryName(id));
-        
+
         Object.entries(this.themesData.categories).forEach(([, category]) => {
             this.availableThemes.set(category.name, new Set(
                 category.themes.map(theme => this.getThemeId(theme.file))
@@ -73,76 +111,72 @@ export class ThemeSelector {
 
     async loadThemeStylesheets() {
         if (!this.themesData) {
-            return;
+            await this.loadThemesData();
         }
 
+        const currentTheme = await Config.get(Config.KEYS.THEME) || 'dark';
+        const themeData = await this.findThemeData(currentTheme);
+
+        if (!themeData) return;
+
         try {
-            const savedTheme = localStorage.getItem('theme');
+            const path = `styles/${themeData.category.path}/${themeData.theme.file}`;
+            await this.loadStylesheet(path);
 
-            if (savedTheme) {
-                const savedThemeData = this.findThemeData(savedTheme);
-                const path = `styles/${savedThemeData.category.path}/${savedThemeData.theme.file}`;
-                
-                try {
-                    const response = await fetch(path);
-                    if (!response.ok) {
-                        localStorage.removeItem('theme');
-                    }
-                } catch {  // Eliminar "_" como parámetro
-                    localStorage.removeItem('theme');
-                }
-            }
-
-            const defaultTheme = this.getDefaultTheme();
-            const defaultThemeData = this.findThemeData(defaultTheme);
-
-            if (defaultThemeData) {
-                const defaultPath = `styles/${defaultThemeData.category.path}/${defaultThemeData.theme.file}`;
-                await this.loadStylesheet(defaultPath).catch(error => {
-                    console.error('Error loading default theme stylesheet:', error);
-                });
-            }
-
-            const promises = Object.values(this.themesData.categories).flatMap(category => 
-                category.themes
-                    .filter(theme => this.getThemeId(theme.file) !== defaultTheme)
-                    .map(theme => {
-                        const path = `styles/${category.path}/${theme.file}`;
-                        return this.loadStylesheet(path).catch(error => {
-                            console.error(`Error loading stylesheet ${path}:`, error);
-                        });
-                    })
-            );
-
-            await Promise.allSettled(promises);
-
+            // Cargar el resto de temas en segundo plano
+            this.loadRemainingThemes();
         } catch (error) {
-            console.error('Error loading theme stylesheets:', error);
-        } finally {
-            const themeToApply = localStorage.getItem('theme') || this.getDefaultTheme();
-            this.setTheme(themeToApply);
-            
-            document.body.classList.remove('js-loading');
-            document.querySelector('.js-loading-overlay')?.classList.add('hidden');
+            console.error('Error loading theme stylesheet:', error);
+            // Intentar cargar el tema por defecto como fallback
+            await this.loadStylesheet('styles/basic/dark.css');
         }
     }
 
-    findThemeData(themeId) {
+    async loadRemainingThemes() {
+        const promises = Object.values(this.themesData.categories).flatMap(category =>
+            category.themes.map(theme => {
+                const path = `styles/${category.path}/${theme.file}`;
+                return this.loadStylesheet(path).catch(() => { });
+            })
+        );
+
+        await Promise.allSettled(promises);
+    }
+
+    async findThemeData(themeId) {
+        if (!this.themesData) {
+            await this.loadThemesData();
+        }
+
+        if (!this.themesData?.categories) {
+            console.warn('No hay datos de categorías disponibles');
+            return {
+                category: { path: 'basic' },
+                theme: { file: 'dark.css' }
+            };
+        }
+
+        // Buscar en todas las categorías
         for (const category of Object.values(this.themesData.categories)) {
             const theme = category.themes.find(t => this.getThemeId(t.file) === themeId);
             if (theme) {
                 return { category, theme };
             }
         }
-        
+
+        // Si no se encuentra, usar el tema por defecto
         for (const category of Object.values(this.themesData.categories)) {
             const defaultTheme = category.themes.find(t => t.isDefault);
             if (defaultTheme) {
                 return { category, theme: defaultTheme };
             }
         }
-        
-        throw new Error('No se encontró el tema ni un tema por defecto');
+
+        // Fallback final
+        return {
+            category: { path: 'basic' },
+            theme: { file: 'dark.css' }
+        };
     }
 
     getDefaultTheme() {
@@ -155,9 +189,12 @@ export class ThemeSelector {
         throw new Error('No se encontró un tema por defecto en el JSON');
     }
 
-    initializeUI() {
+    async initializeUI() {
         const themeGrid = document.querySelector('.theme-grid');
-        if (!themeGrid || !this.themesData) return;
+        if (!themeGrid || !this.themesData) {
+            console.warn('No se puede inicializar UI sin datos de temas');
+            return;
+        }
 
         let html = '';
         this.categoryOrder.forEach(categoryName => {
@@ -180,17 +217,24 @@ export class ThemeSelector {
         requestAnimationFrame(async () => {
             const previews = themeGrid.querySelectorAll('.preview-wrapper[data-theme]');
             for (const preview of previews) {
-                const themeId = preview.getAttribute('data-theme');
-                const themeData = this.findThemeData(themeId);
-                if (themeData) {
-                    const styleText = await this.getThemeStyles(themeData);
-                    preview.setAttribute('style', styleText);
-                    
-                    // Ajustar el título del preview
-                    const title = preview.querySelector('.preview-title');
-                    if (title) {
-                        this.fitPreviewTitle(title);
+                try {
+                    const themeId = preview.getAttribute('data-theme');
+                    const themeData = await this.findThemeData(themeId);
+                    if (!themeData) {
+                        console.warn('No se encontraron datos para el tema:', themeId);
+                        continue;
                     }
+
+                    const styleText = await this.getThemeStyles(themeData);
+                    if (styleText) {
+                        preview.setAttribute('style', styleText);
+                        const title = preview.querySelector('.preview-title');
+                        if (title) {
+                            this.fitPreviewTitle(title);
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Error procesando preview:', error);
                 }
             }
         });
@@ -199,11 +243,11 @@ export class ThemeSelector {
     fitPreviewTitle(titleElement) {
         const text = titleElement.textContent;
         const words = text.split(/\s+/);
-        
+
         // Reset inicial
         titleElement.style = '';
         titleElement.classList.remove('single-line', 'multi-line');
-        
+
         // Forzar reflow
         void titleElement.offsetWidth;
 
@@ -220,7 +264,7 @@ export class ThemeSelector {
         const maxWidth = container.clientWidth - 16;
         const textWidth = titleElement.scrollWidth;
         const isPixelFont = this.isPixelFont(titleElement);
-        
+
         if (textWidth > maxWidth) {
             const scale = maxWidth / textWidth;
             // Ajustes específicos para fuentes pixel art
@@ -235,24 +279,24 @@ export class ThemeSelector {
     fitMultipleWords(titleElement) {
         titleElement.classList.add('multi-line');
         const isPixelFont = this.isPixelFont(titleElement);
-        
+
         // Ajustar tamaño base según el tipo de fuente
         const baseSize = parseFloat(getComputedStyle(titleElement).fontSize);
         const initialSize = isPixelFont ? baseSize * 0.8 : baseSize;
         titleElement.style.fontSize = `${initialSize}px`;
-        
+
         const maxHeight = parseFloat(getComputedStyle(titleElement).lineHeight) * 2;
-        
+
         if (titleElement.scrollHeight > maxHeight) {
             let size = initialSize;
             const minSize = isPixelFont ? 10 : 14;
             const reductionFactor = isPixelFont ? 0.85 : 0.95;
-            
+
             while (size > minSize && titleElement.scrollHeight > maxHeight) {
                 size *= reductionFactor;
                 titleElement.style.fontSize = `${size}px`;
             }
-            
+
             if (titleElement.scrollHeight > maxHeight) {
                 titleElement.classList.remove('multi-line');
                 this.fitSingleWord(titleElement);
@@ -262,25 +306,30 @@ export class ThemeSelector {
 
     isPixelFont(element) {
         const fontFamily = getComputedStyle(element).fontFamily.toLowerCase();
-        return fontFamily.includes('press start') || 
-               fontFamily.includes('pixel') ||
-               fontFamily.includes('8bit') ||
-               fontFamily.includes('arcade');
+        return fontFamily.includes('press start') ||
+            fontFamily.includes('pixel') ||
+            fontFamily.includes('8bit') ||
+            fontFamily.includes('arcade');
     }
 
     async getThemeStyles(themeData) {
+        if (!themeData || !themeData.category || !themeData.theme) {
+            console.warn('Datos de tema inválidos:', themeData);
+            return '';
+        }
+
         const { category, theme } = themeData;
         const path = `styles/${category.path}/${theme.file}`;
-        
+
         try {
             const response = await fetch(path);
             if (!response.ok) throw new Error(`No se pudo cargar ${path}`);
-            
+
             const css = await response.text();
             const styleMatch = css.match(/:root\[data-theme=['"]([^'"]+)['"]\]\s*{([^}]+)}/);
-            
+
             if (!styleMatch) return '';
-            
+
             const variables = styleMatch[2];
             const internalVars = {};
             variables.match(/--[^:]+:[^;]+;/g)?.forEach(prop => {
@@ -311,9 +360,9 @@ export class ThemeSelector {
             return Object.entries(cssVars)
                 .map(([name, value]) => `${name}: ${value}`)
                 .join(';');
-                
-        } catch {
-            // Remover parámetro error no utilizado
+
+        } catch (error) {
+            console.warn('Error cargando estilos del tema:', error);
             return '';
         }
     }
@@ -344,14 +393,14 @@ export class ThemeSelector {
         const variables = [
             '--color-bg',
             '--color-cell',
-            '--color-text',
+            '--color-letter',
             '--color-title',
             '--color-selected',
             '--color-modal',
             '--cell-radius',
             '--border-light',
             '--font-family-title',
-            '--font-family-content'
+            '--font-family-letters'
         ];
 
         const cssText = variables
@@ -364,19 +413,19 @@ export class ThemeSelector {
 
     async loadThemeVariables() {
         const themeStyles = new Map();
-        
+
         try {
             const cssFiles = await this.listThemeFiles();
-            
+
             for (const file of cssFiles) {
                 const response = await fetch(file.fullPath);
                 if (!response.ok) continue;
-                
+
                 const css = await response.text();
-                
+
                 const themeName = file.theme;
                 const themeMatch = css.match(/:root\[data-theme=['"]([^'"]+)['"]\]\s*{([^}]+)}/);
-                
+
                 if (themeMatch) {
                     const variables = themeMatch[2];
                     const styles = this.extractRequiredVariables(variables);
@@ -386,14 +435,14 @@ export class ThemeSelector {
         } catch {
             console.error('Error loading theme variables');
         }
-        
+
         return themeStyles;
     }
 
     extractRequiredVariables(variables) {
         const requiredVars = [
             '--font-family-title',
-            '--font-family-content',
+            '--font-family-letters',
             '--color-bg',
             '--color-cell',
             '--color-text',
@@ -402,11 +451,11 @@ export class ThemeSelector {
             '--border-light',
             '--color-modal'
         ];
-        
+
         return variables
             .match(/--[^:]+:[^;]+;/g)
-            ?.filter(v => 
-                requiredVars.some(required => 
+            ?.filter(v =>
+                requiredVars.some(required =>
                     v.startsWith(required + ':')
                 )
             )
@@ -417,7 +466,7 @@ export class ThemeSelector {
     setTheme(themeName) {
         console.log('ThemeSelector.setTheme:', themeName);
         let found = false;
-        
+
         for (const [, themes] of this.availableThemes) {
             if (themes.has(themeName)) {
                 found = true;
@@ -427,10 +476,10 @@ export class ThemeSelector {
 
         const themeToApply = found ? themeName : this.getDefaultTheme();
         console.log('Aplicando tema:', themeToApply);
-        
+
         document.documentElement.setAttribute('data-theme', themeToApply);
-        localStorage.setItem('theme', themeToApply);
-        
+        Config.set(Config.KEYS.THEME, themeToApply);
+
         return found;
     }
 
@@ -443,26 +492,26 @@ export class ThemeSelector {
 
     bindEvents(themeGrid) {
         console.log('Inicializando eventos de tema');
-        
+
         themeGrid.addEventListener('click', event => {
             const themeButton = event.target.closest('.theme-option');
             if (!themeButton) return;
 
             const newTheme = themeButton.dataset.theme;
             console.log('Click en tema:', newTheme);
-            
+
             // Disparar un evento personalizado para el cambio de tema
             const themeChanged = this.setTheme(newTheme);
             console.log('Tema cambiado:', themeChanged);
-            
+
             if (themeChanged) {
                 themeGrid.querySelectorAll('.theme-option').forEach(btn => {
                     btn.classList.toggle('active', btn === themeButton);
                 });
-                
+
                 // Disparar evento personalizado
-                window.dispatchEvent(new CustomEvent('themechange', { 
-                    detail: { theme: newTheme } 
+                window.dispatchEvent(new CustomEvent('themechange', {
+                    detail: { theme: newTheme }
                 }));
             }
         });
@@ -480,10 +529,10 @@ export class ThemeSelector {
 
     async preloadDefaultTheme() {
         try {
-            const defaultTheme = localStorage.getItem('theme') || 'dark';
+            const defaultTheme = await Config.get(Config.KEYS.THEME) || 'dark';
             const defaultThemeData = this.findThemeData(defaultTheme);
             const themePath = `styles/${defaultThemeData.category.path}/${defaultThemeData.theme.file}`;
-            
+
             const existingLink = document.querySelector(`link[href="${themePath}"]`);
             if (existingLink) {
                 return new Promise((resolve) => {
@@ -496,7 +545,7 @@ export class ThemeSelector {
                 });
             }
 
-            return this.loadStylesheet(themePath).catch(() => 
+            return this.loadStylesheet(themePath).catch(() =>
                 this.loadStylesheet('styles/basic/dark.css')
             );
         } catch {

@@ -5,20 +5,23 @@
 
 :root[data-theme='digitaldawn'] {
     /* Fuentes */
-    --font-family-header: 'Orbitron', sans-serif;
+    --font-family-toolbar: 'Orbitron', sans-serif;
     --font-family-title: 'Rajdhani', sans-serif;
-    --font-family-content: 'Space Grotesk', sans-serif;
+    --font-family-letters: 'Space Grotesk', sans-serif;
 
     /* Colores */
     --color-bg: #0a0a1a;
     --color-cell: #1a1a2a;
     --color-modal: rgb(10 10 26 / 95%);
-    --color-button: #8A2BE2;
-    --color-text: #FFF;
-    --color-title: #FFF;
-    --color-selected: #FF6347;
-    --color-hover: #FFD700;
-    --color-line: #00BFFF;
+    --color-button: #8a2be2;
+    --color-letters: #fff;
+    --color-title: #fff;
+    --color-selected: #ff6347;
+    --color-hover: #ff6347;
+    --color-line: #00bfff;
+    --color-ui: #00bfff;
+    --color-words: #fff;
+    --color-menu: #fff;
 
     /* Efectos */
     --cell-radius: 8px;
@@ -32,44 +35,39 @@
     --glow-color: rgb(138 43 226 / 40%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(135deg, #FF6347, #8A2BE2);
+    --found-bg: linear-gradient(135deg, #ff6347, #8a2be2);
     --found-scale: 1.1;
     --found-shadow: 0 0 40px rgb(0 191 255 / 50%);
     --unused-scale: 0.9;
     --unused-opacity: 0.15;
-    --confetti-colors: #FF6347, #FFD700, #00BFFF, #8A2BE2;
+    --confetti-colors: #ff6347, #ffd700, #00bfff, #8a2be2;
 }
 
 :root[data-theme='digitaldawn'] .board {
-    background: linear-gradient(135deg,
-            rgb(10 10 26 / 95%) 0%,
-            rgb(138 43 226 / 10%) 100%);
-    border: 2px solid rgb(0 191 255 / 20%);
-    padding: 0;  /* Asegurar que no haya padding */
-    box-sizing: border-box;  /* Asegurar que el borde está incluido en el tamaño */
+    background: linear-gradient(
+        135deg,
+        rgb(10 10 26 / 95%) 0%,
+        rgb(138 43 226 / 10%) 100%
+    );
 }
 
 :root[data-theme='digitaldawn'] .cell {
-    background: linear-gradient(145deg,
-            rgb(26 26 42 / 100%) 0%,
-            rgb(26 26 42 / 80%) 100%);
-    border: var(--border-light);
+    background: linear-gradient(
+        145deg,
+        rgb(26 26 42 / 100%) 0%,
+        rgb(26 26 42 / 80%) 100%
+    );
     box-shadow: 0 0 20px rgb(0 191 255 / 10%);
-    backdrop-filter: blur(2px);
 }
 
 :root[data-theme='digitaldawn'] .title {
-    color: #FFF;
     text-shadow:
         0 0 10px rgb(0 191 255 / 50%),
         0 0 20px rgb(138 43 226 / 30%);
-    letter-spacing: 1px;
 }
 
-:root[data-theme='digitaldawn'] .timer,
-:root[data-theme='digitaldawn'] .level-number {
-    color: #00BFFF;
-    text-shadow: 0 0 10px rgb(0 191 255 / 40%);
+:root[data-theme='digitaldawn'] .toolbar {
+    filter: drop-shadow(0 0 10px rgb(0 191 255 / 40%));
 }
 
 @keyframes dawn-found {
@@ -102,18 +100,18 @@
 
 @keyframes dawn-selected {
     0% {
-        background: #FF6347;
+        background: #ff6347;
     }
 
     33% {
-        background: #FFD700;
+        background: #ffd700;
     }
 
     66% {
-        background: #00BFFF;
+        background: #00bfff;
     }
 
     100% {
-        background: #FF6347;
+        background: #ff6347;
     }
 }

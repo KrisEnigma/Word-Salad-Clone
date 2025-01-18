@@ -4,28 +4,27 @@
 
 :root[data-theme='zelda-botw'] {
     /* Fuentes */
-    --font-family-header: 'Cardo', serif;
-
-    /* Más similar a las fuentes del juego */
+    --font-family-toolbar: 'Cardo', serif;
     --font-family-title: 'Cardo', serif;
-    --font-family-content: 'Noto Sans', sans-serif;
-
-    /* Mejor para UI como en el juego */
+    --font-family-letters: 'Noto Sans', sans-serif;
 
     /* Colores - Paleta Sheikah mejorada */
     --color-bg: linear-gradient(135deg, #0f1922 0%, #1a2f3d 50%, #243b4d 100%);
-    --color-cell: linear-gradient(145deg,
-            rgb(38 67 87 / 95%),
-            rgb(29 53 67 / 98%));
-    --color-modal: linear-gradient(180deg,
-            rgb(22 40 52 / 98%) 0%,
-            rgb(15 25 34 / 95%) 100%);
+    --color-cell: linear-gradient(145deg, rgb(38 67 87), rgb(29 53 67));
+    --color-modal: linear-gradient(
+        180deg,
+        rgb(22 40 52 / 98%) 0%,
+        rgb(15 25 34 / 95%) 100%
+    );
     --color-button: linear-gradient(to bottom right, #5ccce0, #45b7ce);
-    --color-text: #e8f1ff;
+    --color-letters: #e8f1ff;
     --color-title: #e8f1ff;
-    --color-selected: #5ccce0;
-    --color-hover: rgb(124 211 230 / 80%);
-    --color-line: linear-gradient(to right, #45b7ce, #7cd3e6);
+    --color-selected: #25a5bc;
+    --color-hover: rgb(85 145 159 / 80%);
+    --color-line: cyan;
+    --color-ui: #7cd3e6;
+    --color-words: #e8f1ff;
+    --color-menu: #e8f1ff;
 
     /* Efectos mejorados */
     --cell-radius: 3px;
@@ -34,15 +33,15 @@
     --glow-effect: 0 0 20px rgb(69 183 206 / 20%);
 
     /* Animaciones mejoradas */
-    --found-bg: radial-gradient(circle,
-            rgb(92 204 224 / 100%) 0%,
-            rgb(69 183 206 / 90%) 50%,
-            rgb(44 149 171 / 80%) 100%);
+    --found-bg: radial-gradient(
+        circle,
+        rgb(92 204 224 / 100%) 0%,
+        rgb(69 183 206 / 90%) 50%,
+        rgb(44 149 171 / 80%) 100%
+    );
     --found-scale: 1.15;
-    --found-shadow:
-        0 0 25px rgb(92 204 224 / 70%),
-        0 0 45px rgb(69 183 206 / 50%),
-        inset 0 0 20px rgb(124 211 230 / 40%);
+    --found-shadow: 0 0 25px rgb(92 204 224 / 70%),
+        0 0 45px rgb(69 183 206 / 50%), inset 0 0 20px rgb(124 211 230 / 40%);
     --unused-scale: 0.92;
     --unused-opacity: 0.15;
     --animation-duration-found: 800ms;
@@ -52,64 +51,14 @@
 
 /* Modificar comportamiento de mark */
 :root[data-theme='zelda-botw'] .mark {
-    background: transparent;
-
-    /* Inicialmente invisible */
-    backdrop-filter: none;
-    border: none;
     transition: all 0.2s ease;
 }
 
-:root[data-theme='zelda-botw'] .mark.selected,
-:root[data-theme='zelda-botw'] .hitbox:hover+.mark {
-    background: rgb(92 204 224 / 15%);
-    backdrop-filter: blur(3px);
-    border: 1px solid rgb(92 204 224 / 30%);
-    box-shadow:
-        0 0 20px rgb(92 204 224 / 20%),
-        inset 0 0 10px rgb(124 211 230 / 10%);
-}
-
 :root[data-theme='zelda-botw'] .cell {
-    backdrop-filter: blur(2px);
-    background: var(--color-cell);
-    border: var(--border-light);
     box-shadow:
         var(--glow-effect),
         inset 0 1px 1px rgb(255 255 255 / 10%),
         inset 0 -1px 1px rgb(0 0 0 / 10%);
-    position: relative;
-}
-
-:root[data-theme='zelda-botw'] .cell::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg,
-            transparent 0%,
-            rgb(92 204 224 / 5%) 50%,
-            transparent 100%);
-    opacity: 0.5;
-    z-index: 1;
-}
-
-:root[data-theme='zelda-botw'] .cell::after {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(45deg,
-            transparent 20%,
-            rgb(92 204 224 / 20%) 40%,
-            rgb(124 211 230 / 20%) 60%,
-            transparent 80%);
-    opacity: 0;
-    transition: all 0.4s ease;
-    z-index: 2;
-}
-
-:root[data-theme='zelda-botw'] .cell:hover::after {
-    opacity: 1;
-    transform: translateX(5px);
 }
 
 /* Actualizar animación para que sea más similar a los efectos del juego */
@@ -143,18 +92,4 @@
     animation-name: zelda-found !important;
     background: var(--found-bg);
     border-color: rgb(124 211 230 / 40%);
-}
-
-:root[data-theme='zelda-botw'] body {
-    background: var(--color-bg);
-}
-
-@keyframes sheikah-particles {
-    from {
-        background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
-    }
-
-    to {
-        background-position: 200px -200px, -200px 200px, 200px 200px, -200px -200px, 100px 100px;
-    }
 }

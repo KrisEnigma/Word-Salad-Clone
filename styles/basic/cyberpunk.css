@@ -5,25 +5,32 @@
 
 :root[data-theme='cyberpunk'] {
     /* Fuentes */
-    --font-family-header: 'Share Tech Mono', monospace;
+    --font-family-toolbar: 'Share Tech Mono', monospace;
     --font-family-title: 'Orbitron', sans-serif;
-    --font-family-content: 'Rajdhani', sans-serif;
+    --font-family-letters: 'Rajdhani', sans-serif;
 
     /* Colores */
-    --color-bg: #1E1E1E;
+    --color-bg: #1e1e1e;
     --color-cell: #2a2a2a;
-    --color-modal: linear-gradient(180deg, rgb(30 30 30 / 95%), rgb(255 69 0 / 10%));
-    --color-button: linear-gradient(145deg, #2a2a2a, #FF4500);
-    --color-text: #0F0;
-    --color-title: #0F0;
-    --color-selected: #F0F;
+    --color-modal: linear-gradient(
+        180deg,
+        rgb(30 30 30 / 95%),
+        rgb(255 69 0 / 10%)
+    );
+    --color-button: linear-gradient(145deg, #2a2a2a, #ff4500);
+    --color-letters: #0f0;
+    --color-title: #0f0;
+    --color-selected: #f0f;
     --color-hover: rgb(255 0 255 / 80%);
-    --color-line: #0FF;
+    --color-line: #0ff;
+    --color-ui: #f0f;
+    --color-words: #0f0;
+    --color-menu: #0ff;
 
     /* Efectos */
     --cell-radius: 2px;
     --shadow-opacity: 0.6;
-    --border-light: 1px solid #0F0;
+    --border-light: 1px solid #0f0;
 
     /* Efectos especiales */
     --effect-color-1: rgb(0 255 0 / 15%);
@@ -32,12 +39,12 @@
     --glow-color: rgb(0 255 0 / 30%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #F0F, #0FF);
+    --found-bg: linear-gradient(45deg, #f0f, #0ff);
     --found-scale: 1.1;
     --found-shadow: 0 0 30px rgb(0 255 255 / 60%);
     --unused-scale: 0.9;
     --unused-opacity: 0.2;
-    --confetti-colors: #0F0, #F0F, #0FF, #FF4500;
+    --confetti-colors: #0f0, #f0f, #0ff, #ff4500;
 }
 
 :root[data-theme='cyberpunk'] .board {
@@ -47,7 +54,7 @@
 
 :root[data-theme='cyberpunk'] .cell {
     border: 1px solid rgb(0 255 0 / 20%);
-    background: linear-gradient(135deg, #1E1E1E, #2a2a2a);
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
     box-shadow:
         inset 0 0 15px rgb(0 255 0 / 10%),
         0 0 10px rgb(0 255 255 / 20%),
@@ -55,7 +62,6 @@
 }
 
 :root[data-theme='cyberpunk'] .title {
-    color: #0F0;
     text-shadow:
         0 0 10px rgb(0 255 0 / 70%),
         0 0 20px rgb(0 255 0 / 50%);
@@ -64,13 +70,13 @@
 
 :root[data-theme='cyberpunk'] .timer {
     font-family: 'Share Tech Mono', monospace;
-    color: #FF4500;
+    color: #ff4500;
     text-shadow: 0 0 10px rgb(255 69 0 / 50%);
 }
 
 :root[data-theme='cyberpunk'] .level-number {
     font-family: 'Share Tech Mono', monospace;
-    color: #0FF;
+    color: #0ff;
     text-shadow: 0 0 10px rgb(0 255 255 / 50%);
 }
 
@@ -84,8 +90,8 @@
         transform: scale(1.1) skew(-5deg);
         filter: hue-rotate(90deg);
         box-shadow:
-            0 0 30px #F0F,
-            0 0 60px #0FF;
+            0 0 30px #f0f,
+            0 0 60px #0ff;
     }
 
     100% {
@@ -100,8 +106,8 @@
 
 :root[data-theme='cyberpunk'] .mark.selected {
     box-shadow:
-        0 0 20px #F0F,
-        0 0 40px #0FF;
+        0 0 20px #f0f,
+        0 0 40px #0ff;
     animation: cyberpunk-glow 2s infinite;
 }
 
@@ -111,15 +117,15 @@
         opacity: 0.8;
         transform: scale(1);
         box-shadow:
-            0 0 20px #F0F,
-            0 0 40px #0FF;
+            0 0 20px #f0f,
+            0 0 40px #0ff;
     }
 
     50% {
         opacity: 1;
         transform: scale(1.1);
         box-shadow:
-            0 0 30px #0F0,
-            0 0 50px #FF4500;
+            0 0 30px #0f0,
+            0 0 50px #ff4500;
     }
 }

@@ -3,24 +3,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root[data-theme='minecraft'] {
-    --font-family-header: 'VT323', monospace;
+    --font-family-toolbar: 'VT323', monospace;
     --font-family-title: 'Press Start 2P', monospace;
-    --font-family-content: 'VT323', monospace;
-    --preview-title-size: 0.7em;
+    --font-family-letters: 'VT323', monospace;
 
     /* Colores */
     --color-bg: #45523e;
     --color-cell: #747474;
     --color-modal: #1a1a1a;
-    --color-button: #549551;
-    --color-text: #fff;
+    --color-button: #5794df;
+    --color-letters: #fff;
     --color-title: #fff;
     --color-selected: #5794df;
-    --color-hover: rgb(87 148 223 / 80%);
+    --color-hover: #549551;
     --color-line: #ffd83d;
+    --color-ui: #66bb6a;
+    --color-words: #fff;
+    --color-menu: #fff;
 
     /* Efectos */
-    --cell-radius: 0;
     --border-light: 2px solid #000;
     --shadow-opacity: 0.3;
 
@@ -30,8 +31,6 @@
     --found-shadow: 3px 3px 0 #000;
     --unused-scale: 0.85;
     --unused-opacity: 0.2;
-    --animation-duration-found: 600ms;
-    --animation-timing: steps(3);
     --confetti-colors: #5794df, #66bb6a, #ffd83d, #c6c6c6;
 }
 
@@ -40,20 +39,24 @@
 }
 
 :root[data-theme='minecraft'] .board {
-    background: repeating-conic-gradient(from 0deg at 0% 0%,
-            #45523e 0% 25%,
-            #3b4734 25% 50%,
-            #45523e 50% 75%,
-            #3b4734 75%);
+    background: repeating-conic-gradient(
+        from 0deg at 0% 0%,
+        #45523e 0% 25%,
+        #3b4734 25% 50%,
+        #45523e 50% 75%,
+        #3b4734 75%
+    );
     background-size: 32px 32px;
 }
 
 :root[data-theme='minecraft'] .cell {
-    background: repeating-conic-gradient(from 0deg at 0% 0%,
-            #747474 0% 25%,
-            #656565 25% 50%,
-            #747474 50% 75%,
-            #656565 75%);
+    background: repeating-conic-gradient(
+        from 0deg at 0% 0%,
+        #747474 0% 25%,
+        #656565 25% 50%,
+        #747474 50% 75%,
+        #656565 75%
+    );
     background-size: 16px 16px;
     image-rendering: pixelated;
     border: 2px solid #000;
@@ -91,7 +94,7 @@
 }
 
 :root[data-theme='minecraft'] .found-temp {
-    animation: minecraft-found var(--animation-duration-found) var(--animation-timing);
+    animation: minecraft-found 600ms;
     background: linear-gradient(45deg, #5794df, #66bb6a);
     box-shadow: 3px 3px 0 #000;
 }

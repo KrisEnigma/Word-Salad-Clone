@@ -4,23 +4,25 @@
 
 :root[data-theme='classicconsole'] {
     /* Fuentes */
-    --font-family-header: 'IBM Plex Mono', monospace;
+    --font-family-toolbar: 'IBM Plex Mono', monospace;
     --font-family-title: 'IBM Plex Mono', monospace;
-    --font-family-content: 'Inconsolata', monospace;
+    --font-family-letters: 'Inconsolata', monospace;
 
     /* Colores */
-    --color-bg: #2C3E50;
+    --color-bg: #2c3e50;
     --color-cell: rgb(74 144 226 / 15%);
     --color-modal: rgb(44 62 80 / 95%);
-    --color-button: #4A90E2;
-    --color-text: #50E3C2;
-    --color-title: #50E3C2;
-    --color-selected: #F5A623;
-    --color-hover: #B8E986;
-    --color-line: #D0021B;
+    --color-button: #4a90e2;
+    --color-letters: #50e3c2;
+    --color-title: #50e3c2;
+    --color-selected: #f5a623;
+    --color-hover: #b8e986;
+    --color-line: #d0021b;
+    --color-ui: #b8e986;
+    --color-words: #fff;
+    --color-menu: #4a90e2;
 
     /* Efectos */
-    --cell-radius: 0;
     --shadow-opacity: 0.5;
     --border-light: 1px solid rgb(74 144 226 / 30%);
 
@@ -31,30 +33,31 @@
     --glow-color: rgb(245 166 35 / 30%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #4A90E2, #50E3C2);
+    --found-bg: linear-gradient(45deg, #4a90e2, #50e3c2);
     --found-scale: 1.1;
     --found-shadow: 0 0 30px rgb(208 2 27 / 50%);
     --unused-scale: 0.9;
     --unused-opacity: 0.2;
-    --confetti-colors: #4A90E2, #50E3C2, #F5A623, #B8E986;
+    --confetti-colors: #4a90e2, #50e3c2, #f5a623, #b8e986;
 }
 
 :root[data-theme='classicconsole'] .board {
-    border: 2px solid #4A90E2;
+    border: 2px solid #4a90e2;
 }
 
 :root[data-theme='classicconsole'] .cell {
     border: var(--border-light);
-    background: linear-gradient(135deg,
-            rgb(52 73 94 / 100%) 0%,
-            rgb(52 73 94 / 90%) 100%);
+    background: linear-gradient(
+        135deg,
+        rgb(52 73 94 / 100%) 0%,
+        rgb(52 73 94 / 90%) 100%
+    );
     box-shadow:
         inset 0 0 0 1px rgb(74 144 226 / 10%),
         0 0 10px rgb(80 227 194 / 20%);
 }
 
 :root[data-theme='classicconsole'] .title {
-    color: #50E3C2;
     text-shadow: 2px 2px 4px rgb(74 144 226 / 40%);
     letter-spacing: 0.1em;
 }
@@ -89,18 +92,18 @@
 
 @keyframes console-selected {
     0% {
-        background: #4A90E2;
+        background: #4a90e2;
     }
 
     33% {
-        background: #50E3C2;
+        background: #50e3c2;
     }
 
     66% {
-        background: #F5A623;
+        background: #f5a623;
     }
 
     100% {
-        background: #4A90E2;
+        background: #4a90e2;
     }
 }

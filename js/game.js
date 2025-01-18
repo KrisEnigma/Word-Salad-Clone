@@ -2,36 +2,57 @@ import { LEVELS, LEVEL_ORDER } from './levels.js';
 import { SelectionManager } from './selection.js';
 import { AnimationManager } from './animations.js';
 import { ThemeSelector } from './themeSelector.js';
+import { Timer } from './timer.js';
+import { Config } from './config.js';
 
 class GameState {
     constructor() {
         this.themeSelector = new ThemeSelector();
-        
-        this.initPhase1()
-            .then(() => this.initPhase2())
-            .catch(error => {
-                console.error('Error during initialization:', error);
-                this.showContent();
-            });
+        this.initialize();
+    }
 
-        window.addEventListener('themechange', () => {
-            this.handleThemeChange();
-        });
+    async initialize() {
+        try {
+            await Config.init();
+            await this.initPhase1();
+            await this.initPhase2();
+        } catch (error) {
+            console.error('Error durante initialization:', error);
+            this.showContent();
+        }
     }
 
     async initPhase1() {
+        // Cargar el tema primero
         await this.themeSelector.loadThemesData();
-        this.themeSelector.applyInitialTheme();
-        
+        await this.themeSelector.applyInitialTheme();
+
+        // Importante: Cargar primero el último nivel guardado
+        const lastLevelId = await Config.getLastLevel();
+        console.log('🎮 Cargando nivel:', lastLevelId);
+
+        // Inicializar elementos y estado
         this.initializeElements();
         this.initializeState();
         this.initializeBoard();
         this.bindEvents();
+
+        // Asegurar que el nivel actual se establece correctamente
+        this.currentLevel = { ...LEVELS[lastLevelId], id: lastLevelId };
     }
 
     async initPhase2() {
-        this.currentLevel = { ...LEVELS[LEVEL_ORDER[0]], id: LEVEL_ORDER[0] };
-        this.updateAll(LEVEL_ORDER[0]);
+        // Verificar que tenemos un nivel válido
+        if (!this.currentLevel || !LEVELS[this.currentLevel.id]) {
+            console.warn('⚠️ Nivel no válido, usando fallback');
+            const fallbackId = LEVEL_ORDER[0];
+            this.currentLevel = { ...LEVELS[fallbackId], id: fallbackId };
+        }
+
+        // Actualizar la UI con el nivel actual
+        console.log('🎯 Actualizando nivel:', this.currentLevel.id);
+        this.updateAll(this.currentLevel.id);
+
         await this.themeSelector.initialize();
         this.showContent();
     }
@@ -59,14 +80,14 @@ class GameState {
     showContent() {
         const body = document.body;
         const overlay = document.querySelector('.js-loading-overlay');
-        
+
         requestAnimationFrame(() => {
             body.style.opacity = '1';
             body.classList.remove('js-loading');
-            
+
             if (overlay) {
                 overlay.classList.add('hidden');
-                
+
                 overlay.addEventListener('transitionend', () => {
                     overlay.remove();
                 }, { once: true });
@@ -79,32 +100,27 @@ class GameState {
         this.wordList = document.querySelector('.word-list');
         this.titleElement = document.querySelector('.title');
         this.levelNumberElement = document.querySelector('.level-number');
-        this.timer = {
-            element: document.querySelector('.timer'),
-            startTime: 0,
-            elapsed: 0,
-            interval: null,
-            isPaused: false
-        };
+        const timerElement = document.querySelector('.timer');
+        this.timer = new Timer(timerElement);
 
         const title = this.titleElement;
-        
+
         this.fitTitle = () => {
             const title = this.titleElement;
             const container = title.parentElement;
-            
+
             const adjustTitle = () => {
                 title.style = '';
-                
+
                 void title.offsetWidth;
-                
-                const availableWidth = container.clientWidth - 
-                    (parseFloat(getComputedStyle(container).paddingLeft) + 
-                    parseFloat(getComputedStyle(container).paddingRight)) - 20;
-                
+
+                const availableWidth = container.clientWidth -
+                    (parseFloat(getComputedStyle(container).paddingLeft) +
+                        parseFloat(getComputedStyle(container).paddingRight)) - 20;
+
                 const titleWidth = title.scrollWidth;
                 const currentFontSize = parseFloat(getComputedStyle(title).fontSize);
-                
+
                 if (titleWidth > availableWidth) {
                     const scale = availableWidth / titleWidth;
                     const minFontSize = parseFloat(getComputedStyle(document.documentElement)
@@ -142,7 +158,7 @@ class GameState {
         window.addEventListener('resize', () => {
             requestAnimationFrame(() => this.fitTitle());
         });
-        
+
         setTimeout(() => this.fitTitle(), 0);
     }
 
@@ -224,18 +240,38 @@ class GameState {
         this.selectionManager.reset();
     }
 
-    loadLevel(levelId) {
+    async loadLevel(levelId) {
+        console.log('📥 Cargando nivel:', levelId);
+
+        // Verificar si el nivel está desbloqueado
+        if (!(await Config.isLevelUnlocked(levelId))) {
+            console.warn('🔒 Intento de acceder a nivel bloqueado:', levelId);
+            return;
+        }
+
+        // Limpiar estado anterior
         AnimationManager.stopConfetti();
         this.resetControls();
         document.querySelectorAll('.animated-letter').forEach(el => el.remove());
+
+        // Actualizar estado actual
         this.currentLevel = { ...LEVELS[levelId], id: levelId };
         [this.foundWords, this.usedLetters].forEach(set => set.clear());
         this.resetSelection();
+
+        // Actualizar UI
         this.updateAll(levelId);
+
+        // Guardar el nivel actual como último nivel jugado
+        await Config.set(Config.KEYS.LAST_LEVEL, levelId);
+        console.log('✅ Nivel cargado:', levelId);
     }
 
     updateAll(levelId) {
-        if (!this.currentLevel) return;
+        if (!this.currentLevel || !this.currentLevel.data) {
+            console.error('No hay nivel válido para actualizar');
+            return;
+        }
         this.updateBoard();
         this.updateTitle();
         this.updateWordList();
@@ -252,7 +288,7 @@ class GameState {
     }
 
     updateWordList() {
-        if (!this.wordList) return;
+        if (!this.wordList || !this.currentLevel?.data) return;
 
         this.wordList.innerHTML = '';
         const fragment = document.createDocumentFragment();
@@ -348,7 +384,7 @@ class GameState {
 
             await AnimationManager.animateWordFound(selection, wordElement, foundWord);
             this.updateUnusedLetters();
-            
+
             if (this.foundWords.size === Object.keys(this.currentLevel.data).length) {
                 this.onLevelComplete();
             }
@@ -394,7 +430,41 @@ class GameState {
     }
 
     async onLevelComplete() {
-        AnimationManager.animateVictory(() => this.showVictoryModal());
+        const currentIndex = LEVEL_ORDER.indexOf(this.currentLevel.id);
+        if (currentIndex < LEVEL_ORDER.length - 1) {
+            const nextLevelId = LEVEL_ORDER[currentIndex + 1];
+            console.log('🎯 Desbloqueando siguiente nivel:', nextLevelId);
+
+            try {
+                // Primero desbloquear el nivel y esperar confirmación
+                const unlocked = await Config.unlockLevel(nextLevelId);
+
+                if (unlocked) {
+                    // Solo proceder si el desbloqueo fue exitoso
+                    console.log('✅ Nivel desbloqueado:', nextLevelId);
+
+                    // Actualizar UI basado en el estado real
+                    const nextLevelButton = document.getElementById('next-level');
+                    if (nextLevelButton) {
+                        nextLevelButton.disabled = false;
+                        console.log('🎮 Botón de siguiente nivel habilitado');
+                    }
+                } else {
+                    console.warn('⚠️ No se pudo desbloquear el nivel:', nextLevelId);
+                }
+
+                // Mostrar la animación de victoria independientemente del desbloqueo
+                await AnimationManager.animateVictory(() => {
+                    this.showVictoryModal();
+                });
+
+            } catch (error) {
+                console.error('❌ Error al desbloquear nivel:', error);
+                await AnimationManager.animateVictory(() => this.showVictoryModal());
+            }
+        } else {
+            await AnimationManager.animateVictory(() => this.showVictoryModal());
+        }
     }
 
     bindEvents() {
@@ -422,8 +492,8 @@ class GameState {
 
         document.addEventListener('click', event => {
             const target = event.target;
-            if (target.closest('#victory-modal') || 
-                target.closest('.modal-content') || 
+            if (target.closest('#victory-modal') ||
+                target.closest('.modal-content') ||
                 target.closest('.menu')) return;
 
             if (!target.closest('.board')) {
@@ -450,13 +520,13 @@ class GameState {
             victoryModal: document.getElementById('victory-modal')
         };
 
-        const isAnyModalActive = () => 
+        const isAnyModalActive = () =>
             Object.values(modalHandlers)
                 .some(modal => modal?.classList.contains('active'));
 
         const closeModal = (modal) => {
             if (modal?.id === 'victory-modal') return;
-            
+
             modal?.classList.remove('active');
             if (!isAnyModalActive()) {
                 this.resumeTimer();
@@ -497,12 +567,23 @@ class GameState {
                 this.loadLevel(this.currentLevel.id);
                 modalHandlers.victoryModal.classList.remove('active');
             },
-            'next-level': () => {
-                const nextIndex = LEVEL_ORDER.indexOf(this.currentLevel.id) + 1;
+            'next-level': async () => {
+                const currentIndex = LEVEL_ORDER.indexOf(this.currentLevel.id);
+                const nextIndex = currentIndex + 1;
+
                 if (nextIndex < LEVEL_ORDER.length) {
-                    this.resetTimer();
-                    this.loadLevel(LEVEL_ORDER[nextIndex]);
-                    modalHandlers.victoryModal.classList.remove('active');
+                    const nextLevelId = LEVEL_ORDER[nextIndex];
+                    console.log('🎮 Intentando cargar nivel:', nextLevelId);
+
+                    // Verificar explícitamente que el nivel está desbloqueado
+                    if (await Config.isLevelUnlocked(nextLevelId)) {
+                        console.log('✅ Cargando siguiente nivel:', nextLevelId);
+                        this.resetTimer();
+                        await this.loadLevel(nextLevelId);
+                        modalHandlers.victoryModal.classList.remove('active');
+                    } else {
+                        console.warn('🔒 Error: Nivel no desbloqueado:', nextLevelId);
+                    }
                 }
             }
         };
@@ -519,13 +600,36 @@ class GameState {
 
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             if (modal.id === 'victory-modal') return;
-            
+
             modal.addEventListener('click', event => {
                 if (event.target === modal) {
                     closeModal(modal);
                 }
             });
         });
+
+        // Agregar manejo del botón de vibración
+        const toggleHaptics = document.getElementById('toggle-haptics');
+        if (toggleHaptics) {
+            Config.isHapticsEnabled().then(enabled => {
+                toggleHaptics.classList.toggle('active', enabled);
+                this.updateHapticsIcon(enabled);
+            });
+
+            toggleHaptics.addEventListener('click', async () => {
+                const newState = !(await Config.isHapticsEnabled());
+                await Config.setHapticsEnabled(newState);
+                toggleHaptics.classList.toggle('active', newState);
+                this.updateHapticsIcon(newState);
+            });
+        }
+    }
+
+    updateHapticsIcon(enabled) {
+        const icon = document.querySelector('#toggle-haptics .icon');
+        if (icon) {
+            icon.textContent = enabled ? '🔊' : '🔇';
+        }
     }
 
     handleModalClose() {
@@ -539,48 +643,26 @@ class GameState {
     }
 
     startTimer() {
-        this.timer.startTime = Date.now() - this.timer.elapsed;
-        this.timer.isPaused = false;
-        if (this.timer.interval) {
-            clearInterval(this.timer.interval);
-        }
-        this.timer.interval = setInterval(() => {
-            if (!this.timer.isPaused) {
-                this.timer.elapsed = Date.now() - this.timer.startTime;
-                this.updateTimerDisplay();
-            }
-        }, 100);
+        this.timer.start();
     }
 
     pauseTimer() {
-        if (!this.timer.isPaused) {
-            this.timer.isPaused = true;
-            this.timer.elapsed = Date.now() - this.timer.startTime;
-        }
+        this.timer.stop();
     }
 
     resumeTimer() {
-        if (this.timer.isPaused) {
-            this.timer.isPaused = false;
-            this.timer.startTime = Date.now() - this.timer.elapsed;
+        if (this.timer.pausedTime !== null) {
+            this.timer.start();
         }
     }
 
     resetTimer() {
-        if (this.timer.interval) {
-            clearInterval(this.timer.interval);
-        }
-        this.timer.elapsed = 0;
-        this.timer.isPaused = false;
-        this.updateTimerDisplay();
+        this.timer.reset();
+        this.timer.start();
     }
 
     updateTimerDisplay() {
-        const seconds = Math.floor(this.timer.elapsed / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const displaySeconds = String(seconds % 60).padStart(2, '0');
-        const displayMinutes = String(minutes).padStart(2, '0');
-        this.timer.element.textContent = `${displayMinutes}:${displaySeconds}`;
+        // El timer ya maneja su propia actualización
     }
 
     showVictoryModal() {

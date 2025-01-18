@@ -4,20 +4,23 @@
 
 :root[data-theme='vintagevibes'] {
     /* Fuentes */
-    --font-family-header: 'Playfair Display', serif;
+    --font-family-toolbar: 'Playfair Display', serif;
     --font-family-title: 'Playfair Display', serif;
-    --font-family-content: 'Old Standard TT', serif;
+    --font-family-letters: 'Old Standard TT', serif;
 
     /* Colores */
-    --color-bg: #7D7D7D;
-    --color-cell: #C0C0C0;
+    --color-bg: #7d7d7d;
+    --color-cell: #c0c0c0;
     --color-modal: rgb(125 125 125 / 95%);
-    --color-button: #A0522D;
-    --color-text: #bb955c;
-    --color-title: #bb955c;
-    --color-selected: #D2691E;
-    --color-hover: #A0522D;
-    --color-line: #F5DEB3;
+    --color-button: #c5793a;
+    --color-letters: #c5793a;
+    --color-title: #f5deb3;
+    --color-selected: #d2691e;
+    --color-hover: #a0522d;
+    --color-line: #d2691e;
+    --color-ui: #f5deb3;
+    --color-words: #bb955c;
+    --color-menu: #f5deb3;
 
     /* Efectos */
     --cell-radius: 2px;
@@ -31,12 +34,12 @@
     --glow-color: rgb(245 222 179 / 20%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #A0522D, #D2691E);
+    --found-bg: linear-gradient(45deg, #60301a, #43220b);
     --found-scale: 1.08;
     --found-shadow: 0 0 25px rgb(245 222 179 / 40%);
     --unused-scale: 0.92;
     --unused-opacity: 0.25;
-    --confetti-colors: #C0C0C0, #A0522D, #D2691E, #F5DEB3;
+    --confetti-colors: #c0c0c0, #a0522d, #d2691e, #f5deb3;
 }
 
 :root[data-theme='vintagevibes'] .board {
@@ -46,27 +49,21 @@
 }
 
 :root[data-theme='vintagevibes'] .cell {
-    background: #C0C0C0;
+    align-items: end;
     border: var(--border-light);
     box-shadow:
         inset 0 0 15px rgb(160 82 45 / 10%),
         0 2px 4px rgb(0 0 0 / 10%);
-    position: relative;
 }
 
 :root[data-theme='vintagevibes'] .title {
-    color: #F5DEB3;
     text-shadow: 2px 2px 4px rgb(160 82 45 / 40%);
     font-style: italic;
     letter-spacing: 0.05em;
 }
 
-:root[data-theme='vintagevibes'] .timer,
-:root[data-theme='vintagevibes'] .level-number {
-    font-family: 'Old Standard TT', serif;
-    font-weight: 700;
-    color: #F5DEB3;
-    text-shadow: 1px 1px 2px rgb(160 82 45 / 30%);
+:root[data-theme='vintagevibes'] .toolbar {
+    filter: drop-shadow(1px 1px 2px rgb(160 82 45 / 30%));
 }
 
 @keyframes vintage-found {
@@ -100,23 +97,23 @@
 @keyframes vintage-selected {
     0%,
     100% {
-        background: #D2691E;
+        background: #854212;
         transform: scale(1);
     }
 
     50% {
-        background: #A0522D;
+        background: #442111;
         transform: scale(1.05);
     }
 }
 
 :root[data-theme='vintagevibes'] .word {
-    font-family: var(--font-family-content);
+    font-family: var(--font-family-letters);
     font-style: italic;
 }
 
 :root[data-theme='vintagevibes'] .word.found {
     background: var(--found-bg);
-    color: #F5DEB3;
+    color: #f5deb3;
     text-shadow: 1px 1px 2px rgb(160 82 45 / 40%);
 }

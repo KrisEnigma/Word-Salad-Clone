@@ -1,4 +1,5 @@
 import { Haptics } from '@capacitor/haptics';
+import { Config } from './config.js';
 
 export class AnimationManager {
     static DURATIONS = {
@@ -27,12 +28,22 @@ export class AnimationManager {
         return metrics;
     }
 
-    static async animateWordFound(selection, wordElement, word) {
+    static async triggerHaptic(type, options = {}) {
+        if (!(await Config.isHapticsEnabled())) return;
+
         try {
-            await Haptics.impact({ style: 'medium' });
+            if (type === 'impact') {
+                await Haptics.impact(options);
+            } else if (type === 'notification') {
+                await Haptics.notification(options);
+            }
         } catch (error) {
             console.warn('Haptics no disponible:', error);
         }
+    }
+
+    static async animateWordFound(selection, wordElement, word) {
+        await this.triggerHaptic('impact', { style: 'medium' });
 
         return new Promise((resolve) => {
             const lastCell = document.getElementById(`tile-${selection[selection.length - 1]}`);
@@ -53,7 +64,7 @@ export class AnimationManager {
                 const letterMetrics = await Promise.all([...word].map(async char => {
                     return this.measureText(char, {
                         'font-size': targetFontStyle.fontSize,
-                        'font-family': 'var(--font-family-content)',
+                        'font-family': 'var(--font-family-letters)',
                         'font-weight': computedThemeStyles.target.fontWeight,
                         'letter-spacing': computedThemeStyles.target.letterSpacing,
                         'text-transform': computedThemeStyles.target.textTransform,
@@ -197,7 +208,7 @@ export class AnimationManager {
                 const colors = this.getColors();
 
                 // Primera oleada: explosiones laterales
-                const triggerFirstWave = () => {
+                const triggerFirstWave = async () => {
                     this.fire({
                         particleCount: 100,
                         spread: 70,
@@ -210,14 +221,13 @@ export class AnimationManager {
                         origin: { x: 0.9, y: 0.35 },
                         colors
                     });
-                    
+
                     // Vibración después de que aparece el confeti
-                    Haptics.impact({ style: 'heavy' })
-                        .catch(error => console.warn('Haptics no disponible:', error));
+                    await AnimationManager.triggerHaptic('impact', { style: 'heavy' });
                 };
 
                 // Segunda oleada: explosión central
-                const triggerSecondWave = () => {
+                const triggerSecondWave = async () => {
                     this.fire({
                         particleCount: 150,
                         spread: 100,
@@ -228,11 +238,10 @@ export class AnimationManager {
                         ticks: 300,
                         colors
                     });
-                    
+
                     // Vibración después de que aparece el confeti central
-                    Haptics.impact({ style: 'heavy' })
-                        .catch(error => console.warn('Haptics no disponible:', error));
-                        
+                    await AnimationManager.triggerHaptic('impact', { style: 'heavy' });
+
                     resolve();
                 };
 
@@ -252,11 +261,7 @@ export class AnimationManager {
     };
 
     static async animateVictory(callback) {
-        try {
-            await Haptics.notification({ type: 'SUCCESS' });
-        } catch (error) {
-            console.warn('Haptics no disponible:', error);
-        }
+        await this.triggerHaptic('notification', { type: 'SUCCESS' });
 
         const victoryModal = document.getElementById('victory-modal');
 

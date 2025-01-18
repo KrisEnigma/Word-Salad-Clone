@@ -4,20 +4,23 @@
 
 :root[data-theme='darksouls'] {
     /* Fuentes */
-    --font-family-header: 'Cinzel', serif;
+    --font-family-toolbar: 'Cinzel', serif;
     --font-family-title: 'Cinzel', serif;
-    --font-family-content: 'Marcellus', serif;
+    --font-family-letters: 'Marcellus', serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #0c0c0c 0%, #221e1b 100%);
     --color-cell: linear-gradient(135deg, #2b261f, #0f0b09);
     --color-modal: rgb(13 13 13 / 95%);
     --color-button: #bb6f10;
-    --color-text: #e4d6a7;
+    --color-letters: #e4d6a7;
     --color-title: #e4d6a7;
     --color-selected: #e19038;
     --color-hover: #ffa533;
     --color-line: #ff4500;
+    --color-ui: #bb6f10;
+    --color-words: #e4d6a7;
+    --color-menu: #e4d6a7;
 
     /* Efectos */
     --cell-radius: min(8px, 2vw);
@@ -35,10 +38,6 @@
     --animation-duration-found: 700ms;
     --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
     --confetti-colors: #4f4f4f, #dbb82c, #9c9c9c, #000;
-}
-
-:root[data-theme='darksouls'] body {
-    background: var(--color-bg);
 }
 
 @keyframes darksouls-found {

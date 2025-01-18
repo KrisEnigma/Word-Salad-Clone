@@ -3,20 +3,23 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root[data-theme='pacman'] {
-    --font-family-header: 'Press Start 2P', monospace;
+    --font-family-toolbar: 'Press Start 2P', monospace;
     --font-family-title: 'Press Start 2P', monospace;
-    --font-family-content: 'VT323', monospace;
+    --font-family-letters: 'VT323', monospace;
 
     /* Colores */
     --color-bg: #000;
     --color-cell: #2121de;
     --color-modal: rgb(0 0 64 / 95%);
-    --color-button: #ffb897;
-    --color-text: #ffd800;
+    --color-button: #2121de;
+    --color-letters: #ffd800;
     --color-title: #ffd800;
     --color-selected: #f00;
-    --color-hover: rgb(255 0 0 / 80%);
+    --color-hover: rgb(145 0 0);
     --color-line: #0ff;
+    --color-ui: #ffb897;
+    --color-words: #ffd800;
+    --color-menu: #0ff;
 
     /* Efectos */
     --cell-radius: 4px;
@@ -34,10 +37,6 @@
     --animation-duration-found: 500ms;
     --animation-timing: cubic-bezier(0.36, 0, 0.66, 1);
     --confetti-colors: #ffda00, #00008b, #f00, #fff;
-}
-
-:root[data-theme='pacman'] .board {
-    background: #000;
 }
 
 :root[data-theme='pacman'] .cell {
@@ -74,7 +73,8 @@
 }
 
 :root[data-theme='pacman'] .found-temp {
-    animation: pacman-found var(--animation-duration-found) var(--animation-timing);
+    animation: pacman-found var(--animation-duration-found)
+        var(--animation-timing);
     background: linear-gradient(45deg, #ffd700, #ff7f00);
     box-shadow: 0 0 20px rgb(255 215 0 / 60%);
 }

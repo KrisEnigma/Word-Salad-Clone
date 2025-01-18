@@ -5,20 +5,23 @@
 
 :root[data-theme='elementalfury'] {
     /* Fuentes */
-    --font-family-header: 'Righteous', cursive;
+    --font-family-toolbar: 'Righteous', cursive;
     --font-family-title: 'Permanent Marker', cursive;
-    --font-family-content: 'Rubik', sans-serif;
+    --font-family-letters: 'Rubik', sans-serif;
 
     /* Colores */
-    --color-bg: linear-gradient(135deg, #1E90FF, #FF4500);
-    --color-cell: #2F4F4F;
+    --color-bg: linear-gradient(135deg, #1e90ff, #ff4500);
+    --color-cell: #2f4f4f;
     --color-modal: rgb(47 79 79 / 95%);
-    --color-button: linear-gradient(145deg, #32CD32, #FF4500);
-    --color-text: #FFD700;
-    --color-title: #FFD700;
-    --color-selected: #8B008B;
+    --color-button: linear-gradient(145deg, #32cd32, #ff4500);
+    --color-letters: #ffd700;
+    --color-title: #ffd700;
+    --color-selected: #8b008b;
     --color-hover: rgb(139 0 139 / 80%);
-    --color-line: #32CD32;
+    --color-line: #32cd32;
+    --color-ui: #32cd32;
+    --color-words: #ffd700;
+    --color-menu: #ffd700;
 
     /* Efectos */
     --cell-radius: 8px;
@@ -32,12 +35,12 @@
     --glow-color: rgb(50 205 50 / 30%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #FF4500, #1E90FF);
+    --found-bg: linear-gradient(45deg, #ff4500, #1e90ff);
     --found-scale: 1.15;
     --found-shadow: 0 0 30px rgb(139 0 139 / 60%);
     --unused-scale: 0.85;
     --unused-opacity: 0.2;
-    --confetti-colors: #FF4500, #1E90FF, #32CD32, #FFD700;
+    --confetti-colors: #ff4500, #1e90ff, #32cd32, #ffd700;
 }
 
 :root[data-theme='elementalfury'] .cell {
@@ -48,20 +51,14 @@
 }
 
 :root[data-theme='elementalfury'] .title {
-    background: linear-gradient(to right, #FF4500, #32CD32);
+    background: linear-gradient(to right, #ff4500 25%, #32cd32 75%);
     background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 15px rgb(30 144 255 / 50%);
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px rgb(30 144 255));
 }
 
-:root[data-theme='elementalfury'] .timer {
-    color: #1E90FF;
-    text-shadow: 2px 2px 4px rgb(139 0 139 / 40%);
-}
-
-:root[data-theme='elementalfury'] .level-number {
-    color: #32CD32;
-    text-shadow: 2px 2px 4px rgb(255 69 0 / 40%);
+:root[data-theme='elementalfury'] .toolbar {
+    filter: drop-shadow(2px 2px 4px rgb(139 0 139 / 40%));
 }
 
 @keyframes fury-found {
@@ -72,8 +69,8 @@
     50% {
         transform: scale(1.15) rotate(5deg);
         box-shadow:
-            0 0 30px #FF4500,
-            0 0 60px #1E90FF;
+            0 0 30px #ff4500,
+            0 0 60px #1e90ff;
     }
 
     100% {
@@ -86,7 +83,7 @@
 }
 
 :root[data-theme='elementalfury'] .mark.selected {
-    background: #8B008B;
+    background: #8b008b;
     animation: elemental-pulse 2s infinite;
 }
 
@@ -94,13 +91,13 @@
     0%,
     100% {
         box-shadow:
-            0 0 20px #FF4500,
-            0 0 40px #1E90FF;
+            0 0 20px #ff4500,
+            0 0 40px #1e90ff;
     }
 
     50% {
         box-shadow:
-            0 0 30px #32CD32,
-            0 0 50px #FFD700;
+            0 0 30px #32cd32,
+            0 0 50px #ffd700;
     }
 }

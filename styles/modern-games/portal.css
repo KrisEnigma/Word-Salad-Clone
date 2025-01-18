@@ -1,190 +1,116 @@
 /* Theme: Portal */
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@100;200;400&display=swap');
 
 :root[data-theme='portal'] {
     /* Fuentes */
-    --font-family-header: 'Public Sans', sans-serif;
-    --font-family-title: verdana, arial, sans-serif;
-    --font-family-content: 'Public Sans', sans-serif;
-    --font-family-cell: 'Oswald', sans-serif;
-
-    /* Colores base de Portal */
+    --font-family-toolbar: 'Oswald', sans-serif;
+    --font-family-title: 'Oswald', sans-serif;
+    --font-family-letters: 'Oswald', sans-serif;
     --portal-blue: #27a7d8;
-
-    /* Color del portal azul */
     --portal-orange: #ff9a00;
-
-    /* Color del portal naranja */
-
-    /* Colores funcionales */
     --color-bg: linear-gradient(135deg, #e6e6e6 0%, #d1d1d1 100%);
-    --color-cell: radial-gradient(circle at center,
-            #fff 30%,
-            #f2f2f2 50%,
-            #e6e6e6 70%,
-            #d1d1d1 100%);
-    --color-modal: rgb(220 220 220 / 98%);
+    --color-cell: radial-gradient(
+        circle at center,
+        #fff 30%,
+        #f2f2f2 50%,
+        #e6e6e6 70%,
+        #d1d1d1 100%
+    );
+    --color-modal: rgb(220 220 220 / 90%);
     --color-button: #1a1a1a;
-    --color-text: #1a1a1a;
+    --color-letters: #1a1a1a;
     --color-title: #1a1a1a;
     --color-selected: var(--portal-blue);
     --color-hover: var(--portal-orange);
     --color-line: var(--portal-orange);
-
-    /* Usar el mismo azul del portal */
-
-    /* Configuración tipográfica */
-    --font-weight-word: 600;
-    --font-weight-title: 900;
-    --font-weight-content: 400;
-    --cell-font-weight: 700;
-    --letter-spacing-word: 0.02em;
-    --letter-spacing-title: -0.03em;
-    --cell-letter-spacing: 0.05em;
-    --text-transform: uppercase;
-    --title-line-height: 0.9;
+    --color-ui: var(--portal-blue);
+    --color-words: #fff;
+    --color-menu: #000;
 
     /* Configuración de celdas */
     --mark-size-override: calc(var(--mark-size) * 1.1);
-    --cell-radius: 0;
 
     /* Efectos y animaciones */
     --border-light: 1px solid rgb(0 0 0 / 20%);
     --shadow-opacity: 0.15;
     --found-bg: var(--portal-orange);
     --found-scale: 1.05;
-    --found-shadow:
-        0 0 0 1px rgb(0 0 0 / 20%),
-        0 0 30px rgb(0 168 214 / 40%),
+    --found-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 30px rgb(0 168 214 / 40%),
         0 0 60px rgb(255 68 0 / 30%);
     --unused-scale: 0.85;
     --unused-opacity: 0.2;
     --animation-duration-found: 800ms;
     --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
-    --confetti-colors:
-        var(--portal-blue),
-        var(--portal-orange),
-        #ffc0cb,
-        #fff;
+    --confetti-colors: var(--portal-blue), var(--portal-orange), #ffc0cb, #fff;
 }
 
 /* Estilizar celdas como paneles de prueba */
 :root[data-theme='portal'] .cell {
-    background: radial-gradient(circle at center,
-            #fff 30%,
-            #f2f2f2 50%,
-            #e6e6e6 70%,
-            #d1d1d1 100%);
-    border: calc(var(--cell-size)* 0.02), solid #000;
+    background: radial-gradient(
+        circle at center,
+        #fff 30%,
+        #f2f2f2 50%,
+        #e6e6e6 70%,
+        #d1d1d1 100%
+    );
+    border:
+        calc(var(--cell-size) * 0.02),
+        solid #000;
     box-shadow:
         inset 0 0 0 1px rgb(255 255 255 / 90%),
         inset 0 2px 0 rgb(255 255 255 / 50%),
         0 0 0 1px rgb(0 0 0 / 80%);
-    position: relative;
-    overflow: hidden;
 }
 
 /* Personalización tipográfica ajustada */
 :root[data-theme='portal'] .title {
-    font-family: var(--font-family-title);
-    font-weight: var(--font-weight-title);
-    text-transform: var(--text-transform);
-    letter-spacing: var(--letter-spacing-title);
-    font-style: italic;
-    line-height: var(--title-line-height);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 :root[data-theme='portal'] .text {
-    font-family: var(--font-family-cell);
-    font-weight: var(--cell-font-weight);
-    letter-spacing: var(--cell-letter-spacing);
-    font-stretch: var(--font-stretch, condensed);
-
-    /* Corregido: usar var() */
-    transform: var(--cell-transform);
-    -webkit-font-smoothing: antialiased;
     padding-bottom: 0.1em;
-}
-
-:root[data-theme='portal'] .word {
-    font-family: var(--font-family-content);
-
-    /* Usar Public Sans en vez de Verdana */
-    font-weight: var(--font-weight-word);
-    letter-spacing: var(--letter-spacing-word);
-    text-transform: var(--text-transform);
-}
-
-:root[data-theme='portal'] .word.found {
-    font-weight: 700;
-
-    /* Más bold cuando se encuentra */
-    background: var(--portal-orange);
-    color: white;
-    box-shadow:
-        0 0 0 1px rgb(255 255 255 / 20%),
-        0 0 15px rgb(255 68 0 / 30%);
-}
-
-:root[data-theme='portal'] .level-number,
-:root[data-theme='portal'] .timer {
-    font-family: var(--font-family-header);
-    font-weight: 600;
-    letter-spacing: 0.02em;
 }
 
 /* Efecto de selección tipo portal */
 :root[data-theme='portal'] .mark {
-    width: var(--mark-size);
     height: var(--mark-size-override);
-
-    /* Usar altura personalizada */
     top: calc(50% - var(--mark-size-override) / 2);
-
-    /* Centrar con nueva altura */
 }
 
 :root[data-theme='portal'] .mark.selected {
-    background: var(--portal-blue);
     box-shadow:
         inset 0 0 0 1px rgb(255 255 255 / 20%),
         0 0 20px rgb(0 168 214 / 40%);
-    backdrop-filter: none;
 }
 
-/* Efecto hover tipo portal naranja */
-:root[data-theme='portal'] .hitbox:hover+.mark:not(.selected) {
-    background: var(--portal-orange);
+:root[data-theme='portal'] .hitbox:hover + .mark:not(.selected) {
     box-shadow:
         inset 0 0 0 1px rgb(255 255 255 / 20%),
         0 0 20px rgb(255 68 0 / 40%);
-    backdrop-filter: none;
 }
 
-/* Fondo al estilo Aperture Science */
-:root[data-theme='portal'] body {
-    background: var(--color-bg);
+:root[data-theme='portal'] .found-temp {
+    animation: portal-found 0.8s var(--animation-timing);
+    background: #fff;
 }
 
-/* Agregar posición relativa al contenedor del tablero para usarlo como referencia */
-:root[data-theme='portal'] .game-container {
-    position: relative;
-}
-
-/* Modificar el pseudo-elemento para que se posicione respecto al tablero */
-:root[data-theme='portal'] body::before {
-    display: none;
+:root[data-theme='portal'] .menu-options {
+    color: #fff;
 }
 
 @keyframes logo-spin {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 /* Vamos a usar el board como referencia */
 :root[data-theme='portal'] .board {
-    position: relative;
     isolation: isolate;
 }
 
@@ -195,7 +121,8 @@
     top: 50%;
     width: min(110%, 150vh);
     aspect-ratio: 1;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 532 532"><g id="c"><g id="b"><path id="a" fill="rgba(0,0,0,0.08)" d="M165 32C108 56 60 101 34 159l248-46"/><use xlink:href="%23a" transform="rotate(45 266 266)"/></g><use xlink:href="%23b" transform="rotate(90 266 266)"/></g><use xlink:href="%23c" transform="rotate(180 266 266)"/></svg>') center / 100% no-repeat;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 532 532"><g id="c"><g id="b"><path id="a" fill="rgba(0,0,0,0.08)" d="M165 32C108 56 60 101 34 159l248-46"/><use xlink:href="%23a" transform="rotate(45 266 266)"/></g><use xlink:href="%23b" transform="rotate(90 266 266)"/></g><use xlink:href="%23c" transform="rotate(180 266 266)"/></svg>')
+        center / 100% no-repeat;
     transform: translate(-50%, -50%);
     animation: logo-spin 60s linear infinite;
     will-change: transform;
@@ -228,33 +155,12 @@
 
     100% {
         transform: scale(1);
-        background: radial-gradient(circle at center,
-                #fff 30%,
-                #f2f2f2 50%,
-                #e6e6e6 70%,
-                #d1d1d1 100%);
+        background: radial-gradient(
+            circle at center,
+            #fff 30%,
+            #f2f2f2 50%,
+            #e6e6e6 70%,
+            #d1d1d1 100%
+        );
     }
-}
-
-:root[data-theme='portal'] .found-temp {
-    animation: portal-found 0.8s var(--animation-timing);
-    background: #fff;
-}
-
-:root[data-theme='portal'] .found-temp .text {
-    animation: text-portal-found 0.8s var(--animation-timing);
-    color: #fff;
-}
-
-/* Mejorar contraste en botones del modal */
-:root[data-theme='portal'] .menu-options button {
-    color: white;
-    letter-spacing: 0.05em;
-    border: 1px solid rgb(255 255 255 / 10%);
-}
-
-:root[data-theme='portal'] .menu-options button:hover {
-    background: var(--portal-blue);
-    border-color: rgb(255 255 255 / 20%);
-    box-shadow: 0 0 15px rgb(0 168 214 / 30%);
 }

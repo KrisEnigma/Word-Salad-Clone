@@ -5,20 +5,23 @@
 
 :root[data-theme='dreams'] {
     /* Fuentes */
-    --font-family-header: 'Syne Mono', monospace;
+    --font-family-toolbar: 'Syne Mono', monospace;
     --font-family-title: 'Chakra Petch', sans-serif;
-    --font-family-content: 'Righteous', cursive;
+    --font-family-letters: 'Righteous', cursive;
 
     /* Colores */
-    --color-bg: #2F4F4F;
+    --color-bg: #2f4f4f;
     --color-cell: #3a5f5f;
     --color-modal: rgb(47 79 79 / 95%);
     --color-button: #3a5f5f;
-    --color-text: #00FF7F;
-    --color-title: #00FF7F;
-    --color-selected: #FF1493;
+    --color-letters: #00ff7f;
+    --color-title: #00ff7f;
+    --color-selected: #ff1493;
     --color-hover: rgb(255 20 147 / 80%);
-    --color-line: #1E90FF;
+    --color-line: #1e90ff;
+    --color-ui: #ff1493;
+    --color-words: #fff;
+    --color-menu: #00ff7f;
 
     /* Efectos */
     --cell-radius: 4px;
@@ -32,12 +35,12 @@
     --glow-color: rgb(0 255 127 / 30%);
 
     /* Animaciones */
-    --found-bg: linear-gradient(45deg, #FF1493, #1E90FF);
+    --found-bg: linear-gradient(45deg, #ff1493, #1e90ff);
     --found-scale: 1.12;
     --found-shadow: 0 0 25px rgb(255 20 147 / 50%);
     --unused-scale: 0.88;
     --unused-opacity: 0.25;
-    --confetti-colors: #FF1493, #00FF7F, #1E90FF, #FF8C00;
+    --confetti-colors: #ff1493, #00ff7f, #1e90ff, #ff8c00;
 }
 
 :root[data-theme='dreams'] .board {
@@ -53,18 +56,14 @@
 }
 
 :root[data-theme='dreams'] .title {
-    color: #00FF7F;
     text-shadow:
         0 0 12px rgb(0 255 127 / 60%),
         0 0 24px rgb(30 144 255 / 40%);
     letter-spacing: 1px;
 }
 
-:root[data-theme='dreams'] .timer,
-:root[data-theme='dreams'] .level-number {
-    font-family: 'Syne Mono', monospace;
-    color: #1E90FF;
-    text-shadow: 0 0 12px rgb(30 144 255 / 50%);
+:root[data-theme='dreams'] .toolbar {
+    filter: drop-shadow(0 0 12px rgb(30 144 255 / 50%));
 }
 
 @keyframes dreams-found {
@@ -77,8 +76,8 @@
         transform: scale(1.12) rotate(5deg);
         filter: saturate(1.5);
         box-shadow:
-            0 0 30px #FF1493,
-            0 0 50px #1E90FF;
+            0 0 30px #ff1493,
+            0 0 50px #1e90ff;
     }
 
     100% {
@@ -93,8 +92,8 @@
 
 :root[data-theme='dreams'] .mark.selected {
     box-shadow:
-        0 0 15px #FF1493,
-        0 0 30px #1E90FF;
+        0 0 15px #ff1493,
+        0 0 30px #1e90ff;
     animation: dreams-pulse 2s ease infinite;
 }
 

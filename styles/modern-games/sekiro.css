@@ -4,20 +4,23 @@
 
 :root[data-theme='sekiro'] {
     /* Fuentes */
-    --font-family-header: 'Cinzel', serif;
+    --font-family-toolbar: 'Cinzel', serif;
     --font-family-title: 'Noto Serif JP', serif;
-    --font-family-content: 'Noto Sans JP', sans-serif;
+    --font-family-letters: 'Noto Sans JP', sans-serif;
 
     /* Colores */
     --color-bg: linear-gradient(135deg, #1e1a17 0%, #39342d 100%);
     --color-cell: #2b2823;
     --color-modal: #1c1c1c;
     --color-button: #b32d0f;
-    --color-text: #f1efe9;
-    --color-title: #f1efe9;
+    --color-letters: #f1efe9;
+    --color-title: #f76b6b;
     --color-selected: #d0491e;
     --color-hover: #f76b6b;
     --color-line: #991b1b;
+    --color-ui: #f1efe9;
+    --color-words: #f1efe9;
+    --color-menu: #f1efe9;
 
     /* Efectos */
     --cell-radius: 8px;
@@ -33,10 +36,6 @@
     --animation-duration-found: 600ms;
     --animation-timing: cubic-bezier(0.22, 1, 0.36, 1);
     --confetti-colors: #be5f46, #e3e2de, #6d6e71, #acbda9;
-}
-
-:root[data-theme='sekiro'] body {
-    background: var(--color-bg);
 }
 
 @keyframes sekiro-found {

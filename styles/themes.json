@@ -1,169 +1,169 @@
 {
-  "categories": {
-    "basic": {
-      "themes": [
-        {
-          "file": "8bitadventure.css",
-          "name": "8-Bit Adventure"
+    "categories": {
+        "basic": {
+            "themes": [
+                {
+                    "file": "8bitadventure.css",
+                    "name": "8-Bit Adventure"
+                },
+                {
+                    "file": "arcade.css",
+                    "name": "Arcade"
+                },
+                {
+                    "file": "battleready.css",
+                    "name": "Battle Ready"
+                },
+                {
+                    "file": "classicconsole.css",
+                    "name": "Classic Console"
+                },
+                {
+                    "file": "cyberpunk.css",
+                    "name": "Cyberpunk"
+                },
+                {
+                    "isDefault": true,
+                    "file": "dark.css",
+                    "name": "Dark"
+                },
+                {
+                    "file": "digitaldawn.css",
+                    "name": "Digital Dawn"
+                },
+                {
+                    "file": "dreams.css",
+                    "name": "Dreams"
+                },
+                {
+                    "file": "elementalfury.css",
+                    "name": "Elemental Fury"
+                },
+                {
+                    "file": "fantasy.css",
+                    "name": "Fantasy"
+                },
+                {
+                    "file": "forest.css",
+                    "name": "Forest"
+                },
+                {
+                    "file": "gameoverglow.css",
+                    "name": "Game Over Glow"
+                },
+                {
+                    "file": "glitcheffect.css",
+                    "name": "Glitch Effect"
+                },
+                {
+                    "file": "herojourney.css",
+                    "name": "Hero's Journey"
+                },
+                {
+                    "file": "light.css",
+                    "name": "Light"
+                },
+                {
+                    "file": "mysticshadows.css",
+                    "name": "Mystic Shadows"
+                },
+                {
+                    "file": "neonnostalgia.css",
+                    "name": "Neon Nostalgia"
+                },
+                {
+                    "file": "odyssey.css",
+                    "name": "Odyssey"
+                },
+                {
+                    "file": "pixel.css",
+                    "name": "Pixel"
+                },
+                {
+                    "file": "pixelparadise.css",
+                    "name": "Pixel Paradise"
+                },
+                {
+                    "file": "retroarcade.css",
+                    "name": "Retro Arcade"
+                },
+                {
+                    "file": "retrorainbow.css",
+                    "name": "Retro Rainbow"
+                },
+                {
+                    "file": "solarized.css",
+                    "name": "Solarized"
+                },
+                {
+                    "file": "stealth.css",
+                    "name": "Stealth"
+                },
+                {
+                    "file": "synthwave.css",
+                    "name": "Synthwave"
+                },
+                {
+                    "file": "technovibes.css",
+                    "name": "Techno Vibes"
+                },
+                {
+                    "file": "vintagevibes.css",
+                    "name": "Vintage Vibes"
+                }
+            ]
         },
-        {
-          "file": "arcade.css",
-          "name": "Arcade"
+        "modern-games": {
+            "themes": [
+                {
+                    "file": "bloodborne.css",
+                    "name": "Bloodborne"
+                },
+                {
+                    "file": "darksouls.css",
+                    "name": "Dark Souls"
+                },
+                {
+                    "file": "eldenring.css",
+                    "name": "Elden Ring"
+                },
+                {
+                    "file": "portal.css",
+                    "name": "Portal"
+                },
+                {
+                    "file": "sekiro.css",
+                    "name": "Sekiro"
+                },
+                {
+                    "file": "zelda-botw.css",
+                    "name": "Zelda BOTW"
+                }
+            ]
         },
-        {
-          "file": "battleready.css",
-          "name": "Battle Ready"
-        },
-        {
-          "file": "classicconsole.css",
-          "name": "Classic Console"
-        },
-        {
-          "file": "cyberpunk.css",
-          "name": "Cyberpunk"
-        },
-        {
-          "isDefault": true,
-          "file": "dark.css",
-          "name": "Dark"
-        },
-        {
-          "file": "digitaldawn.css",
-          "name": "Digital Dawn"
-        },
-        {
-          "file": "dreams.css",
-          "name": "Dreams"
-        },
-        {
-          "file": "elementalfury.css",
-          "name": "Elemental Fury"
-        },
-        {
-          "file": "fantasy.css",
-          "name": "Fantasy"
-        },
-        {
-          "file": "forest.css",
-          "name": "Forest"
-        },
-        {
-          "file": "gameoverglow.css",
-          "name": "Game Over Glow"
-        },
-        {
-          "file": "glitcheffect.css",
-          "name": "Glitch Effect"
-        },
-        {
-          "file": "herojourney.css",
-          "name": "Hero's Journey"
-        },
-        {
-          "file": "light.css",
-          "name": "Light"
-        },
-        {
-          "file": "mysticshadows.css",
-          "name": "Mystic Shadows"
-        },
-        {
-          "file": "neonnostalgia.css",
-          "name": "Neon Nostalgia"
-        },
-        {
-          "file": "odyssey.css",
-          "name": "Odyssey"
-        },
-        {
-          "file": "pixel.css",
-          "name": "Pixel"
-        },
-        {
-          "file": "pixelparadise.css",
-          "name": "Pixel Paradise"
-        },
-        {
-          "file": "retroarcade.css",
-          "name": "Retro Arcade"
-        },
-        {
-          "file": "retrorainbow.css",
-          "name": "Retro Rainbow"
-        },
-        {
-          "file": "solarized.css",
-          "name": "Solarized"
-        },
-        {
-          "file": "stealth.css",
-          "name": "Stealth"
-        },
-        {
-          "file": "synthwave.css",
-          "name": "Synthwave"
-        },
-        {
-          "file": "technovibes.css",
-          "name": "Techno Vibes"
-        },
-        {
-          "file": "vintagevibes.css",
-          "name": "Vintage Vibes"
+        "retro-games": {
+            "themes": [
+                {
+                    "file": "amongus.css",
+                    "name": "Among Us"
+                },
+                {
+                    "file": "minecraft.css",
+                    "name": "Minecraft"
+                },
+                {
+                    "file": "pacman.css",
+                    "name": "Pac-Man"
+                },
+                {
+                    "file": "spaceinvaders.css",
+                    "name": "Space Invaders"
+                },
+                {
+                    "file": "tetris.css",
+                    "name": "Tetris"
+                }
+            ]
         }
-      ]
-    },
-    "modern-games": {
-      "themes": [
-        {
-          "file": "bloodborne.css",
-          "name": "Bloodborne"
-        },
-        {
-          "file": "darksouls.css",
-          "name": "Dark Souls"
-        },
-        {
-          "file": "eldenring.css",
-          "name": "Elden Ring"
-        },
-        {
-          "file": "portal.css",
-          "name": "Portal"
-        },
-        {
-          "file": "sekiro.css",
-          "name": "Sekiro"
-        },
-        {
-          "file": "zelda-botw.css",
-          "name": "Zelda BOTW"
-        }
-      ]
-    },
-    "retro-games": {
-      "themes": [
-        {
-          "file": "amongus.css",
-          "name": "Among Us"
-        },
-        {
-          "file": "minecraft.css",
-          "name": "Minecraft"
-        },
-        {
-          "file": "pacman.css",
-          "name": "Pac-Man"
-        },
-        {
-          "file": "spaceinvaders.css",
-          "name": "Space Invaders"
-        },
-        {
-          "file": "tetris.css",
-          "name": "Tetris"
-        }
-      ]
     }
-  }
 }
