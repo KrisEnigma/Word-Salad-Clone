@@ -1,20 +1,13 @@
 export const Haptics = {
-    impact: async (options = {}) => {
-        try {
-            if ('vibrate' in navigator) {
-                navigator.vibrate(options.style === 'heavy' ? 100 : 50);
-            }
-        } catch (e) {
-            console.warn('Haptics no disponible:', e);
+    impact: async ({ style = 'medium' } = {}) => {
+        if ('vibrate' in navigator) {
+            const duration = style === 'heavy' ? 100 : style === 'medium' ? 50 : 25;
+            navigator.vibrate(duration);
         }
     },
-    notification: async (options = {}) => {
-        try {
-            if ('vibrate' in navigator) {
-                navigator.vibrate([100, 30, 100]);
-            }
-        } catch (e) {
-            console.warn('Haptics no disponible:', e);
+    notification: async ({ type = 'success' } = {}) => {
+        if ('vibrate' in navigator) {
+            navigator.vibrate([100, 30, 100]);
         }
     }
 };

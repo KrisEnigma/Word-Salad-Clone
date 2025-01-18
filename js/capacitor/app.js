@@ -5,5 +5,6 @@ export const App = {
                 callback({ isActive: !document.hidden });
             });
         }
+        return { remove: () => {} };
     }
 };
