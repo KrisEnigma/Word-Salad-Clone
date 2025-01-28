@@ -36,7 +36,7 @@ self.addEventListener('push', (event) => {
         event.waitUntil(
             self.registration.showNotification(data.title, {
                 body: data.body,
-                icon: '/icon.png',
+                icon: 'assets/images/icon.png',
                 vibrate: [200, 100, 200],
                 requireInteraction: true,
                 data: { url: self.registration.scope }
