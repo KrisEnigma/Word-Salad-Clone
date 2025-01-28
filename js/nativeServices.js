@@ -271,6 +271,10 @@ class NativeServices {
     static async sendNotification(title, body) {
         console.group('📱 Enviando notificación');
         try {
+            const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+            const baseUrl = isPWA ? '/GameSalad' : '';
+            const iconPath = `${baseUrl}/assets/images/icon.png`;
+
             // En Android nativo, usar LocalNotifications
             if (Capacitor.isNativePlatform && Capacitor.getPlatform() === 'android') {
                 console.log('Usando notificaciones nativas Android...');
@@ -289,6 +293,8 @@ class NativeServices {
                         sound: null,
                         android: {
                             channelId: 'default',
+                            smallIcon: 'ic_launcher_foreground',
+                            largeIcon: 'ic_launcher_round',
                             importance: 4
                         }
                     }]
@@ -307,18 +313,21 @@ class NativeServices {
 
             // Esperar a que el Service Worker esté listo
             const registration = await navigator.serviceWorker.ready;
+            console.log('Service Worker listo:', registration);
             
-            // Solicitar permisos
-            const permission = await Notification.requestPermission();
-            if (permission !== 'granted') {
-                throw new Error('Permiso de notificación denegado');
+            // Solicitar permisos si es necesario
+            if (Notification.permission !== 'granted') {
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    throw new Error('Permiso de notificación denegado');
+                }
             }
 
             // Mostrar notificación a través del Service Worker
             await registration.showNotification(title, {
                 body,
-                icon: '/assets/images/icon.png',
-                badge: '/assets/images/icon.png',
+                icon: iconPath,
+                badge: iconPath,
                 vibrate: [200, 100, 200],
                 requireInteraction: true,
                 data: { url: registration.scope }
