@@ -293,23 +293,15 @@ class NativeServices {
                         title,
                         body,
                         id: notificationId,
-                        schedule: { at: new Date(Date.now() + 1000) },
-                        sound: null,
-                        android: {
-                            channelId: 'default',
-                            smallIcon: 'ic_launcher_foreground',
-                            largeIcon: 'ic_launcher_round',
-                            importance: 4
-                        }
+                        schedule: { at: new Date(Date.now() + 1000) }
                     }]
                 });
                 console.log('✅ Notificación programada');
                 return true;
             }
 
-            // En web, asegurar que el Service Worker esté listo
+            // En web, asegurar que el Service Worker esté registrado y listo
             if ('serviceWorker' in navigator) {
-                // Esperar a que el Service Worker esté listo
                 const registration = await navigator.serviceWorker.ready;
                 
                 // Solicitar permisos si es necesario
@@ -324,14 +316,15 @@ class NativeServices {
                     icon: '/assets/images/icon.png',
                     badge: '/assets/images/icon.png',
                     vibrate: [200, 100, 200],
-                    requireInteraction: true
+                    requireInteraction: true,
+                    data: { url: registration.scope }
                 });
                 
                 console.log('✅ Notificación web mostrada');
                 return true;
             }
 
-            throw new Error('Service Worker no disponible');
+            throw new Error('Notificaciones no soportadas');
 
         } catch (error) {
             console.error('❌ Error en notificación:', error);

@@ -31,16 +31,16 @@ self.addEventListener('notificationclick', (event) => {
 
 self.addEventListener('push', (event) => {
     console.log('Service Worker: Push recibido');
-    if (event.data) {
-        const data = event.data.json();
-        event.waitUntil(
-            self.registration.showNotification(data.title, {
-                body: data.body,
-                icon: '/assets/images/icon.png',  // ✅ Ruta absoluta desde la raíz
-                vibrate: [200, 100, 200],
-                requireInteraction: true,
-                data: { url: self.registration.scope }
-            })
-        );
-    }
+    const options = {
+        body: event.data?.text() || 'Notificación sin contenido',
+        icon: '/assets/images/icon.png',
+        badge: '/assets/images/icon.png',
+        vibrate: [200, 100, 200],
+        requireInteraction: true,
+        data: { url: self.registration.scope }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification('GameSalad', options)
+    );
 });
