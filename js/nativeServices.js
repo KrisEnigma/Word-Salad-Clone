@@ -308,7 +308,7 @@ class NativeServices {
 
                 new Notification(title, {
                     body,
-                    icon: 'assets/images/icon.png'
+                    icon: '/assets/images/icon.png'  // ✅ Ruta absoluta desde la raíz
                 });
                 console.log('✅ Notificación web mostrada');
                 return true;
@@ -374,7 +374,7 @@ class NativeServices {
 
             await registration.showNotification(title, {
                 body,
-                icon: '/icon.png',
+                icon: '/assets/images/icon.png',  // ✅ Ruta absoluta desde la raíz
                 vibrate: [200, 100, 200]
             });
 

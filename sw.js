@@ -36,7 +36,7 @@ self.addEventListener('push', (event) => {
         event.waitUntil(
             self.registration.showNotification(data.title, {
                 body: data.body,
-                icon: 'assets/images/icon.png',
+                icon: '/assets/images/icon.png',  // ✅ Ruta absoluta desde la raíz
                 vibrate: [200, 100, 200],
                 requireInteraction: true,
                 data: { url: self.registration.scope }
