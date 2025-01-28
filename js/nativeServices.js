@@ -57,6 +57,17 @@ class NativeServices {
     static async setupWebServices() {
         console.group('[Capacitor] Configurando servicios web');
         try {
+            // Registrar Service Worker primero
+            if ('serviceWorker' in navigator) {
+                this.#serviceWorkerRegistration = await navigator.serviceWorker.register('/sw.js', {
+                    scope: '/',
+                    type: 'classic',
+                    updateViaCache: 'none'
+                });
+                console.log('✅ Service Worker registrado');
+                await navigator.serviceWorker.ready;
+            }
+
             // Notificaciones web
             if ('Notification' in window) {
                 const permission = await Notification.requestPermission();
@@ -296,12 +307,18 @@ class NativeServices {
                 return true;
             }
 
-            // En web, usar Service Worker si está disponible, sino fallback a Notifications
-            console.log('Usando Web Notifications...');
+            // En web, asegurar que el Service Worker esté listo
             if ('serviceWorker' in navigator) {
+                // Esperar a que el Service Worker esté listo
                 const registration = await navigator.serviceWorker.ready;
-                console.log('Service Worker listo');
                 
+                // Solicitar permisos si es necesario
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    throw new Error('Permiso de notificación denegado');
+                }
+
+                // Mostrar notificación usando el Service Worker
                 await registration.showNotification(title, {
                     body,
                     icon: '/assets/images/icon.png',
@@ -314,24 +331,7 @@ class NativeServices {
                 return true;
             }
 
-            // Fallback a Notification API solo si no hay Service Worker
-            if ('Notification' in window) {
-                const permission = await Notification.requestPermission();
-                console.log('Permiso web:', permission);
-                
-                if (permission !== 'granted') {
-                    throw new Error('Permiso denegado');
-                }
-
-                new Notification(title, {
-                    body,
-                    icon: '/assets/images/icon.png'
-                });
-                console.log('✅ Notificación web mostrada');
-                return true;
-            }
-
-            throw new Error('Notificaciones no disponibles en esta plataforma');
+            throw new Error('Service Worker no disponible');
 
         } catch (error) {
             console.error('❌ Error en notificación:', error);

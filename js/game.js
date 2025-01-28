@@ -758,10 +758,13 @@ class GameState {
             'test-notification': async () => {
                 console.group('🔔 Test Notificación');
                 try {
-                    console.log('1. Activando notificaciones...');
+                    console.log('1. Inicializando notificaciones...');
+                    await NativeServices.initializeNotifications();
+                    
+                    console.log('2. Activando notificaciones...');
                     await Storage.setNotificationEnabled(true);
                     
-                    console.log('2. Intentando enviar notificación...');
+                    console.log('3. Intentando enviar notificación...');
                     await NativeServices.sendNotification(
                         '¡Hora de jugar!',
                         'Te esperan nuevos desafíos en GameSalad'
