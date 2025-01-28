@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>Game Salad</title>
+    <link rel="icon" href="./assets/images/icon_tr.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./assets/images/icon.png" />
+    <meta name="theme-color" content="#262626">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="./assets/manifest.json">
+    <!-- Agregar importación de CSS -->
+    <link rel="stylesheet" href="./styles/styles.css">
+    <!-- Agregar importación de JavaScript como módulo -->
+    <script type="module" src="./js/game.js"></script>
+    <script>
+        // Eliminar logs de debug inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            // Solo mantener los estilos críticos
+            const styleSheets = Array.from(document.styleSheets)
+                .filter(sheet => !sheet.href || sheet.href.includes('styles.css'));
+        });
+    </script>
+</head>
+
+<body class="js-loading">
+    <div class="js-loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <div class="toolbar">
+        <button class="menu">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 18L20 18" stroke-width="2" stroke-linecap="round" />
+                <path d="M4 12L20 12" stroke-width="2" stroke-linecap="round" />
+                <path d="M4 6L20 6" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+        <div class="level-number"></div>
+        <div class="timer"></div>
+    </div>
+    <div class="game-container">
+        <div class="title-container">
+            <h1 class="title" style="user-select: text; -webkit-user-select: text; -moz-user-select: text;"></h1>
+        </div>
+        <div class="board"></div>
+        <div class="word-list"></div>
+    </div>
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <h2>Menú</h2>
+            <div class="menu-options">
+                <button id="theme-button">Cambiar Tema</button>
+                <button id="reset-game">Reiniciar Nivel</button>
+                <button id="vibration-toggle">Activar Vibración</button>
+                <button id="test-notification">Probar Notificación</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="theme-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="back-button">
+                    <div class="arrow-left"></div>
+                </button>
+                <h2>Temas</h2>
+            </div>
+            <div class="theme-grid"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="victory-modal">
+        <canvas id="confetti-canvas"></canvas>
+        <div class="modal-content">
+            <h2>¡Nivel Completado!</h2>
+            <p class="victory-time">Tiempo: <span id="final-time"></span></p>
+            <div class="menu-options">
+                <button id="restart-level">Reiniciar Nivel</button>
+                <button id="next-level">Siguiente Nivel</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
