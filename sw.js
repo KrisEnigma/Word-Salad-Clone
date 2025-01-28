@@ -18,14 +18,16 @@ self.addEventListener('notificationclick', (event) => {
     console.log('Abriendo URL:', urlToOpen);
 
     event.waitUntil(
-        clients.matchAll({ type: 'window' }).then((clientList) => {
-            for (const client of clientList) {
-                if (client.url === urlToOpen && 'focus' in client) {
-                    return client.focus();
+        clients.matchAll({ type: 'window' })
+            .then(clientList => {
+                const matchingClient = clientList.find(client => 
+                    client.url === urlToOpen && 'focus' in client);
+                
+                if (matchingClient) {
+                    return matchingClient.focus();
                 }
-            }
-            return clients.openWindow(urlToOpen);
-        })
+                return clients.openWindow(urlToOpen);
+            })
     );
 });
 

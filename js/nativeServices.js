@@ -271,66 +271,67 @@ class NativeServices {
     static async sendNotification(title, body) {
         console.group('📱 Enviando notificación');
         try {
-            console.log('Platform:', Capacitor.getPlatform());
-            console.log('isNative:', Capacitor.isNative);
-            
-            // En Android, usar LocalNotifications
-            if (Capacitor.getPlatform() === 'android') {
-                console.log('Usando LocalNotifications...');
-                const notificationId = Math.floor(Math.random() * 2147483647);
-
-                console.log('Solicitando permisos...');
+            // En Android nativo, usar LocalNotifications
+            if (Capacitor.isNativePlatform && Capacitor.getPlatform() === 'android') {
+                console.log('Usando notificaciones nativas Android...');
                 const permResult = await LocalNotifications.requestPermissions();
-                console.log('Permisos:', permResult);
-
+                
                 if (permResult.display !== 'granted') {
-                    throw new Error('Permiso de notificación denegado');
+                    throw new Error('Permiso de notificación denegado en Android');
                 }
 
-                console.log('Programando notificación...');
                 await LocalNotifications.schedule({
                     notifications: [{
                         title,
                         body,
-                        id: notificationId,
-                        schedule: { at: new Date(Date.now() + 1000) }
+                        id: Date.now(),
+                        schedule: { at: new Date() },
+                        sound: null,
+                        android: {
+                            channelId: 'default',
+                            importance: 4
+                        }
                     }]
                 });
-                console.log('✅ Notificación programada');
+                
+                console.log('✅ Notificación Android enviada');
+                console.groupEnd();
                 return true;
             }
 
-            // En web, asegurar que el Service Worker esté registrado y listo
-            if ('serviceWorker' in navigator) {
-                const registration = await navigator.serviceWorker.ready;
-                
-                // Solicitar permisos si es necesario
-                const permission = await Notification.requestPermission();
-                if (permission !== 'granted') {
-                    throw new Error('Permiso de notificación denegado');
-                }
-
-                // Mostrar notificación usando el Service Worker
-                await registration.showNotification(title, {
-                    body,
-                    icon: '/assets/images/icon.png',
-                    badge: '/assets/images/icon.png',
-                    vibrate: [200, 100, 200],
-                    requireInteraction: true,
-                    data: { url: registration.scope }
-                });
-                
-                console.log('✅ Notificación web mostrada');
-                return true;
+            // En web, siempre usar Service Worker
+            console.log('Usando Service Worker notifications...');
+            if (!('serviceWorker' in navigator)) {
+                throw new Error('Service Worker no soportado');
             }
 
-            throw new Error('Notificaciones no soportadas');
+            // Esperar a que el Service Worker esté listo
+            const registration = await navigator.serviceWorker.ready;
+            
+            // Solicitar permisos
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+                throw new Error('Permiso de notificación denegado');
+            }
+
+            // Mostrar notificación a través del Service Worker
+            await registration.showNotification(title, {
+                body,
+                icon: '/assets/images/icon.png',
+                badge: '/assets/images/icon.png',
+                vibrate: [200, 100, 200],
+                requireInteraction: true,
+                data: { url: registration.scope }
+            });
+
+            console.log('✅ Notificación web enviada');
+            console.groupEnd();
+            return true;
 
         } catch (error) {
             console.error('❌ Error en notificación:', error);
-            throw error;
-        } finally {
             console.groupEnd();
+            throw error;
         }
     }
 
