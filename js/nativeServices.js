@@ -296,8 +296,25 @@ class NativeServices {
                 return true;
             }
 
-            // En web, intentar usar notificaciones del navegador
+            // En web, usar Service Worker si está disponible, sino fallback a Notifications
             console.log('Usando Web Notifications...');
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.ready;
+                console.log('Service Worker listo');
+                
+                await registration.showNotification(title, {
+                    body,
+                    icon: '/assets/images/icon.png',
+                    badge: '/assets/images/icon.png',
+                    vibrate: [200, 100, 200],
+                    requireInteraction: true
+                });
+                
+                console.log('✅ Notificación web mostrada');
+                return true;
+            }
+
+            // Fallback a Notification API solo si no hay Service Worker
             if ('Notification' in window) {
                 const permission = await Notification.requestPermission();
                 console.log('Permiso web:', permission);
@@ -308,7 +325,7 @@ class NativeServices {
 
                 new Notification(title, {
                     body,
-                    icon: '/assets/images/icon.png'  // ✅ Ruta absoluta desde la raíz
+                    icon: '/assets/images/icon.png'
                 });
                 console.log('✅ Notificación web mostrada');
                 return true;
