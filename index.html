@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <title>Game Salad</title>
-    <!-- Actualizar rutas de assets -->
     <link rel="icon" href="assets/images/icon_tr.png" type="image/x-icon">
-    <link rel="apple-touch-icon" href="assets/images/icon.png" />
+    <link rel="apple-touch-icon" href="assets/images/icon.png">
     <meta name="theme-color" content="#262626">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="manifest" href="assets/manifest.json">
 
     <style>
-        /* Solo mantener los estilos del loader que son críticos */
         .js-loading-overlay {
             position: fixed;
             inset: 0;
@@ -29,20 +26,26 @@
         .js-loading-overlay.fade-out {
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease-out;
+            transition: opacity 0.1s ease-out;
         }
 
-        /* Barra de progreso moderna con brillo neón */
-        .progress {
+        .progress-container {
             position: relative;
             width: min(280px, 70vw);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress {
+            position: relative;
+            width: 100%;
             height: 8px;
             background: #2a2a2a;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow:
-                inset 0 2px 4px rgba(0, 0, 0, 0.2),
-                0 0 10px rgba(52, 152, 219, 0.3);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,.2), 0 0 10px rgba(52,152,219,.3);
         }
 
         .progress-bar {
@@ -52,241 +55,107 @@
             transform-origin: left;
             transform: scaleX(0);
             border-radius: 8px;
-            box-shadow:
-                0 0 20px rgba(52, 152, 219, 0.5),
-                0 0 40px rgba(46, 204, 113, 0.3);
-            animation: initial-progress 2s ease forwards paused;
-            will-change: transform;
-            position: relative;
+            box-shadow: 0 0 20px rgba(52,152,219,.5), 0 0 40px rgba(46,204,113,.3);
+            transition: transform 0.2s ease-out;
         }
 
-        /* Efecto de brillo neón */
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg,
-                    transparent,
-                    rgba(255, 255, 255, 0.2),
-                    transparent);
-            transform: translateX(-100%);
-            animation: shine 1.5s linear infinite;
-        }
-
-        @keyframes initial-progress {
-            0% {
-                transform: scaleX(0);
-            }
-
-            15% {
-                transform: scaleX(0.3);
-            }
-
-            40% {
-                transform: scaleX(0.6);
-            }
-
-            80% {
-                transform: scaleX(0.8);
-            }
-
-            100% {
-                transform: scaleX(1);
-            }
-        }
-
-        @keyframes shine {
-            100% {
-                transform: translateX(100%);
-            }
+        .progress-percentage {
+            color: #fff;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            transition: opacity 0.2s ease-out;
         }
     </style>
 
-   <script>
-        // Desregistrar SW existente
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) {
-                    registration.unregister();
-                    console.log('SW desregistrado');
-                }
-            });
-        }
-    </script>
     <script>
-        // Mejorar el logging de carga
-        console.group('🔄 Inicio de carga');
-        
-        function logLoadEvent(event) {
-            console.log(`Evento disparado: ${event.type}`, {
-                timeStamp: event.timeStamp,
-                target: event.target?.tagName || 'unknown'
+        // Limpiar SW previos
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(registration => registration.unregister());
             });
         }
-
-        // Monitorear eventos clave
-        ['DOMContentLoaded', 'load', 'readystatechange'].forEach(event => {
-            document.addEventListener(event, logLoadEvent);
-        });
-
-        // Monitorear estado de fuentes
-        document.fonts.ready.then(() => {
-            console.log('✅ Fuentes listas:', {
-                loaded: document.fonts.check('1em "Rubik"'),
-                status: document.readyState
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            console.group('📑 Estado del DOM');
-            const overlay = document.querySelector('.js-loading-overlay');
-            const progressBar = overlay.querySelector('.progress-bar');
-            
-            // Logging detallado de elementos críticos
-            console.log('Estado de elementos:', {
-                title: document.querySelector('.title')?.offsetHeight || 'no height',
-                board: document.querySelector('.board')?.children.length || 'empty',
-                levelNumber: document.querySelector('.level-number')?.textContent || 'empty',
-                timer: document.querySelector('.timer')?.textContent || 'empty'
-            });
-            
-            Promise.all([
-                document.fonts.ready,
-                Promise.all(
-                    Array.from(document.images)
-                        .filter(img => !img.complete)
-                        .map(img => new Promise(resolve => {
-                            img.onload = img.onerror = () => {
-                                console.log(`Imagen cargada: ${img.src}`);
-                                resolve();
-                            };
-                        }))
-                )
-            ]).then(() => {
-                console.log('✅ Todos los recursos cargados');
-                requestAnimationFrame(() => {
-                    progressBar.style.animationPlayState = 'running';
-                    document.body.offsetHeight; // Forzar reflow
-                    document.dispatchEvent(new CustomEvent('resources-ready', {
-                        detail: { timestamp: Date.now() }
-                    }));
-                });
-            }).catch(error => {
-                console.error('❌ Error cargando recursos:', error);
-            });
-            console.groupEnd();
-        });
-
-        // Contador de cambios para evitar spam
-        let mutationCount = 0;
-        
-        // Monitorear recursos dinámicos con throttling
-        const observer = new MutationObserver((mutations) => {
-            mutationCount += mutations.length;
-            
-            // Solo logear cambios significativos
-            const significantChanges = mutations.filter(m => 
-                m.addedNodes.length && 
-                Array.from(m.addedNodes).some(node => 
-                    node.nodeType === 1 && // Solo elementos
-                    ['TITLE', 'BOARD', 'LEVEL-NUMBER', 'TIMER'].includes(node.nodeName)
-                )
-            );
-
-            if (significantChanges.length) {
-                console.log('🎲 Elementos críticos añadidos:', {
-                    elements: significantChanges.map(m => 
-                        Array.from(m.addedNodes)
-                            .filter(n => n.nodeType === 1)
-                            .map(n => n.nodeName)
-                    ).flat()
-                });
-            }
-        });
-
-        // Desconectar el observer después de la carga inicial
-        document.addEventListener('load', () => {
-            console.log(`📊 Total de mutaciones: ${mutationCount}`);
-            observer.disconnect();
-        }, { once: true });
-
-        document.addEventListener('resources-ready', (event) => {
-            console.log('🎮 Recursos listos, iniciando observación DOM');
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
-        });
     </script>
     <script>
-        // Manejar la carga inicial
+        let progressBar, progressPercentage, targetProgress = 0, currentProgress = 0;
+        
+        function updateProgress(progress) {
+            targetProgress = Math.min(0.95, targetProgress + progress);
+            requestAnimationFrame(updateProgressDisplay);
+        }
+
+        function updateProgressDisplay() {
+            const diff = targetProgress - currentProgress;
+            if (Math.abs(diff) > 0.001) {
+                currentProgress += diff * 0.1;
+                progressBar.style.transform = `scaleX(${currentProgress})`;
+                progressPercentage.textContent = `${Math.round(currentProgress * 100)}%`;
+                requestAnimationFrame(updateProgressDisplay);
+            }
+        }
+
+        function finishLoading() {
+            targetProgress = 1;
+            requestAnimationFrame(updateProgressDisplay);
+            setTimeout(() => {
+                document.querySelector('.js-loading-overlay').classList.add('fade-out');
+            }, 400);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const overlay = document.querySelector('.js-loading-overlay');
-            const progressBar = overlay.querySelector('.progress-bar');
+            progressBar = document.querySelector('.progress-bar');
+            progressPercentage = document.querySelector('.progress-percentage');
             
-            // Esperar a que todos los recursos estén listos
-            Promise.all([
-                // Esperar fuentes
-                document.fonts.ready,
-                // Esperar imágenes
-                Promise.all(
-                    Array.from(document.images)
-                        .filter(img => !img.complete)
-                        .map(img => new Promise(resolve => {
-                            img.onload = img.onerror = resolve;
-                        }))
-                )
-            ]).then(() => {
-                console.log('✅ Recursos cargados');
-                requestAnimationFrame(() => {
-                    progressBar.style.animationPlayState = 'running';
-                    // Forzar reflow
-                    document.body.offsetHeight;
-                    // Disparar evento de recursos listos
-                    document.dispatchEvent(new Event('resources-ready'));
-                });
+            updateProgress(0.15);
+            
+            document.addEventListener('resources-ready', () => updateProgress(0.25));
+            window.addEventListener('themechange', () => updateProgress(0.25));
+            document.addEventListener('initialization-complete', () => updateProgress(0.15));
+            document.addEventListener('title-adjusted', (e) => {
+                if (e.detail?.final) {
+                    updateProgress(0.15);
+                    finishLoading();
+                }
             });
 
-            progressBar.addEventListener('animationend', () => {
-                overlay.classList.add('fade-out');
-                // Forzar reflow nuevamente
-                document.body.offsetHeight;
-            });
+            setTimeout(finishLoading, 2000); // Fallback
         });
     </script>
-    <noscript>
-        <style>
-            .js-loading-overlay { display: none !important; }
-        </style>
-    </noscript>
+    <noscript><style>.js-loading-overlay{display:none!important}</style></noscript>
   <script type="module" crossorigin src="./assets/js/main.js"></script>
 </head>
 
 <body class="js-loading">
     <div class="js-loading-overlay">
-        <div class="progress">
-            <div class="progress-bar"></div>
+        <div class="progress-container">
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="progress-percentage">0%</div>
         </div>
     </div>
 
     <div class="toolbar">
         <button class="menu">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 18L20 18" stroke-width="2" stroke-linecap="round" />
-                <path d="M4 12L20 12" stroke-width="2" stroke-linecap="round" />
-                <path d="M4 6L20 6" stroke-width="2" stroke-linecap="round" />
+                <path d="M4 18L20 18" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 12L20 12" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 6L20 6" stroke-width="2" stroke-linecap="round"/>
             </svg>
         </button>
         <div class="level-number"></div>
         <div class="timer"></div>
     </div>
+
     <div class="game-container">
         <div class="title-container">
-            <h1 class="title" style="user-select: text; -webkit-user-select: text; -moz-user-select: text;"></h1>
+            <h1 class="title" style="user-select:text;-webkit-user-select:text;-moz-user-select:text"></h1>
         </div>
         <div class="board"></div>
         <div class="word-list"></div>
     </div>
+
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
             <h2>Menú</h2>
@@ -323,5 +192,4 @@
         </div>
     </div>
 </body>
-
 </html>
