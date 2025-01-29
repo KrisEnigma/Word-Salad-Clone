@@ -107,11 +107,11 @@
             progressBar = document.querySelector('.progress-bar');
             progressPercentage = document.querySelector('.progress-percentage');
             
-            // Ajustar los pesos de progreso
-            document.addEventListener('sw-ready', () => updateProgress(0.3));
-            document.addEventListener('resources-ready', () => updateProgress(0.2));
-            window.addEventListener('themechange', () => updateProgress(0.2));
-            document.addEventListener('initialization-complete', () => updateProgress(0.15));
+            // Ajustar pesos: mover SW al final
+            document.addEventListener('resources-ready', () => updateProgress(0.3));
+            window.addEventListener('themechange', () => updateProgress(0.3));
+            document.addEventListener('initialization-complete', () => updateProgress(0.2));
+            document.addEventListener('sw-ready', () => updateProgress(0.1));
             document.addEventListener('title-adjusted', (e) => {
                 if (e.detail?.final) {
                     updateProgress(0.1);
@@ -119,7 +119,7 @@
                 }
             });
 
-            setTimeout(finishLoading, 3000); // Aumentar timeout
+            setTimeout(finishLoading, 3000);
         });
     </script>
     <noscript><style>.js-loading-overlay{display:none!important}</style></noscript>
