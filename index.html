@@ -107,19 +107,19 @@
             progressBar = document.querySelector('.progress-bar');
             progressPercentage = document.querySelector('.progress-percentage');
             
-            updateProgress(0.15);
-            
-            document.addEventListener('resources-ready', () => updateProgress(0.25));
-            window.addEventListener('themechange', () => updateProgress(0.25));
+            // Ajustar los pesos de progreso
+            document.addEventListener('sw-ready', () => updateProgress(0.3));
+            document.addEventListener('resources-ready', () => updateProgress(0.2));
+            window.addEventListener('themechange', () => updateProgress(0.2));
             document.addEventListener('initialization-complete', () => updateProgress(0.15));
             document.addEventListener('title-adjusted', (e) => {
                 if (e.detail?.final) {
-                    updateProgress(0.15);
+                    updateProgress(0.1);
                     finishLoading();
                 }
             });
 
-            setTimeout(finishLoading, 2000); // Fallback
+            setTimeout(finishLoading, 3000); // Aumentar timeout
         });
     </script>
     <noscript><style>.js-loading-overlay{display:none!important}</style></noscript>
