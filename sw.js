@@ -10,15 +10,15 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
-    
+
     // Intentar abrir la ventana existente o crear una nueva
     event.waitUntil(
         clients.matchAll({ type: 'window' })
             .then(clientList => {
-                const gameClient = clientList.find(client => 
+                const gameClient = clientList.find(client =>
                     client.url.includes('gamesalad')
                 );
-                
+
                 if (gameClient) {
                     return gameClient.focus();
                 }

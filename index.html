@@ -113,24 +113,48 @@
             });
         }
     </script>
-    <!-- Script actualizado para manejar la barra de progreso -->
     <script>
+        // Manejar la carga inicial
         document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.querySelector('.js-loading-overlay');
             const progressBar = overlay.querySelector('.progress-bar');
-
-            // Iniciar animación
-            requestAnimationFrame(() => {
-                progressBar.style.animationPlayState = 'running';
+            
+            // Esperar a que todos los recursos estén listos
+            Promise.all([
+                // Esperar fuentes
+                document.fonts.ready,
+                // Esperar imágenes
+                Promise.all(
+                    Array.from(document.images)
+                        .filter(img => !img.complete)
+                        .map(img => new Promise(resolve => {
+                            img.onload = img.onerror = resolve;
+                        }))
+                )
+            ]).then(() => {
+                console.log('✅ Recursos cargados');
+                requestAnimationFrame(() => {
+                    progressBar.style.animationPlayState = 'running';
+                    // Forzar reflow
+                    document.body.offsetHeight;
+                    // Disparar evento de recursos listos
+                    document.dispatchEvent(new Event('resources-ready'));
+                });
             });
 
-            // Esperar a que termine la animación
             progressBar.addEventListener('animationend', () => {
                 overlay.classList.add('fade-out');
+                // Forzar reflow nuevamente
+                document.body.offsetHeight;
             });
         });
     </script>
-  <script type="module" crossorigin src="./assets/main-CZ5MLR1I.js"></script>
+    <noscript>
+        <style>
+            .js-loading-overlay { display: none !important; }
+        </style>
+    </noscript>
+  <script type="module" crossorigin src="./assets/js/main.js"></script>
 </head>
 
 <body class="js-loading">
