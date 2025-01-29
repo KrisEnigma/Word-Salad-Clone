@@ -112,6 +112,111 @@
                 }
             });
         }
+    </script>
+    <script>
+        // Mejorar el logging de carga
+        console.group('🔄 Inicio de carga');
+        
+        function logLoadEvent(event) {
+            console.log(`Evento disparado: ${event.type}`, {
+                timeStamp: event.timeStamp,
+                target: event.target?.tagName || 'unknown'
+            });
+        }
+
+        // Monitorear eventos clave
+        ['DOMContentLoaded', 'load', 'readystatechange'].forEach(event => {
+            document.addEventListener(event, logLoadEvent);
+        });
+
+        // Monitorear estado de fuentes
+        document.fonts.ready.then(() => {
+            console.log('✅ Fuentes listas:', {
+                loaded: document.fonts.check('1em "Rubik"'),
+                status: document.readyState
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.group('📑 Estado del DOM');
+            const overlay = document.querySelector('.js-loading-overlay');
+            const progressBar = overlay.querySelector('.progress-bar');
+            
+            // Logging detallado de elementos críticos
+            console.log('Estado de elementos:', {
+                title: document.querySelector('.title')?.offsetHeight || 'no height',
+                board: document.querySelector('.board')?.children.length || 'empty',
+                levelNumber: document.querySelector('.level-number')?.textContent || 'empty',
+                timer: document.querySelector('.timer')?.textContent || 'empty'
+            });
+            
+            Promise.all([
+                document.fonts.ready,
+                Promise.all(
+                    Array.from(document.images)
+                        .filter(img => !img.complete)
+                        .map(img => new Promise(resolve => {
+                            img.onload = img.onerror = () => {
+                                console.log(`Imagen cargada: ${img.src}`);
+                                resolve();
+                            };
+                        }))
+                )
+            ]).then(() => {
+                console.log('✅ Todos los recursos cargados');
+                requestAnimationFrame(() => {
+                    progressBar.style.animationPlayState = 'running';
+                    document.body.offsetHeight; // Forzar reflow
+                    document.dispatchEvent(new CustomEvent('resources-ready', {
+                        detail: { timestamp: Date.now() }
+                    }));
+                });
+            }).catch(error => {
+                console.error('❌ Error cargando recursos:', error);
+            });
+            console.groupEnd();
+        });
+
+        // Contador de cambios para evitar spam
+        let mutationCount = 0;
+        
+        // Monitorear recursos dinámicos con throttling
+        const observer = new MutationObserver((mutations) => {
+            mutationCount += mutations.length;
+            
+            // Solo logear cambios significativos
+            const significantChanges = mutations.filter(m => 
+                m.addedNodes.length && 
+                Array.from(m.addedNodes).some(node => 
+                    node.nodeType === 1 && // Solo elementos
+                    ['TITLE', 'BOARD', 'LEVEL-NUMBER', 'TIMER'].includes(node.nodeName)
+                )
+            );
+
+            if (significantChanges.length) {
+                console.log('🎲 Elementos críticos añadidos:', {
+                    elements: significantChanges.map(m => 
+                        Array.from(m.addedNodes)
+                            .filter(n => n.nodeType === 1)
+                            .map(n => n.nodeName)
+                    ).flat()
+                });
+            }
+        });
+
+        // Desconectar el observer después de la carga inicial
+        document.addEventListener('load', () => {
+            console.log(`📊 Total de mutaciones: ${mutationCount}`);
+            observer.disconnect();
+        }, { once: true });
+
+        document.addEventListener('resources-ready', (event) => {
+            console.log('🎮 Recursos listos, iniciando observación DOM');
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
     </script>
     <script>
         // Manejar la carga inicial
