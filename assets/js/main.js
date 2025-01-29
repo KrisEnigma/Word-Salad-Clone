@@ -4403,39 +4403,9 @@ svg {
     box-shadow: 0 0 20px #17b2ff;
 }
 
-/* Estilos de scroll */
-/* Firefox */
 .theme-grid {
-    /* Solo aplicar color en Firefox */
+    scrollbar-width: thin;
     scrollbar-color: var(--color-ui) transparent;
-}
-
-/* Solo aplicar width en Firefox */
-@supports (scrollbar-width: thin) {
-    .theme-grid {
-        scrollbar-width: thin;
-    }
-}
-
-/* WebKit (Chrome, Safari, Edge, etc) */
-@supports selector(::-webkit-scrollbar) {
-    .theme-grid::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .theme-grid::-webkit-scrollbar-track {
-        background: var(--background);
-        border-radius: 4px;
-    }
-
-    .theme-grid::-webkit-scrollbar-thumb {
-        background: var(--color-ui);
-        border-radius: 4px;
-    }
-
-    .theme-grid::-webkit-scrollbar-thumb:hover {
-        background: var(--accent);
-    }
 }
 `,wt={categories:{basic:{themes:[{file:"8bitadventure.css",name:"8-Bit"},{file:"arcade.css",name:"Arcade"},{file:"battleready.css",name:"Battle"},{file:"classicconsole.css",name:"Classic"},{file:"cyberpunk.css",name:"Cyberpunk"},{file:"dark.css",name:"Dark",isDefault:!0},{file:"digitaldawn.css",name:"Dawn"},{file:"dreams.css",name:"Dreams"},{file:"elementalfury.css",name:"Elemental"},{file:"fantasy.css",name:"Fantasy"},{file:"forest.css",name:"Forest"},{file:"gameoverglow.css",name:"Game Over"},{file:"glitcheffect.css",name:"Glitch"},{file:"herojourney.css",name:"Hero"},{file:"light.css",name:"Light"},{file:"mint.css",name:"Mint"},{file:"mysticshadows.css",name:"Mystic"},{file:"neon.css",name:"Neon"},{file:"neonnostalgia.css",name:"Nostalgia"},{file:"odyssey.css",name:"Odyssey"},{file:"pixelparadise.css",name:"Paradise"},{file:"pixel.css",name:"Pixel"},{file:"retrorainbow.css",name:"Rainbow"},{file:"retroarcade.css",name:"Retro"},{file:"solarized.css",name:"Solarized"},{file:"stealth.css",name:"Stealth"},{file:"synthwave.css",name:"Synthwave"},{file:"technovibes.css",name:"Techno"},{file:"vintagevibes.css",name:"Vintage"}]},"modern-games":{themes:[{file:"bloodborne.css",name:"Bloodborne"},{file:"darksouls.css",name:"Dark Souls"},{file:"eldenring.css",name:"Elden Ring"},{file:"portal.css",name:"Portal"},{file:"sekiro.css",name:"Sekiro"},{file:"zelda-botw.css",name:"Zelda BOTW"}]},"retro-games":{themes:[{file:"amongus.css",name:"Among Us"},{file:"minecraft.css",name:"Minecraft"},{file:"pacman.css",name:"Pac-Man"},{file:"spaceinvaders.css",name:"Space Invaders"},{file:"tetris.css",name:"Tetris"}]}}};class vt{constructor(){this.currentTheme="dark",this.themesData=wt,this.availableThemes=new Map,this.categoryOrder=[],this.loadedStylesheets=new Set,this.loadedFonts=new Set,this.singleWordTerms=new Set(["pac-man"]),this._styleCache=new Map,this._previewStyles=new Map,this._themeLoadPromise=null,this._activeTheme=null,this._pendingThemeLoad=null,this._activeStyleElement=null,this._styleElement=document.createElement("style"),this._themesStyleElement=document.createElement("style"),this._themesStyleElement.id="theme-styles",this._themeGrid=null}loadThemeData(){var e;if(!((e=this.themesData)!=null&&e.categories)){console.error("❌ No se encontraron datos de temas");return}this.categoryOrder=[],this.availableThemes.clear(),Object.entries(this.themesData.categories).forEach(([t,o])=>{this.categoryOrder.push(t),o.themes.forEach(a=>{this.availableThemes.set(a.file.replace(".css",""),a.name)})}),this._themeGrid=document.querySelector(".theme-grid"),this._themeGrid&&this.generateThemeGrid(),xt({categorías:this.categoryOrder,temas:Array.from(this.availableThemes.entries())},"loadThemeData")}generateThemeGrid(){if(!this._themeGrid){console.error("❌ Elemento theme-grid no encontrado");return}this._themeGrid.innerHTML="",Object.entries(this.themesData.categories).forEach(([t,o])=>{const a=t.split("-").map(n=>n.charAt(0).toUpperCase()+n.slice(1)).join(" "),i=document.createElement("div");i.className="theme-category",i.textContent=a,this._themeGrid.appendChild(i),o.themes.forEach(n=>{const c=n.file.replace(".css",""),d=document.createElement("button");d.className="theme-option",d.dataset.theme=c;const f=document.createElement("div");f.className="preview-wrapper";const k=document.createElement("div");k.className="preview-cell";const h=document.createElement("div");h.className="preview-text",h.textContent="A",k.appendChild(h);const x=document.createElement("div");x.className="preview-mark",k.appendChild(x);const T=document.createElement("div");T.className="preview-title",T.textContent=n.name,f.appendChild(k),f.appendChild(T),d.appendChild(f),d.addEventListener("click",()=>this.setTheme(c)),this._themeGrid.appendChild(d)})});const e=document.querySelector(".back-button");e&&e.addEventListener("click",()=>{const t=document.getElementById("theme-modal"),o=document.getElementById("modal");t&&o&&(t.classList.remove("active"),o.classList.add("active"))})}async injectBaseStyles(){console.log("💉 Inyectando estilos base..."),this._styleElement.textContent=Ee,document.head.appendChild(this._styleElement),this.loadThemeData(),this._themesStyleElement||(this._themesStyleElement=document.createElement("style"),this._themesStyleElement.id="theme-styles"),this._themesStyleElement.textContent=this.getThemeStyles(),document.head.appendChild(this._themesStyleElement),await new Promise(e=>{requestAnimationFrame(()=>setTimeout(e,100))})}getThemeStyles(){var t;if(!((t=this.themesData)!=null&&t.categories))return console.error("❌ No hay datos de temas"),"";const e=[];return Object.values(this.themesData.categories).forEach(o=>{o.themes.forEach(a=>{const i=a.file.replace(".css",""),n=this.findThemeStylesInCss(i);n&&e.push(n)})}),e.join(`
 
