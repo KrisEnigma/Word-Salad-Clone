@@ -2,39 +2,44 @@
 
 const CACHE_NAME = 'gamesalad-v1';
 
-// Usar rutas relativas y dinámicas que coincidan con el build
+// Actualizar las rutas para que coincidan con la estructura del build
 const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  './assets/js/main.BZf7lQmB.js',
-  './assets/images/icon.png',
-  './assets/images/icon_tr.png'
+    './',
+    './index.html',
+    './assets/manifest.json',  // Ruta actualizada al manifest
+    './assets/images/icon.png',
+    './assets/images/icon_tr.png',
+    './assets/js/main.BZf7lQmB.js'  // Asegurar que el JS principal también se cachee
 ];
 
-// Función para manejar rutas relativas
-const getPathname = (requestUrl) => new URL(requestUrl, self.registration.scope).pathname;
+// Función para manejar rutas de manera más robusta
+const getPathname = (requestUrl) => {
+    try {
+        return new URL(requestUrl, self.registration.scope).pathname;
+    } catch (e) {
+        return requestUrl;
+    }
+};
 
 self.addEventListener('install', (event) => {
     console.log('Service Worker: Instalando...');
     event.waitUntil(
-        // Primero limpiar la caché anterior
-        caches.delete(CACHE_NAME).then(() => 
-            caches.open(CACHE_NAME)
-        ).then(cache => {
-            // Intentar cachear cada archivo individualmente
-            return Promise.all(
-                urlsToCache.map(url => 
-                    cache.add(url).catch(err => {
-                        console.warn('Error cacheando:', url, err);
-                        return Promise.resolve(); // Continuar con el resto
-                    })
-                )
-            );
-        })
+        caches.delete(CACHE_NAME)
+            .then(() => caches.open(CACHE_NAME))
+            .then(cache => {
+                // Intentar cachear archivos uno por uno
+                return Promise.allSettled(
+                    urlsToCache.map(url => 
+                        cache.add(url)
+                            .catch(err => {
+                                console.warn('Error cacheando:', url, err);
+                                return null;
+                            })
+                    )
+                );
+            })
+            .then(() => self.skipWaiting())
     );
-    // Activar inmediatamente
-    event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
