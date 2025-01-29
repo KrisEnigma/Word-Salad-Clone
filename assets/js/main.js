@@ -4407,7 +4407,7 @@ svg {
 /* Firefox */
 .theme-grid {
     /* Solo aplicar color en Firefox */
-    scrollbar-color: var(--color-ui) var(--color-bg);
+    scrollbar-color: var(--color-ui) transparent;
 }
 
 /* Solo aplicar width en Firefox */
