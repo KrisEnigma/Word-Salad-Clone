@@ -4,31 +4,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+        content="width=device-width, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <title>Game Salad</title>
-    <link rel="icon" href="./assets/images/icon_tr.png" type="image/x-icon">
-    <link rel="apple-touch-icon" href="./assets/images/icon.png" />
+    <link rel="icon" href="./src/public/assets/images/icon_tr.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./src/public/assets/images/icon.png" />
     <meta name="theme-color" content="#262626">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="./assets/manifest.json">
-    <!-- Agregar importación de CSS -->
-    <link rel="stylesheet" href="./styles/styles.css">
-    <!-- Agregar importación de JavaScript como módulo -->
-    <script type="module" src="./js/game.js"></script>
+    <link rel="manifest" href="./src/public/assets/manifest.json">
+
+    <style>
+        /* Solo mantener los estilos del loader que son críticos */
+        .js-loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: #121212;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            z-index: 99999;
+            padding: 20px;
+        }
+
+        .js-loading-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+        }
+
+        /* Barra de progreso moderna con brillo neón */
+        .progress {
+            position: relative;
+            width: min(280px, 70vw);
+            height: 8px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.2),
+                0 0 10px rgba(52,152,219,0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            transform-origin: left;
+            transform: scaleX(0);
+            border-radius: 8px;
+            box-shadow: 
+                0 0 20px rgba(52,152,219,0.5),
+                0 0 40px rgba(46,204,113,0.3);
+            animation: initial-progress 2s ease forwards paused;
+            will-change: transform;
+            position: relative;
+        }
+
+        /* Efecto de brillo neón */
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.2),
+                transparent
+            );
+            transform: translateX(-100%);
+            animation: shine 1.5s linear infinite;
+        }
+
+        @keyframes initial-progress {
+            0% { transform: scaleX(0); }
+            15% { transform: scaleX(0.3); }
+            40% { transform: scaleX(0.6); }
+            80% { transform: scaleX(0.8); }
+            100% { transform: scaleX(1); }
+        }
+
+        @keyframes shine {
+            100% { transform: translateX(100%); }
+        }
+    </style>
+
+    <!-- Script actualizado para manejar la barra de progreso -->
     <script>
-        // Eliminar logs de debug inicial
         document.addEventListener('DOMContentLoaded', () => {
-            // Solo mantener los estilos críticos
-            const styleSheets = Array.from(document.styleSheets)
-                .filter(sheet => !sheet.href || sheet.href.includes('styles.css'));
+            const overlay = document.querySelector('.js-loading-overlay');
+            const progressBar = overlay.querySelector('.progress-bar');
+            
+            // Iniciar animación
+            requestAnimationFrame(() => {
+                progressBar.style.animationPlayState = 'running';
+            });
+
+            // Esperar a que termine la animación
+            progressBar.addEventListener('animationend', () => {
+                overlay.classList.add('fade-out');
+            });
         });
     </script>
+  <script type="module" crossorigin src="/src/js/main.js"></script>
 </head>
 
 <body class="js-loading">
     <div class="js-loading-overlay">
-        <div class="loader"></div>
+        <div class="progress">
+            <div class="progress-bar"></div>
+        </div>
     </div>
 
     <div class="toolbar">
