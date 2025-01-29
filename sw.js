@@ -2,24 +2,38 @@
 
 const CACHE_NAME = 'gamesalad-v1';
 
-// Actualizar rutas para que sean relativas
+// Usar rutas relativas y dinámicas que coincidan con el build
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
+  './assets/js/main.BZf7lQmB.js',
   './assets/images/icon.png',
   './assets/images/icon_tr.png'
 ];
 
-// Agregar función helper para rutas
+// Función para manejar rutas relativas
 const getPathname = (requestUrl) => new URL(requestUrl, self.registration.scope).pathname;
 
 self.addEventListener('install', (event) => {
     console.log('Service Worker: Instalando...');
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => cache.addAll(urlsToCache))
+        // Primero limpiar la caché anterior
+        caches.delete(CACHE_NAME).then(() => 
+            caches.open(CACHE_NAME)
+        ).then(cache => {
+            // Intentar cachear cada archivo individualmente
+            return Promise.all(
+                urlsToCache.map(url => 
+                    cache.add(url).catch(err => {
+                        console.warn('Error cacheando:', url, err);
+                        return Promise.resolve(); // Continuar con el resto
+                    })
+                )
+            );
+        })
     );
+    // Activar inmediatamente
     event.waitUntil(self.skipWaiting());
 });
 
