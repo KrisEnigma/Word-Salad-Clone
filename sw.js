@@ -1,17 +1,41 @@
 /* global clients */
 
+const CACHE_NAME = 'gamesalad-v1';
+
+// Actualizar rutas para que sean relativas
+const urlsToCache = [
+  './',
+  './index.html',
+  './manifest.json',
+  './assets/images/icon.png',
+  './assets/images/icon_tr.png'
+];
+
 // Agregar función helper para rutas
-const getAssetPath = (path) => {
-    return new URL(path, self.registration.scope).pathname;
-};
+const getPathname = (requestUrl) => new URL(requestUrl, self.registration.scope).pathname;
 
 self.addEventListener('install', (event) => {
     console.log('Service Worker: Instalando...');
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => cache.addAll(urlsToCache))
+    );
     event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
     console.log('Service Worker: Activando...');
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
     event.waitUntil(clients.claim());
 });
 
@@ -19,7 +43,7 @@ self.addEventListener('notificationclick', (event) => {
     console.log('Service Worker: Click en notificación');
     event.notification.close();
 
-    const urlToOpen = event.notification.data?.url || '/';
+    const urlToOpen = event.notification.data?.url || './';
     console.log('Abriendo URL:', urlToOpen);
 
     event.waitUntil(
@@ -36,10 +60,17 @@ self.addEventListener('notificationclick', (event) => {
     );
 });
 
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request)
+            .then((response) => response || fetch(event.request))
+    );
+});
+
 self.addEventListener('push', (event) => {
     console.log('Service Worker: Push recibido');
     
-    const iconPath = getAssetPath('assets/images/icon.png');
+    const iconPath = getPathname('assets/images/icon.png');
     
     const options = {
         body: event.data?.text() || 'Notificación sin contenido',
