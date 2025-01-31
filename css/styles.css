@@ -329,10 +329,6 @@ svg {
     background: transparent;
 }
 
-.board::before {
-    content: '';
-}
-
 .board svg {
     position: absolute;
     top: 0;
@@ -4329,9 +4325,13 @@ svg {
     position: absolute;
     top: 50%;
     left: 50%;
+    z-index: 1;
     width: min(110%, 150vh);
     aspect-ratio: 1;
+    pointer-events: none;
+    content: '';
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 532 532"><g id="c"><g id="b"><path id="a" fill="rgba(0,0,0,0.08)" d="M165 32C108 56 60 101 34 159l248-46"/><use xlink:href="%23a" transform="rotate(45 266 266)"/></g><use xlink:href="%23b" transform="rotate(90 266 266)"/></g><use xlink:href="%23c" transform="rotate(180 266 266)"/></svg>') center / 100% no-repeat;
+    mix-blend-mode: color;
     transform: translate(-50%, -50%);
     animation: logo-spin 60s linear infinite;
     will-change: transform;
