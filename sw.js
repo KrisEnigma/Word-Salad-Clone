@@ -1,4 +1,6 @@
-self.addEventListener('install', (event) => {
+/* global clients */
+
+self.addEventListener('install', () => {
     self.skipWaiting();
     console.log('📱 Notification SW instalado');
 });
@@ -11,19 +13,22 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
 
-    // Intentar abrir la ventana existente o crear una nueva
-    event.waitUntil(
-        clients.matchAll({ type: 'window' })
-            .then(clientList => {
-                const gameClient = clientList.find(client =>
-                    client.url.includes('gamesalad')
-                );
+    // Usar la URL almacenada en la notificación o construir la URL correcta
+    const urlToOpen = event.notification.data?.url || `${self.registration.scope}index.html`;
 
-                if (gameClient) {
-                    return gameClient.focus();
+    // Abrir o enfocar la ventana existente
+    event.waitUntil(
+        clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true
+        }).then((clientList) => {
+            for (const client of clientList) {
+                if (client.url === urlToOpen && 'focus' in client) {
+                    return client.focus();
                 }
-                return clients.openWindow('/');
-            })
+            }
+            return clients.openWindow(urlToOpen);
+        })
     );
 });
 

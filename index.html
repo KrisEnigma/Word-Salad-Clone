@@ -1,24 +1,49 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <title>Game Salad</title>
-    <link rel="icon" href="assets/images/icon_tr.png" type="image/x-icon">
-    <link rel="apple-touch-icon" href="assets/images/icon.png">
+    <link rel="icon" href="assets/images/icon_tr.png" type="image/x-icon" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/images/icon.png" sizes="180x180">
+    <meta name="description" content="Video Game Word Puzzle">
+    <meta property="og:title" content="Game Salad">
+    <meta property="og:description" content="Video Game Word Puzzle">
     <meta name="theme-color" content="#262626">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <link rel="manifest" href="assets/manifest.json">
 
+    <!-- Early font preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Critical fonts preload -->
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&family=JetBrains+Mono:wght@700&display=swap">
+
+    <!-- Non-blocking font loading -->
+    <!-- Grupo 1: Fuentes principales (tema por defecto) -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&family=JetBrains+Mono:wght@700&display=swap"
+        media="print" onload="this.media='all'">
+
+    <!-- Grupo 2: Fuentes alternativas (otros temas) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;700&family=Audiowide&family=Black+Ops+One&family=Cardo:wght@400;700&family=Chakra+Petch:wght@400;700&family=Cinzel:wght@500;700&family=Cormorant:wght@500;700&family=Crimson+Pro:wght@500&family=DM+Sans:wght@500;700&family=DotGothic16&family=Exo+2:wght@700&family=Fira+Code:wght@500;700&family=Goldman&family=IBM+Plex+Mono:wght@500;700&family=Inconsolata:wght@400;700&family=Inter:wght@500;700&family=Marcellus&family=MedievalSharp&family=Metamorphous&family=Monoton&family=Noto+Sans+JP:wght@500;700&family=Old+Standard+TT:wght@400;700&family=Orbitron:wght@400;700&family=Oswald:wght@100;200;400&family=Outfit:wght@700&family=Permanent+Marker&family=Philosopher:wght@700&family=Pixelify+Sans&family=Playfair+Display:wght@400;700&family=Press+Start+2P&family=Quantico:wght@700&family=Quicksand:wght@400;700&family=Rajdhani:wght@500;700&family=Righteous&family=Roboto+Mono:wght@700&family=Rubik+Glitch&family=Share+Tech+Mono&family=Silkscreen:wght@700&family=Source+Code+Pro:wght@700&family=Space+Grotesk:wght@400;600&family=Space+Mono:wght@700&family=Staatliches&family=Syncopate:wght@400;700&family=Syne+Mono&family=Teko:wght@600&family=Tomorrow:wght@500&family=VT323&&display=swap" media="print" onload="this.media='all'">
+
+    <!-- Preload main JavaScript -->
+    <link rel="modulepreload" href="./assets/js/game.js" as="script">
+
+    <!-- Loading overlay styles -->
     <style>
         .js-loading-overlay {
             position: fixed;
             inset: 0;
             background: #121212;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            display: grid !important;
+            place-items: center !important;
             z-index: 99999;
             padding: 20px;
         }
@@ -45,7 +70,7 @@
             background: #2a2a2a;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,.2), 0 0 10px rgba(52,152,219,.3);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, .2), 0 0 10px rgba(52, 152, 219, .3);
         }
 
         .progress-bar {
@@ -55,7 +80,7 @@
             transform-origin: left;
             transform: scaleX(0);
             border-radius: 8px;
-            box-shadow: 0 0 20px rgba(52,152,219,.5), 0 0 40px rgba(46,204,113,.3);
+            box-shadow: 0 0 20px rgba(52, 152, 219, .5), 0 0 40px rgba(46, 204, 113, .3);
             transition: transform 0.2s ease-out;
         }
 
@@ -64,22 +89,30 @@
             font-family: system-ui, -apple-system, sans-serif;
             font-size: 14px;
             font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             transition: opacity 0.2s ease-out;
         }
     </style>
 
     <script>
-        // Limpiar SW previos
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(registrations => {
-                registrations.forEach(registration => registration.unregister());
+            navigator.serviceWorker.getRegistrations().then(async registrations => {
+                try {
+                    await Promise.all(registrations.map(registration => registration.unregister()));
+                } catch (error) {
+                    console.error('Error removing Service Workers:', error);
+                }
             });
         }
-    </script>
+    </script>
+    
+    <!-- Cargar styles.css antes del script principal -->
+    <link rel="stylesheet" href="css/styles.css">
+    
     <script>
         let progressBar, progressPercentage, targetProgress = 0, currentProgress = 0;
-        
+        const startTime = performance.now();
+
         function updateProgress(progress) {
             targetProgress = Math.min(0.95, targetProgress + progress);
             requestAnimationFrame(updateProgressDisplay);
@@ -91,6 +124,7 @@
                 currentProgress += diff * 0.1;
                 progressBar.style.transform = `scaleX(${currentProgress})`;
                 progressPercentage.textContent = `${Math.round(currentProgress * 100)}%`;
+                progressBar.parentElement.setAttribute('aria-valuenow', Math.round(currentProgress * 100));
                 requestAnimationFrame(updateProgressDisplay);
             }
         }
@@ -98,36 +132,73 @@
         function finishLoading() {
             targetProgress = 1;
             requestAnimationFrame(updateProgressDisplay);
+            
+            // Usar timeout para asegurar que la animación termine
             setTimeout(() => {
-                document.querySelector('.js-loading-overlay').classList.add('fade-out');
+                const overlay = document.querySelector('.js-loading-overlay');
+                if (overlay) {
+                    overlay.classList.add('fade-out');
+                    overlay.addEventListener('transitionend', () => {
+                        overlay.style.display = 'none';
+                    }, { once: true });
+                }
+                document.body.classList.remove('js-loading');
             }, 400);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             progressBar = document.querySelector('.progress-bar');
             progressPercentage = document.querySelector('.progress-percentage');
-            
-            // Ajustar pesos: mover SW al final
-            document.addEventListener('resources-ready', () => updateProgress(0.3));
-            window.addEventListener('themechange', () => updateProgress(0.3));
-            document.addEventListener('initialization-complete', () => updateProgress(0.2));
-            document.addEventListener('sw-ready', () => updateProgress(0.1));
+
+            const progressEvents = {
+                'resources-ready': 0.3,
+                'themechange': 0.3,
+                'initialization-complete': 0.2,
+                'sw-ready': 0.1,
+                'title-adjusted': 0.1
+            };
+
+            Object.entries(progressEvents).forEach(([event, value]) => {
+                document.addEventListener(event, () => updateProgress(value));
+            });
+
             document.addEventListener('title-adjusted', (e) => {
                 if (e.detail?.final) {
-                    updateProgress(0.1);
                     finishLoading();
                 }
             });
 
-            setTimeout(finishLoading, 3000);
+            const loadTime = performance.now() - startTime;
+            const timeoutDelay = Math.max(3000 - loadTime, 1000);
+            setTimeout(finishLoading, timeoutDelay);
+        });
+
+        window.addEventListener('error', (event) => {
+            console.error('Error global:', event.error);
+            finishLoading();
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Promesa rechazada:', event.reason);
+            finishLoading();
         });
     </script>
-    <noscript><style>.js-loading-overlay{display:none!important}</style></noscript>
   <script type="module" crossorigin src="./assets/js/main.js"></script>
 </head>
 
 <body>
-    <div class="js-loading-overlay">
+    <noscript>
+        <style>
+            .js-loading-overlay {
+                display: none !important;
+            }
+        </style>
+        <div style="text-align: center; padding: 20px; color: white;">
+            This game requires JavaScript to work. Please enable JavaScript to play.
+        </div>
+    </noscript>
+
+    <div class="js-loading-overlay" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="progress-container">
             <div class="progress">
                 <div class="progress-bar"></div>
@@ -137,11 +208,9 @@
     </div>
 
     <div class="toolbar">
-        <button class="menu">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 18L20 18" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 12L20 12" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 6L20 6" stroke-width="2" stroke-linecap="round"/>
+        <button class="menu" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M4 18L20 18 M4 12L20 12 M4 6L20 6" stroke-width="2" stroke-linecap="round" />
             </svg>
         </button>
         <div class="level-number"></div>
@@ -150,25 +219,25 @@
 
     <div class="game-container">
         <div class="title-container">
-            <h1 class="title" style="user-select:text;-webkit-user-select:text;-moz-user-select:text"></h1>
+            <h1 class="title"></h1>
         </div>
         <div class="board"></div>
         <div class="word-list"></div>
     </div>
 
-    <div class="modal-overlay" id="modal">
+    <div class="modal-overlay" id="modal" role="dialog" aria-labelledby="modal-title">
         <div class="modal-content">
-            <h2>Menú</h2>
+            <h2 id="modal-title">Menu</h2>
             <div class="menu-options">
-                <button id="theme-button">Cambiar Tema</button>
-                <button id="reset-game">Reiniciar Nivel</button>
-                <button id="vibration-toggle">Activar Vibración</button>
-                <button id="test-notification">Probar Notificación</button>
+                <button id="theme-button" aria-label="Change Theme">Change Theme</button>
+                <button id="reset-game" aria-label="Restart Level">Restart Level</button>
+                <button id="vibration-toggle" aria-label="Toggle Vibration">Toggle Vibration</button>
+                <button id="test-notification" aria-label="Test Notification">Test Notification</button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="theme-modal">
+    <div id="theme-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <button class="back-button">
@@ -176,20 +245,38 @@
                 </button>
                 <h2>Temas</h2>
             </div>
-            <div class="theme-grid"></div>
+            <div class="theme-grid">
+                <div class="theme-placeholder">Loading themes...</div>
+            </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="victory-modal">
+    <div class="modal-overlay" id="theme-modal" role="dialog" aria-labelledby="theme-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="back-button" aria-label="Back">
+                    <div class="arrow-left"></div>
+                </button>
+                <h2 id="theme-modal-title">Themes</h2>
+            </div>
+            <div class="theme-grid">
+                <div class="theme-placeholder">Loading themes...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="victory-modal" role="dialog" aria-labelledby="victory-modal-title">
         <canvas id="confetti-canvas"></canvas>
         <div class="modal-content">
-            <h2>¡Nivel Completado!</h2>
-            <p class="victory-time">Tiempo: <span id="final-time"></span></p>
+            <h2 id="victory-modal-title">Level Complete!</h2>
+            <p class="victory-time">Time: <span id="final-time"></span></p>
             <div class="menu-options">
-                <button id="restart-level">Reiniciar Nivel</button>
-                <button id="next-level">Siguiente Nivel</button>
+                <button id="restart-level" aria-label="Restart Level">Restart Level</button>
+                <button id="next-level" aria-label="Next Level">Next Level</button>
             </div>
         </div>
     </div>
 </body>
+
+</body></html>
 </html>
